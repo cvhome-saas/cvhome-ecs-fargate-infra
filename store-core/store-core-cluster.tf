@@ -1,5 +1,5 @@
 locals {
-  store-core-dns-name = "store-core.${var.project}.lcl"
+  store-core-dns-name = "${local.module-name}.${var.project}.lcl"
   store-core-cluster-sg = {
 
     alb_ingress_3000 = {
@@ -84,7 +84,7 @@ resource "aws_service_discovery_service" "store-core-service" {
 module "ecs" {
   source = "terraform-aws-modules/ecs/aws"
 
-  cluster_name = "store-core-${var.project}"
+  cluster_name = "${local.module-name}-${var.project}"
 
   fargate_capacity_providers = {
     FARGATE = {

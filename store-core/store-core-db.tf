@@ -1,9 +1,8 @@
-
 module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 5.0"
 
-  name        = "${var.project}-db-sg"
+  name        = "${local.module-name}-${var.project}-db-sg"
   description = "Complete PostgreSQL example security group"
   vpc_id = var.vpc_id
 
@@ -25,16 +24,16 @@ module "security_group" {
 module "db" {
   source = "terraform-aws-modules/rds/aws"
 
-  identifier = var.project
+  identifier = "${local.module-name}-${var.project}"
 
   engine            = "postgres"
   engine_version    = "16.4"
   instance_class    = "db.t4g.micro"
   allocated_storage = 20
-  family = "postgres16"
+  family            = "postgres16"
 
 
-  db_name  = var.project
+  db_name  = "postgres"
   username = "postgres"
   port     = "5432"
 
@@ -48,7 +47,7 @@ module "db" {
   create_db_parameter_group = false
 
   create_db_subnet_group = true
-  subnet_ids = var.database_subnets
+  subnet_ids             = var.database_subnets
 
 
   deletion_protection = false

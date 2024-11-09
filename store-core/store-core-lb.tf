@@ -1,7 +1,7 @@
 module "store-core-lb" {
   source = "terraform-aws-modules/alb/aws"
 
-  name                       = "store-core-lb-${var.project}"
+  name                       = "${local.module-name}-lb-${var.project}"
   vpc_id                     = var.vpc_id
   subnets                    = var.public_subnets
   enable_deletion_protection = false
@@ -10,7 +10,7 @@ module "store-core-lb" {
 
   access_logs = {
     bucket = var.log_s3_bucket_id
-    prefix = "store-core-lb-access-logs"
+    prefix = "${local.module-name}-lb-access-logs"
   }
 
   # Security Group

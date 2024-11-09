@@ -1,3 +1,4 @@
 locals {
-  tags=var.tags
+  module-name = "store-core"
+  tags        = var.tags
 }
