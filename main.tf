@@ -9,3 +9,15 @@ locals {
     Environment = var.env
   }
 }
+
+module "store-core" {
+  source           = "./store-core"
+  vpc_id           = module.vpc.vpc_id
+  public_subnets   = module.vpc.public_subnets
+  private_subnets  = module.vpc.private_subnets
+  log_s3_bucket_id = module.log-bucket.s3_bucket_id
+  certificate_arn  = var.certificate_arn
+  domain           = var.domain
+  project          = var.project
+  tags             = local.tags
+}

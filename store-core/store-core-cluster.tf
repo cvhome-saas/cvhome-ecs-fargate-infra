@@ -63,7 +63,7 @@ locals {
         }
       }
 
-      subnet_ids           = module.vpc.public_subnets
+      subnet_ids           = var.public_subnets
       security_group_rules = local.store-core-cluster-sg
     }
   }
@@ -71,7 +71,7 @@ locals {
 }
 resource "aws_service_discovery_private_dns_namespace" "store-core-namespace" {
   name = local.store-core-dns-name
-  vpc  = module.vpc.vpc_id
+  vpc  = var.vpc_id
   tags = local.tags
 }
 
