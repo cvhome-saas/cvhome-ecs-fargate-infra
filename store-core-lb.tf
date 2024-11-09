@@ -9,7 +9,7 @@ module "store-core-lb" {
 
 
   access_logs = {
-    bucket = module.cvhome-log-bucket.s3_bucket_id
+    bucket = module.log-bucket.s3_bucket_id
     prefix = "access-logs"
   }
 

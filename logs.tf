@@ -1,8 +1,8 @@
-module "cvhome-log-bucket" {
+module "log-bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "~> 3.0"
 
-  bucket_prefix = "${var.project}-cvhome-logs-"
+  bucket_prefix = "${var.project}-logs-"
   acl = "log-delivery-write"
 
   # For example only
