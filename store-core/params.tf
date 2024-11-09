@@ -10,6 +10,12 @@ variable "public_subnets" {
 variable "private_subnets" {
   type = list(string)
 }
+variable "database_subnets" {
+  type = list(string)
+}
+variable "vpc_cidr_block" {
+  type = string
+}
 variable "tags" {
   type = map(string)
 }

@@ -20,4 +20,6 @@ module "store-core" {
   domain           = var.domain
   project          = var.project
   tags             = local.tags
+  database_subnets = module.vpc.database_subnets
+  vpc_cidr_block   = local.vpc_cidr
 }
