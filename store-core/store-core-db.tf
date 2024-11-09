@@ -14,7 +14,7 @@ module "security_group" {
       to_port     = 5432
       protocol    = "tcp"
       description = "PostgreSQL access from within VPC"
-      cidr_blocks = module.vpc.vpc_cidr_block
+      cidr_blocks = var.vpc_cidr_block
     },
   ]
 
