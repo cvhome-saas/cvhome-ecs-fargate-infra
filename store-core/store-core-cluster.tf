@@ -22,24 +22,22 @@ locals {
   }
   store-core-cluster-services = {
     ecsdemo-frontend = {
+      loadbalanced               = true
+      loadbalancer_target_groups = "store-core-tg"
+
       cpu              = 512
       memory           = 1024
       assign_public_ip = true
-      # service_registries = {
-      #   registry_arn   = aws_service_discovery_service.this.arn
-      #   container_name = "ecs-sample"
-      #   container_port = 80
-      # }
       container_definitions = {
 
-        ecs-sample = {
+        app = {
           cpu       = 512
           memory    = 1024
           essential = true
           image     = "nginx"
           port_mappings = [
             {
-              name          = "ecs-sample"
+              name          = "app"
               containerPort = 80
               protocol      = "tcp"
             }
@@ -54,20 +52,10 @@ locals {
           memory_reservation        = 100
         }
       }
-
-      load_balancer = {
-        service = {
-          target_group_arn = module.store-core-lb.target_groups["store-core-tg"].arn
-          container_name   = "ecs-sample"
-          container_port   = 80
-        }
-      }
-
       subnet_ids           = var.public_subnets
       security_group_rules = local.store-core-cluster-sg
     }
   }
-
 }
 resource "aws_service_discovery_private_dns_namespace" "store-core-namespace" {
   name = local.store-core-dns-name
@@ -89,9 +77,10 @@ resource "aws_service_discovery_service" "store-core-service" {
     failure_threshold = 1
   }
   for_each = local.store-core-cluster-services
+  tags     = local.tags
 }
-#
-#
+
+
 module "ecs" {
   source = "terraform-aws-modules/ecs/aws"
 
@@ -110,7 +99,24 @@ module "ecs" {
     }
   }
 
-  services = local.store-core-cluster-services
+  services = {
+    for key, value in local.store-core-cluster-services : key => merge(value,
+      {
+        service_registries = {
+          registry_arn   = aws_service_discovery_service.store-core-service[key].arn
+          container_name = value.container_definitions.app.port_mappings[0].name
+          container_port = value.container_definitions.app.port_mappings[0].containerPort
+        }
+        load_balancer = value.loadbalanced ? {
+          service = {
+            target_group_arn = module.store-core-lb.target_groups[value.loadbalancer_target_groups].arn
+            container_name   = "app"
+            container_port   = 80
+          }
+        } : null
+      }
+    )
+  }
 
 
   tags = local.tags
