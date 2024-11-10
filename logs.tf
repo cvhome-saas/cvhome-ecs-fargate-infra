@@ -2,8 +2,8 @@ module "log-bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "~> 3.0"
 
-  bucket_prefix = "${var.project}-logs-"
-  acl = "log-delivery-write"
+  bucket_prefix = "${var.project}-${var.env}-logs-"
+  acl           = "log-delivery-write"
 
   # For example only
   force_destroy = true
@@ -12,7 +12,7 @@ module "log-bucket" {
   object_ownership         = "ObjectWriter"
 
   attach_elb_log_delivery_policy = true # Required for ALB logs
-  attach_lb_log_delivery_policy = true # Required for ALB/NLB logs
+  attach_lb_log_delivery_policy  = true # Required for ALB/NLB logs
 
   attach_deny_insecure_transport_policy = true
   attach_require_latest_tls_policy      = true

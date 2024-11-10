@@ -1,3 +1,6 @@
+variable "env" {
+  type = string
+}
 variable "project" {
   type = string
 }
@@ -27,4 +30,10 @@ variable "domain" {
 }
 variable "certificate_arn" {
   type = string
+}
+variable "db-instance_class" {
+  default = "db.t4g.micro"
+}
+variable "db-allocated_storage" {
+  default = 20
 }

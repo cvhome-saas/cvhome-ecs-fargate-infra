@@ -1,19 +1,4 @@
-module "store-core-lb" {
-  source = "terraform-aws-modules/alb/aws"
-
-  name                       = "${local.module-name}-lb-${var.project}"
-  vpc_id                     = var.vpc_id
-  subnets                    = var.public_subnets
-  enable_deletion_protection = false
-
-
-
-  access_logs = {
-    bucket = var.log_s3_bucket_id
-    prefix = "${local.module-name}-lb-access-logs"
-  }
-
-  # Security Group
+locals {
   security_group_ingress_rules = {
     all_http = {
       from_port   = 80
@@ -33,9 +18,28 @@ module "store-core-lb" {
   security_group_egress_rules = {
     all = {
       ip_protocol = "-1"
-      cidr_ipv4   = "10.0.0.0/16"
+      cidr_ipv4   = var.vpc_cidr_block
     }
   }
+}
+module "cluster-lb" {
+  source = "terraform-aws-modules/alb/aws"
+
+  name                       = "${local.module-name}-${var.project}-${var.env}"
+  vpc_id                     = var.vpc_id
+  subnets                    = var.public_subnets
+  enable_deletion_protection = false
+
+
+
+  access_logs = {
+    bucket = var.log_s3_bucket_id
+    prefix = "${local.module-name}-lb-access-logs"
+  }
+
+  # Security Group
+  security_group_ingress_rules = local.security_group_ingress_rules
+  security_group_egress_rules  = local.security_group_egress_rules
 
 
   listeners = {
@@ -48,7 +52,7 @@ module "store-core-lb" {
         status_code = "HTTP_301"
       }
     }
-    ex-fixed-response = {
+    ex-fallabck-response = {
       port            = 443
       protocol        = "HTTPS"
       certificate_arn = var.certificate_arn
@@ -79,7 +83,7 @@ module "store-core-lb" {
           actions = [
             {
               type             = "forward"
-              target_group_key = "store-core-tg"
+              target_group_key = "gateway-tg"
             }
           ]
           conditions = [
@@ -102,12 +106,24 @@ module "store-core-lb" {
       port              = 80
       target_type       = "ip"
     }
-    store-core-tg = {
+    gateway-tg = {
       create_attachment = false
       name_prefix       = "core"
       protocol          = "HTTP"
-      port              = 80
+      port              = local.cluster-services.store-core-gateway.container_definitions.app.port_mappings[0].containerPort
       target_type       = "ip"
+
+      health_check = {
+        enabled             = true
+        interval            = 45
+        path                = "/actuator/health"
+        port                = local.cluster-services.store-core-gateway.container_definitions.app.port_mappings[0].containerPort
+        healthy_threshold   = 3
+        unhealthy_threshold = 2
+        timeout             = 5
+        protocol            = "HTTP"
+        matcher             = "200"
+      }
     }
   }
 

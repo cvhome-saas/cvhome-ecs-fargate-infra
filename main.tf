@@ -22,4 +22,5 @@ module "store-core" {
   tags             = local.tags
   database_subnets = module.vpc.database_subnets
   vpc_cidr_block   = local.vpc_cidr
+  env              = var.env
 }

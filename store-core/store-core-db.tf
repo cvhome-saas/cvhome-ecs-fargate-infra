@@ -2,8 +2,8 @@ module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 5.0"
 
-  name        = "${local.module-name}-${var.project}-db-sg"
-  description = "Complete PostgreSQL example security group"
+  name        = "db-${local.module-name}-${var.project}-${var.env}"
+  description = "Postgres db security group"
   vpc_id = var.vpc_id
 
   # ingress
@@ -12,7 +12,7 @@ module "security_group" {
       from_port   = 5432
       to_port     = 5432
       protocol    = "tcp"
-      description = "PostgreSQL access from within VPC"
+      description = "Db access from within VPC"
       cidr_blocks = var.vpc_cidr_block
     },
   ]
@@ -24,12 +24,12 @@ module "security_group" {
 module "db" {
   source = "terraform-aws-modules/rds/aws"
 
-  identifier = "${local.module-name}-${var.project}"
+  identifier = "${local.module-name}-${var.project}-${var.env}"
 
   engine            = "postgres"
   engine_version    = "16.4"
-  instance_class    = "db.t4g.micro"
-  allocated_storage = 20
+  instance_class    = var.db-instance_class
+  allocated_storage = var.db-allocated_storage
   family            = "postgres16"
 
 
