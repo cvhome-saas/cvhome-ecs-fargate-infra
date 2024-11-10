@@ -2,7 +2,7 @@ module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 5.0"
 
-  name        = "db-${local.module-name}-${var.project}-${var.env}"
+  name        = "db-${var.module_name}-${var.project}-${var.env}"
   description = "Postgres db security group"
   vpc_id = var.vpc_id
 
@@ -17,14 +17,14 @@ module "security_group" {
     },
   ]
 
-  tags = local.tags
+  tags = var.tags
 }
 
 
 module "db" {
   source = "terraform-aws-modules/rds/aws"
 
-  identifier = "${local.module-name}-${var.project}-${var.env}"
+  identifier = "${var.module_name}-${var.project}-${var.env}"
 
   engine            = "postgres"
   engine_version    = "16.4"
@@ -54,7 +54,7 @@ module "db" {
   publicly_accessible = true
   skip_final_snapshot = true
 
-  tags = local.tags
+  tags = var.tags
 }
 
 
@@ -63,7 +63,4 @@ data "aws_secretsmanager_secret" "db-secret" {
 }
 data "aws_secretsmanager_secret_version" "current-db-secret-version" {
   secret_id = data.aws_secretsmanager_secret.db-secret.id
-}
-locals {
-  db-password = jsondecode(data.aws_secretsmanager_secret_version.current-db-secret-version.secret_string)["password"]
 }

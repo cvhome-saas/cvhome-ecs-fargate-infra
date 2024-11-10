@@ -1,5 +1,4 @@
 locals {
-  cluster-dnsname        = "${local.module-name}.${var.project}.lcl"
   default_container_name = "app"
   cluster-sg = {
 
@@ -9,7 +8,8 @@ locals {
       to_port                  = 65535
       protocol                 = "tcp"
       description              = "Service port"
-      source_security_group_id = module.cluster-lb.security_group_id
+      # source_security_group_id = module.cluster-lb.security_group_id
+      cidr_blocks = ["0.0.0.0/0"]
     }
 
     egress_all = {
@@ -34,45 +34,23 @@ locals {
     }
   }
 }
-resource "aws_service_discovery_private_dns_namespace" "cluster-namespace" {
-  name = local.cluster-dnsname
-  vpc  = var.vpc_id
-  tags = local.tags
-}
-
-resource "aws_service_discovery_service" "cluster-service" {
-  name = each.key
-  dns_config {
-    namespace_id = aws_service_discovery_private_dns_namespace.cluster-namespace.id
-    dns_records {
-      ttl  = 10
-      type = "SRV"
-    }
-    routing_policy = "MULTIVALUE"
-  }
-  health_check_custom_config {
-    failure_threshold = 1
-  }
-  for_each = local.cluster-services
-  tags     = local.tags
-}
 
 
 module "ecs" {
   source = "terraform-aws-modules/ecs/aws"
 
-  cluster_name = "${local.module-name}-${var.project}-${var.env}"
+  cluster_name = "${local.module_name}-${var.project}-${var.env}"
 
   fargate_capacity_providers = local.fargate_capacity_providers
 
   services = {
-    for key, value in local.cluster-services : key => merge(value,
+    for key, value in local.cluster_services : key => merge(value,
       {
         security_group_rules = local.cluster-sg
         subnet_ids           = var.public_subnets
         assign_public_ip     = true
         service_registries = {
-          registry_arn   = aws_service_discovery_service.cluster-service[key].arn
+          registry_arn   = module.resource.service_discovery_service_arn[key].arn
           container_name = value.container_definitions.app.port_mappings[0].name
           container_port = value.container_definitions.app.port_mappings[0].containerPort
         }
@@ -88,5 +66,6 @@ module "ecs" {
   }
 
 
-  tags = local.tags
+  tags = var.tags
+  depends_on = [module.resource.service_discovery_service_arn]
 }

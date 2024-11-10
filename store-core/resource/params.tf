@@ -1,0 +1,48 @@
+variable "env" {
+  type = string
+}
+variable "project" {
+  type = string
+}
+variable "vpc_id" {
+  type = string
+}
+variable "public_subnets" {
+  type = list(string)
+}
+variable "private_subnets" {
+  type = list(string)
+}
+variable "database_subnets" {
+  type = list(string)
+}
+variable "vpc_cidr_block" {
+  type = string
+}
+variable "tags" {
+  type = map(string)
+}
+variable "log_s3_bucket_id" {
+  type = string
+}
+variable "domain" {
+  type = string
+}
+variable "certificate_arn" {
+  type = string
+}
+variable "db-instance_class" {
+  default = "db.t4g.micro"
+}
+variable "db-allocated_storage" {
+  default = 20
+}
+variable "module_name" {
+  type = string
+}
+variable "cluster_dnsname" {
+  type = string
+}
+variable "cluster_services" {
+  type = set(string)
+}

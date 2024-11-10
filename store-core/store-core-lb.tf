@@ -25,7 +25,7 @@ locals {
 module "cluster-lb" {
   source = "terraform-aws-modules/alb/aws"
 
-  name                       = "${local.module-name}-${var.project}-${var.env}"
+  name                       = "${local.module_name}-${var.project}-${var.env}"
   vpc_id                     = var.vpc_id
   subnets                    = var.public_subnets
   enable_deletion_protection = false
@@ -34,7 +34,7 @@ module "cluster-lb" {
 
   access_logs = {
     bucket = var.log_s3_bucket_id
-    prefix = "${local.module-name}-lb-access-logs"
+    prefix = "${local.module_name}-lb-access-logs"
   }
 
   # Security Group
@@ -103,14 +103,14 @@ module "cluster-lb" {
       create_attachment = false
       name_prefix       = "auth"
       protocol          = "HTTP"
-      port              = local.cluster-services.auth.container_definitions.app.port_mappings[0].containerPort
+      port              = local.cluster_services.auth.container_definitions.app.port_mappings[0].containerPort
       target_type       = "ip"
 
       health_check = {
         enabled             = true
         interval            = 150
-        path                = "/"
-        port                = local.cluster-services.auth.container_definitions.app.port_mappings[0].containerPort
+        path                = "/health"
+        port                = 9000
         healthy_threshold   = 3
         unhealthy_threshold = 2
         timeout             = 5
@@ -122,14 +122,14 @@ module "cluster-lb" {
       create_attachment = false
       name_prefix       = "core"
       protocol          = "HTTP"
-      port              = local.cluster-services.store-core-gateway.container_definitions.app.port_mappings[0].containerPort
+      port              = local.cluster_services.store-core-gateway.container_definitions.app.port_mappings[0].containerPort
       target_type       = "ip"
 
       health_check = {
         enabled             = true
         interval            = 45
         path                = "/actuator/health"
-        port                = local.cluster-services.store-core-gateway.container_definitions.app.port_mappings[0].containerPort
+        port                = local.cluster_services.store-core-gateway.container_definitions.app.port_mappings[0].containerPort
         healthy_threshold   = 3
         unhealthy_threshold = 2
         timeout             = 5
@@ -139,5 +139,5 @@ module "cluster-lb" {
     }
   }
 
-  tags = local.tags
+  tags = var.tags
 }
