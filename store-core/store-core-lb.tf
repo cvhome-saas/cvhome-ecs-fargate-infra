@@ -103,8 +103,20 @@ module "cluster-lb" {
       create_attachment = false
       name_prefix       = "auth"
       protocol          = "HTTP"
-      port              = 80
+      port              = local.cluster-services.auth.container_definitions.app.port_mappings[0].containerPort
       target_type       = "ip"
+
+      health_check = {
+        enabled             = true
+        interval            = 150
+        path                = "/"
+        port                = local.cluster-services.auth.container_definitions.app.port_mappings[0].containerPort
+        healthy_threshold   = 3
+        unhealthy_threshold = 2
+        timeout             = 5
+        protocol            = "HTTP"
+        matcher             = "200"
+      }
     }
     gateway-tg = {
       create_attachment = false

@@ -56,3 +56,14 @@ module "db" {
 
   tags = local.tags
 }
+
+
+data "aws_secretsmanager_secret" "db-secret" {
+  arn = module.db.db_instance_master_user_secret_arn
+}
+data "aws_secretsmanager_secret_version" "current-db-secret-version" {
+  secret_id = data.aws_secretsmanager_secret.db-secret.id
+}
+locals {
+  db-password = jsondecode(data.aws_secretsmanager_secret_version.current-db-secret-version.secret_string)["password"]
+}
