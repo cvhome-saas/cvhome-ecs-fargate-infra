@@ -103,7 +103,7 @@ module "cluster-lb" {
       create_attachment = false
       name_prefix       = "auth"
       protocol          = "HTTP"
-      port              = local.cluster_services.auth.container_definitions.app.port_mappings[0].containerPort
+      port              = 9999
       target_type       = "ip"
 
       health_check = {
@@ -122,14 +122,14 @@ module "cluster-lb" {
       create_attachment = false
       name_prefix       = "core"
       protocol          = "HTTP"
-      port              = local.cluster_services.store-core-gateway.container_definitions.app.port_mappings[0].containerPort
+      port              = 7000
       target_type       = "ip"
 
       health_check = {
         enabled             = true
         interval            = 45
         path                = "/actuator/health"
-        port                = local.cluster_services.store-core-gateway.container_definitions.app.port_mappings[0].containerPort
+        port                = 7000
         healthy_threshold   = 3
         unhealthy_threshold = 2
         timeout             = 5
