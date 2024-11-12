@@ -1,8 +1,8 @@
-module "security_group" {
+module "db_security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 5.0"
 
-  name        = "db-${var.module_name}-${var.project}-${var.env}"
+  name        = "db-${local.module_name}-${var.project}-${var.env}"
   description = "Postgres db security group"
   vpc_id = var.vpc_id
 
@@ -14,6 +14,7 @@ module "security_group" {
       protocol    = "tcp"
       description = "Db access from within VPC"
       cidr_blocks = var.vpc_cidr_block
+      # cidr_blocks = "0.0.0.0/0"
     },
   ]
 
@@ -21,15 +22,15 @@ module "security_group" {
 }
 
 
-module "db" {
+module "store-core-db" {
   source = "terraform-aws-modules/rds/aws"
 
-  identifier = "${var.module_name}-${var.project}-${var.env}"
+  identifier = "${local.module_name}-${var.project}-${var.env}"
 
   engine            = "postgres"
   engine_version    = "16.4"
-  instance_class    = var.db-instance_class
-  allocated_storage = var.db-allocated_storage
+  instance_class    = var.db_instance_class
+  allocated_storage = var.db_allocated_storage
   family            = "postgres16"
 
 
@@ -40,7 +41,7 @@ module "db" {
 
   iam_database_authentication_enabled = false
 
-  vpc_security_group_ids = [module.security_group.security_group_id]
+  vpc_security_group_ids = [module.db_security_group.security_group_id]
   # DB subnet group
 
   create_db_option_group    = false
@@ -58,9 +59,9 @@ module "db" {
 }
 
 
-data "aws_secretsmanager_secret" "db-secret" {
-  arn = module.db.db_instance_master_user_secret_arn
+data "aws_secretsmanager_secret" "db_secret" {
+  arn = module.store-core-db.db_instance_master_user_secret_arn
 }
-data "aws_secretsmanager_secret_version" "current-db-secret-version" {
-  secret_id = data.aws_secretsmanager_secret.db-secret.id
+data "aws_secretsmanager_secret_version" "current_db_secret_version" {
+  secret_id = data.aws_secretsmanager_secret.db_secret.id
 }
