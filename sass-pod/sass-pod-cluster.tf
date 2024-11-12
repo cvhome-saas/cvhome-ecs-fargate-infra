@@ -13,9 +13,9 @@ locals {
   }
   services = {
     "saas-pod-gateway" = {
-      public                     = true
-      priority                   = 100
-      service_type               = "SERVICE"
+      public       = true
+      priority     = 100
+      service_type = "SERVICE"
       loadbalancer_target_groups = {
         "gateway-tg-80" : {
           loadbalancer_target_groups_arn = module.cluster-lb.target_groups["gateway-tg-80"].arn

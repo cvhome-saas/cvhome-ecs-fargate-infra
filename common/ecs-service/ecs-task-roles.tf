@@ -18,7 +18,7 @@ resource "aws_iam_role" "ecs_task_execution_role" {
 }
 resource "aws_iam_role_policy" "ecs_task_execution_role_policy" {
   name = "${var.project}-${var.module_name}-${var.service_name}-execution-role-policy-${var.env}"
-  role   = aws_iam_role.ecs_task_execution_role.id
+  role = aws_iam_role.ecs_task_execution_role.id
   policy = jsonencode({
     Version : "2012-10-17"
     Statement : [
@@ -63,7 +63,7 @@ resource "aws_iam_role" "ecs_task_role" {
 }
 resource "aws_iam_role_policy" "ecs_task_role_policy" {
   name = "${var.project}-${var.module_name}-${var.service_name}-role-policy-${var.env}"
-  role   = aws_iam_role.ecs_task_role.id
+  role = aws_iam_role.ecs_task_role.id
   policy = jsonencode({
     Version : "2012-10-17"
     Statement : [

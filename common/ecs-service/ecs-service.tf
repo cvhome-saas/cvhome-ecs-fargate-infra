@@ -70,7 +70,7 @@ module "service_security_group" {
 
   name        = "${var.project}-${var.module_name}-${var.service_name}-sg-${var.env}"
   description = "Postgres db security group"
-  vpc_id = var.vpc_id
+  vpc_id      = var.vpc_id
 
   # ingress
   ingress_with_cidr_blocks = var.ingress_with_cidr_blocks
@@ -89,7 +89,7 @@ resource "aws_ecs_service" "this" {
   network_configuration {
     subnets          = var.subnet
     assign_public_ip = var.service.public
-    security_groups = [module.service_security_group.security_group_id]
+    security_groups  = [module.service_security_group.security_group_id]
   }
 
   service_registries {
@@ -98,7 +98,7 @@ resource "aws_ecs_service" "this" {
     container_port = var.service.main_container_port
   }
   dynamic "load_balancer" {
-    for_each =var.service.loadbalancer_target_groups
+    for_each = var.service.loadbalancer_target_groups
     content {
       target_group_arn = load_balancer.value.loadbalancer_target_groups_arn
       container_name   = load_balancer.value.main_container

@@ -11,5 +11,5 @@ resource "aws_service_discovery_service" "this" {
   health_check_custom_config {
     failure_threshold = 1
   }
-  tags     = var.tags
+  tags = var.tags
 }

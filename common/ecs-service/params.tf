@@ -73,11 +73,11 @@ variable "service" {
 }
 variable "ingress_with_cidr_blocks" {
   description = "List of ingress rules to create where 'cidr_blocks' is used"
-  type = list(map(string))
-  default = []
+  type        = list(map(string))
+  default     = []
 }
 variable "egress_with_cidr_blocks" {
   description = "List of egress rules to create where 'cidr_blocks' is used"
-  type = list(map(string))
-  default = []
+  type        = list(map(string))
+  default     = []
 }

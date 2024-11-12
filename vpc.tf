@@ -11,7 +11,7 @@ module "vpc" {
   cidr = local.vpc_cidr
 
   enable_dns_hostnames = true
-  enable_dns_support = true
+  enable_dns_support   = true
 
   azs              = local.azs
   public_subnets   = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
@@ -25,7 +25,7 @@ module "vpc" {
 }
 
 module "bastion" {
-  source = "umotif-public/bastion/aws"
+  source  = "umotif-public/bastion/aws"
   version = "~> 2.1.0"
 
   name_prefix = var.project
@@ -33,7 +33,7 @@ module "bastion" {
   vpc_id         = module.vpc.vpc_id
   public_subnets = module.vpc.public_subnets
 
-  ssh_key_name   = var.bastion_ssh_key_name
+  ssh_key_name = var.bastion_ssh_key_name
 
   tags = local.tags
 }
