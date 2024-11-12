@@ -1,5 +1,4 @@
 locals {
-  default_container_name = "app"
   fargate_capacity_providers = {
     FARGATE = {
       default_capacity_provider_strategy = {
@@ -268,7 +267,7 @@ module "store-core-service" {
       from_port   = 0
       to_port     = 65535
       protocol    = "tcp"
-      description = "Db access from within VPC"
+      description = "Allow ingress traffic access from within VPC"
       cidr_blocks = var.vpc_cidr_block
     },
   ]
@@ -277,7 +276,7 @@ module "store-core-service" {
       from_port   = 0
       to_port     = 65535
       protocol    = "tcp"
-      description = "Db access from within VPC"
+      description = "Allow egress traffic access"
       cidr_blocks = "0.0.0.0/0"
     },
   ]
