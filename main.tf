@@ -39,7 +39,7 @@ module "store-pod" {
   vpc_cidr_block   = local.vpc_cidr
   env              = var.env
   index            = each.key
-  for_each = toset(["1"])
+  for_each         = toset(["1"])
 }
 
 module "saas-pod" {
@@ -55,5 +55,5 @@ module "saas-pod" {
   vpc_cidr_block   = local.vpc_cidr
   env              = var.env
   index            = each.key
-  for_each = toset(["1"])
+  for_each         = toset(["1"])
 }

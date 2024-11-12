@@ -13,16 +13,16 @@ locals {
   }
   services = {
     "store-ui" = {
-      public                         = true
-      priority                       = 100
-      service_type                   = "SERVICE"
-      loadbalancer_target_groups={}
+      public                      = true
+      priority                    = 100
+      service_type                = "SERVICE"
+      loadbalancer_target_groups  = {}
       load_balancer_host_matchers = []
-      desired                        = 1
-      cpu                            = 512
-      memory                         = 1024
-      main_container                 = "store-ui"
-      main_container_port            = 4200
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "store-ui"
+      main_container_port         = 4200
       health_check = {
         path                = "/"
         port                = 4200
@@ -47,16 +47,16 @@ locals {
       }
     }
     "welcome-ui" = {
-      public                         = true
-      priority                       = 100
-      service_type                   = "SERVICE"
-      loadbalancer_target_groups={}
+      public                      = true
+      priority                    = 100
+      service_type                = "SERVICE"
+      loadbalancer_target_groups  = {}
       load_balancer_host_matchers = []
-      desired                        = 1
-      cpu                            = 512
-      memory                         = 1024
-      main_container                 = "welcome-ui"
-      main_container_port            = 4300
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "welcome-ui"
+      main_container_port         = 4300
       health_check = {
         path                = "/"
         port                = 4300
@@ -92,11 +92,11 @@ locals {
         }
       }
       load_balancer_host_matchers = []
-      desired             = 1
-      cpu                 = 512
-      memory              = 1024
-      main_container      = "store-core-gateway"
-      main_container_port = 7000
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "store-core-gateway"
+      main_container_port         = 7000
       health_check = {
         path                = "/actuator/health"
         port                = 7000
@@ -133,9 +133,9 @@ locals {
       }
     }
     "auth" = {
-      public                         = true
-      priority                       = 100
-      service_type                   = "SERVICE"
+      public       = true
+      priority     = 100
+      service_type = "SERVICE"
       loadbalancer_target_groups = {
         "auth-tg" : {
           loadbalancer_target_groups_arn = module.cluster-lb.target_groups["auth-tg"].arn
@@ -145,11 +145,11 @@ locals {
       }
 
       load_balancer_host_matchers = []
-      desired             = 1
-      cpu                 = 512
-      memory              = 1024
-      main_container      = "auth"
-      main_container_port = 9999
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "auth"
+      main_container_port         = 9999
       health_check = {
         path                = "/health"
         port                = 9000
@@ -191,17 +191,17 @@ locals {
       }
     }
     "manager" = {
-      public                         = true
-      priority                       = 100
-      service_type                   = "SERVICE"
-      loadbalancer_target_groups={}
+      public                     = true
+      priority                   = 100
+      service_type               = "SERVICE"
+      loadbalancer_target_groups = {}
 
       load_balancer_host_matchers = []
-      desired             = 1
-      cpu                 = 512
-      memory              = 1024
-      main_container      = "manager"
-      main_container_port = 7001
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "manager"
+      main_container_port         = 7001
       health_check = {
         path                = "/actuator/health"
         port                = 7001

@@ -4,7 +4,7 @@ module "db_security_group" {
 
   name        = "db-${local.module_name}-${var.project}-${var.env}"
   description = "Postgres db security group"
-  vpc_id = var.vpc_id
+  vpc_id      = var.vpc_id
 
   # ingress
   ingress_with_cidr_blocks = [
