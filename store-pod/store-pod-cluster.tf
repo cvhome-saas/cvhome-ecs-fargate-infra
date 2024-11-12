@@ -74,8 +74,6 @@ locals {
             { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-GATEWAY_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-GATEWAY_PORT", "value" : "443" },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_SCHEMA", "value" : "https" },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_PORT", "value" : "443" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
             { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : local.cluster_dnsname },
@@ -111,8 +109,7 @@ locals {
       public                         = true
       priority                       = 100
       service_type                   = "SERVICE"
-      # loadbalancer_target_groups_arn = module.cluster-lb.target_groups["gateway-tg"].arn
-      loadbalancer_target_groups_arn = null
+      loadbalancer_target_groups_arn = module.cluster-lb.target_groups["gateway-tg"].arn
 
       load_balancer_host_matchers = []
       desired             = 1
@@ -136,8 +133,6 @@ locals {
             { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-GATEWAY_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-GATEWAY_PORT", "value" : "443" },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_SCHEMA", "value" : "https" },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_PORT", "value" : "443" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
             { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : local.cluster_dnsname },
