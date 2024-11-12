@@ -36,7 +36,11 @@ variable "requires_compatibilities" {
 variable "service" {
   type = object({
     public : bool
-    loadbalancer_target_groups_arn : string
+    loadbalancer_target_groups : map(object({
+      loadbalancer_target_groups_arn : string
+      main_container : string
+      main_container_port : number
+    }))
     priority : number
     service_type : string
     load_balancer_host_matchers = list(string)

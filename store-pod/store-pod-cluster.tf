@@ -16,7 +16,7 @@ locals {
       public                         = true
       priority                       = 100
       service_type                   = "SERVICE"
-      loadbalancer_target_groups_arn = null
+      loadbalancer_target_groups={}
       load_balancer_host_matchers = []
       desired                        = 1
       cpu                            = 512
@@ -50,7 +50,7 @@ locals {
       public                         = true
       priority                       = 100
       service_type                   = "SERVICE"
-      loadbalancer_target_groups_arn = null
+      loadbalancer_target_groups={}
 
       load_balancer_host_matchers = []
       desired             = 1
@@ -83,7 +83,9 @@ locals {
             },
             { "name" : "COM_ASREVO_CVHOME_CDN_STORAGE_PROVIDER", "value" : "S3" },
             { "name" : "COM_ASREVO_CVHOME_CDN_STORAGE_BUCKET", "value" : module.storage-bucket.s3_bucket_id },
-            { "name" : "COM_ASREVO_CVHOME_CDN_BASE-PATH", "value" : module.storage-bucket.s3_bucket_bucket_domain_name },
+            {
+              "name" : "COM_ASREVO_CVHOME_CDN_BASE-PATH", "value" : module.storage-bucket.s3_bucket_bucket_domain_name
+            },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_NAMESPACE", "value" : "store-pod-1.cvhome.lcl" },
             { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-pod-db.db_instance_name },
             { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-pod-db.db_instance_address },
@@ -106,10 +108,16 @@ locals {
       }
     }
     "store-pod-gateway" = {
-      public                         = true
-      priority                       = 100
-      service_type                   = "SERVICE"
-      loadbalancer_target_groups_arn = module.cluster-lb.target_groups["gateway-tg"].arn
+      public       = true
+      priority     = 100
+      service_type = "SERVICE"
+      loadbalancer_target_groups = {
+        "gateway-tg" : {
+          loadbalancer_target_groups_arn = module.cluster-lb.target_groups["gateway-tg"].arn
+          main_container                 = "store-pod-gateway"
+          main_container_port            = 7100
+        }
+      }
 
       load_balancer_host_matchers = []
       desired             = 1
