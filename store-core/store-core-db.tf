@@ -14,7 +14,6 @@ module "db_security_group" {
       protocol    = "tcp"
       description = "Db access from within VPC"
       cidr_blocks = var.vpc_cidr_block
-      # cidr_blocks = "0.0.0.0/0"
     },
   ]
 
