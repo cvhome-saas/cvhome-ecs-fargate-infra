@@ -10,6 +10,8 @@ module "vpc" {
   name = "${var.project}-${var.env}"
   cidr = local.vpc_cidr
 
+  enable_dns_hostnames = true
+  enable_dns_support = true
 
   azs              = local.azs
   public_subnets   = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
