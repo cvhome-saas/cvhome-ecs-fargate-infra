@@ -19,12 +19,12 @@ locals {
       loadbalancer_target_groups = {
         "gateway-tg-80" : {
           loadbalancer_target_groups_arn = module.cluster-lb.target_groups["gateway-tg-80"].arn
-          main_container                 = "app80"
+          main_container                 = "saas-pod-gateway"
           main_container_port            = 80
         }
         "gateway-tg-443" : {
           loadbalancer_target_groups_arn = module.cluster-lb.target_groups["gateway-tg-443"].arn
-          main_container                 = "app443"
+          main_container                 = "saas-pod-gateway"
           main_container_port            = 443
         }
       }
