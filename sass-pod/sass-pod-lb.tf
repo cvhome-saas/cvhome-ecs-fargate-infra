@@ -70,7 +70,7 @@ module "cluster-lb" {
       health_check = {
         enabled             = true
         interval            = 45
-        path                = "/config"
+        path                = "/config/"
         port                = 2019
         healthy_threshold   = 3
         unhealthy_threshold = 2
@@ -88,7 +88,7 @@ module "cluster-lb" {
       health_check = {
         enabled             = true
         interval            = 45
-        path                = "/config"
+        path                = "/config/"
         port                = 2019
         healthy_threshold   = 3
         unhealthy_threshold = 2
