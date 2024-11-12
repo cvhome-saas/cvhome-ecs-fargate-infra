@@ -67,6 +67,12 @@ locals {
               containerPort : 80,
               hostPort : 80,
               protocol : "tcp"
+            },
+            {
+              name : "app2019",
+              containerPort : 2019,
+              hostPort : 2019,
+              protocol : "tcp"
             }
           ]
         }
