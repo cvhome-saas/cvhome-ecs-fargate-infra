@@ -8,7 +8,7 @@ resource "aws_cloudwatch_log_group" "this" {
 resource "aws_ecs_task_definition" "this" {
   cpu                      = var.service.cpu
   memory                   = var.service.memory
-  family                   = var.service_name
+  family                   = "${var.project}-${var.module_name}-${var.service_name}-${var.env}"
   network_mode             = "awsvpc"
   requires_compatibilities = var.requires_compatibilities
   task_role_arn            = aws_iam_role.ecs_task_role.arn
