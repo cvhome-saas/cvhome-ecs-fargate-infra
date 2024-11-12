@@ -16,7 +16,19 @@ locals {
       public                     = true
       priority                   = 100
       service_type               = "SERVICE"
-      loadbalancer_target_groups = {}
+      loadbalancer_target_groups = {
+        "gateway-tg-80" : {
+          loadbalancer_target_groups_arn = module.cluster-lb.target_groups["gateway-tg-80"].arn
+          main_container                 = "app80"
+          main_container_port            = 80
+        }
+        "gateway-tg-443" : {
+          loadbalancer_target_groups_arn = module.cluster-lb.target_groups["gateway-tg-443"].arn
+          main_container                 = "app443"
+          main_container_port            = 443
+        }
+      }
+
 
 
       load_balancer_host_matchers = []
@@ -45,7 +57,7 @@ locals {
           ]
           portMappings : [
             {
-              name : "app",
+              name : "app443",
               containerPort : 443,
               hostPort : 443,
               protocol : "tcp"
@@ -64,19 +76,19 @@ locals {
 }
 
 
-module "store-pod-cluster" {
+module "saas-pod-cluster" {
   source                     = "terraform-aws-modules/ecs/aws"
   cluster_name               = "${local.module_name}-${var.project}-${var.env}"
   fargate_capacity_providers = local.fargate_capacity_providers
   tags                       = var.tags
 }
 
-module "store-pod-service" {
+module "saas-pod-service" {
   source       = "../common/ecs-service"
   namespace_id = aws_service_discovery_private_dns_namespace.cluster_namespace.id
   service_name = each.key
   tags         = var.tags
-  cluster_name = module.store-pod-cluster.cluster_name
+  cluster_name = module.saas-pod-cluster.cluster_name
   env          = var.env
   module_name  = local.module_name
   project      = var.project
