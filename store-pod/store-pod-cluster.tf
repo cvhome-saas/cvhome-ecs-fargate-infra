@@ -13,16 +13,16 @@ locals {
   }
   services = {
     "landing-ui" = {
-      public              = true
-      priority            = 100
-      service_type        = "SERVICE"
-      loadbalancer_target_groups = {}
+      public                      = true
+      priority                    = 100
+      service_type                = "SERVICE"
+      loadbalancer_target_groups  = {}
       load_balancer_host_matchers = []
-      desired             = 1
-      cpu                 = 512
-      memory              = 1024
-      main_container      = "landing-ui"
-      main_container_port = 7102
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "landing-ui"
+      main_container_port         = 7102
       health_check = {
         path                = "/"
         port                = 7102
@@ -47,17 +47,17 @@ locals {
       }
     }
     "store" = {
-      public       = true
-      priority     = 100
-      service_type = "SERVICE"
+      public                     = true
+      priority                   = 100
+      service_type               = "SERVICE"
       loadbalancer_target_groups = {}
 
       load_balancer_host_matchers = []
-      desired             = 1
-      cpu                 = 512
-      memory              = 1024
-      main_container      = "store"
-      main_container_port = 7101
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "store"
+      main_container_port         = 7101
       health_check = {
         path                = "/actuator/health"
         port                = 7101
@@ -109,9 +109,9 @@ locals {
       }
     }
     "store-pod-gateway" = {
-      public       = true
-      priority     = 100
-      service_type = "SERVICE"
+      public                     = true
+      priority                   = 100
+      service_type               = "SERVICE"
       loadbalancer_target_groups = {}
 
       # loadbalancer_target_groups = {
@@ -123,11 +123,11 @@ locals {
       # }
 
       load_balancer_host_matchers = []
-      desired             = 1
-      cpu                 = 512
-      memory              = 1024
-      main_container      = "store-pod-gateway"
-      main_container_port = 7100
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "store-pod-gateway"
+      main_container_port         = 7100
       health_check = {
         path                = "/actuator/health"
         port                = 7100
