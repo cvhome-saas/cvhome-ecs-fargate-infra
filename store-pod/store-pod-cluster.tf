@@ -33,7 +33,7 @@ locals {
 
       containers = {
         "landing-ui" = {
-          image = "public.ecr.aws/b2i4h4k9/store-pod/landing-ui:0.1.0"
+          image = "${var.docker_registry}/store-pod/landing-ui:0.1.0"
           environment : []
           portMappings : [
             {
@@ -68,7 +68,7 @@ locals {
 
       containers = {
         "store" = {
-          image = "public.ecr.aws/b2i4h4k9/store-pod/store:0.1.0"
+          image = "${var.docker_registry}/store-pod/store:0.1.0"
           environment : [
             { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
             { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
@@ -138,7 +138,7 @@ locals {
 
       containers = {
         "store-pod-gateway" = {
-          image = "public.ecr.aws/b2i4h4k9/store-pod/store-pod-gateway:0.1.0"
+          image = "${var.docker_registry}/store-pod/store-pod-gateway:0.1.0"
           environment : [
             { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
             { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },

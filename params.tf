@@ -13,3 +13,6 @@ variable "certificate_arn" {
 variable "domain" {
   type = string
 }
+variable "docker_registry" {
+  type = string
+}

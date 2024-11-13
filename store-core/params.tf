@@ -40,3 +40,6 @@ variable "db_instance_class" {
 variable "db_allocated_storage" {
   default = 20
 }
+variable "docker_registry" {
+  type = string
+}

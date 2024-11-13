@@ -34,3 +34,6 @@ variable "domain_zone_id" {
 variable "certificate_arn" {
   type = string
 }
+variable "docker_registry" {
+  type = string
+}

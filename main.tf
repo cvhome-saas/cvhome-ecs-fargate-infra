@@ -28,6 +28,7 @@ module "store-core" {
   database_subnets = module.vpc.database_subnets
   vpc_cidr_block   = local.vpc_cidr
   env              = var.env
+  docker_registry = var.docker_registry
 }
 
 module "store-pod" {
@@ -45,6 +46,7 @@ module "store-pod" {
   vpc_cidr_block   = local.vpc_cidr
   env              = var.env
   index            = each.key
+  docker_registry = var.docker_registry
   for_each         = toset(["1"])
 }
 
@@ -62,5 +64,6 @@ module "saas-pod" {
   vpc_cidr_block   = local.vpc_cidr
   env              = var.env
   index            = each.key
+  docker_registry = var.docker_registry
   for_each         = toset(["1"])
 }
