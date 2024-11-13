@@ -47,7 +47,7 @@ locals {
 
       containers = {
         "saas-pod-gateway" = {
-          image = "${var.docker_registry}/saas-pod/saas-pod-gateway-v2:0.1.0"
+          image = "${var.docker_registry}/saas-pod/saas-pod-gateway-v2:${var.image_version}"
           environment : [
             { "name" : "STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.store-pod-1.${var.project}.lcl:7100" },
             {

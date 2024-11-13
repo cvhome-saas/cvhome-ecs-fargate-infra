@@ -37,3 +37,9 @@ variable "certificate_arn" {
 variable "docker_registry" {
   type = string
 }
+variable "image_version" {
+  type = string
+}
+variable "namespace" {
+  type = string
+}

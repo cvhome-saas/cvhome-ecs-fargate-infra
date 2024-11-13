@@ -33,7 +33,7 @@ locals {
 
       containers = {
         "landing-ui" = {
-          image = "${var.docker_registry}/store-pod/landing-ui:0.1.0"
+          image = "${var.docker_registry}/store-pod/landing-ui:${var.image_version}"
           environment : []
           portMappings : [
             {
@@ -68,7 +68,7 @@ locals {
 
       containers = {
         "store" = {
-          image = "${var.docker_registry}/store-pod/store:0.1.0"
+          image = "${var.docker_registry}/store-pod/store:${var.image_version}"
           environment : [
             { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
             { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
@@ -76,7 +76,7 @@ locals {
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_CORE-GATEWAY_PORT", "value" : "443" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
-            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : local.cluster_dnsname },
+            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.namespace },
             {
               "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
               "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
@@ -138,7 +138,7 @@ locals {
 
       containers = {
         "store-pod-gateway" = {
-          image = "${var.docker_registry}/store-pod/store-pod-gateway:0.1.0"
+          image = "${var.docker_registry}/store-pod/store-pod-gateway:${var.image_version}"
           environment : [
             { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
             { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
@@ -146,11 +146,12 @@ locals {
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_CORE-GATEWAY_PORT", "value" : "443" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
-            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : local.cluster_dnsname },
+            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.namespace },
             {
               "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
               "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
             },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_MANAGER_NAMESPACE", "value" : "store-core.${var.project}.lcl" },
           ]
           portMappings : [
             {

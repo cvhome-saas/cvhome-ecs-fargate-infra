@@ -13,3 +13,6 @@ variable "domain" {
 variable "docker_registry" {
   type = string
 }
+variable "image_version" {
+  type = string
+}

@@ -33,7 +33,7 @@ locals {
 
       containers = {
         "store-ui" = {
-          image = "${var.docker_registry}/store-core/store-ui:0.1.0"
+          image = "${var.docker_registry}/store-core/store-ui:${var.image_version}"
           environment : []
           portMappings : [
             {
@@ -67,7 +67,7 @@ locals {
 
       containers = {
         "welcome-ui" = {
-          image = "${var.docker_registry}/store-core/welcome-ui:0.1.0"
+          image = "${var.docker_registry}/store-core/welcome-ui:${var.image_version}"
           environment : []
           portMappings : [
             {
@@ -107,7 +107,7 @@ locals {
 
       containers = {
         "store-core-gateway" = {
-          image = "${var.docker_registry}/store-core/store-core-gateway:0.1.0"
+          image = "${var.docker_registry}/store-core/store-core-gateway:${var.image_version}"
           environment : [
             { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
             { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
@@ -115,11 +115,12 @@ locals {
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_PORT", "value" : "443" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
-            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : local.cluster_dnsname },
+            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.namespace },
             {
               "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
               "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
             },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_NAMESPACE", "value" : "store-pod-1.${var.project}.lcl" },
           ]
           portMappings : [
             {
@@ -160,7 +161,7 @@ locals {
 
       containers = {
         "auth" = {
-          image = "${var.docker_registry}/store-core/auth:0.1.0"
+          image = "${var.docker_registry}/store-core/auth:${var.image_version}"
           environment : [
             { "name" : "KC_HTTP_PORT", "value" : "9999" },
             { "name" : "KC_HTTP_ENABLED", "value" : "true" },
@@ -212,7 +213,7 @@ locals {
 
       containers = {
         "manager" = {
-          image = "${var.docker_registry}/store-core/manager:0.1.0"
+          image = "${var.docker_registry}/store-core/manager:${var.image_version}"
           environment : [
             { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
             { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
@@ -220,7 +221,7 @@ locals {
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_PORT", "value" : "443" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
-            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : local.cluster_dnsname },
+            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.namespace },
             {
               "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
               "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
