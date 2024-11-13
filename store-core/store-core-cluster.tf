@@ -226,7 +226,7 @@ locals {
               "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
             },
 
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_NAMESPACE", "value" : "store-pod-1.cvhome.lcl" },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_NAMESPACE", "value" : "store-pod-1.${var.project}.lcl" },
             { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-core-db.db_instance_name },
             { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-core-db.db_instance_address },
             { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-core-db.db_instance_port },

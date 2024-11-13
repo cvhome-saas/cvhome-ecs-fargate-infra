@@ -49,10 +49,10 @@ locals {
         "saas-pod-gateway" = {
           image = "${var.docker_registry}/saas-pod/saas-pod-gateway-v2:0.1.0"
           environment : [
-            { "name" : "STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.store-pod-1.cvhome.lcl:7100" },
+            { "name" : "STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.store-pod-1.${var.project}.lcl:7100" },
             {
               "name" : "ASK_TLS_URL",
-              "value" : "http://store-core-gateway.store-core.cvhome.lcl:7000/manager/api/v1/router/public/ask-for-tls"
+              "value" : "http://store-core-gateway.store-core.${var.project}.lcl:7000/manager/api/v1/router/public/ask-for-tls"
             }
           ]
           portMappings : [
