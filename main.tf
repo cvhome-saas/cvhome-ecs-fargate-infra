@@ -1,10 +1,19 @@
 provider "aws" {
-  region = "eu-central-1"
+  region = var.region
+}
+
+resource "random_string" "project" {
+  length  = 8
+  upper   = false
+  lower   = true
+  numeric = false
+  special = false
 }
 
 locals {
+  project = random_string.project.result
   tags = {
-    Project     = var.project
+    Project     = local.project
     Terraform   = "true"
     Environment = var.env
   }
@@ -23,7 +32,7 @@ module "store-core" {
   certificate_arn  = var.certificate_arn
   domain           = var.domain
   domain_zone_id   = data.aws_route53_zone.domain_zone_id.name
-  project          = var.project
+  project          = local.project
   tags             = local.tags
   database_subnets = module.vpc.database_subnets
   vpc_cidr_block   = local.vpc_cidr
@@ -40,7 +49,7 @@ module "store-pod" {
   certificate_arn  = var.certificate_arn
   domain           = var.domain
   domain_zone_id   = data.aws_route53_zone.domain_zone_id.name
-  project          = var.project
+  project          = local.project
   tags             = local.tags
   database_subnets = module.vpc.database_subnets
   vpc_cidr_block   = local.vpc_cidr
@@ -59,7 +68,7 @@ module "saas-pod" {
   certificate_arn  = var.certificate_arn
   domain           = var.domain
   domain_zone_id   = data.aws_route53_zone.domain_zone_id.name
-  project          = var.project
+  project          = local.project
   tags             = local.tags
   vpc_cidr_block   = local.vpc_cidr
   env              = var.env
