@@ -95,7 +95,6 @@ resource "aws_ecs_service" "this" {
   service_registries {
     registry_arn   = aws_service_discovery_service.this.arn
     container_name = var.service.main_container
-    container_port = var.service.main_container_port
   }
   dynamic "load_balancer" {
     for_each = var.service.loadbalancer_target_groups

@@ -4,7 +4,7 @@ resource "aws_service_discovery_service" "this" {
     namespace_id = var.namespace_id
     dns_records {
       ttl  = 10
-      type = "SRV"
+      type = "A"
     }
     routing_policy = "MULTIVALUE"
   }
