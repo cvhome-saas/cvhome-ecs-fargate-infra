@@ -85,7 +85,7 @@ locals {
             { "name" : "COM_ASREVO_CVHOME_CDN_STORAGE_BUCKET", "value" : module.cdn-storage-bucket.s3_bucket_id },
             {
               "name" : "COM_ASREVO_CVHOME_CDN_BASE-PATH",
-              "value" : "https://${module.cdn-storage-bucket.s3_bucket_bucket_domain_name}"
+              "value" : "https://${module.cdn-storage-cloudfront.cloudfront_distribution_domain_name}"
             },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_NAMESPACE", "value" : "store-pod-1.${var.project}.lcl" },
             { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-pod-db.db_instance_name },
