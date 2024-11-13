@@ -31,7 +31,7 @@ variable "log_s3_bucket_id" {
 variable "domain" {
   type = string
 }
-variable "domain_zone_id" {
+variable "domain_zone_name" {
   type = string
 }
 variable "certificate_arn" {

@@ -106,7 +106,7 @@ module "saas-pod-gateway-record" {
   source  = "terraform-aws-modules/route53/aws//modules/records"
   version = "~> 3.0"
 
-  zone_name = var.domain_zone_id
+  zone_name = var.domain_zone_name
 
   records = [
     {
