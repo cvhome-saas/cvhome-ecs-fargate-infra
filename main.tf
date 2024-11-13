@@ -10,6 +10,10 @@ locals {
   }
 }
 
+data "aws_route53_zone" "domain_zone_id" {
+  name = var.domain
+}
+
 module "store-core" {
   source           = "./store-core"
   vpc_id           = module.vpc.vpc_id
@@ -18,6 +22,7 @@ module "store-core" {
   log_s3_bucket_id = module.log-bucket.s3_bucket_id
   certificate_arn  = var.certificate_arn
   domain           = var.domain
+  domain_zone_id   = data.aws_route53_zone.domain_zone_id.name
   project          = var.project
   tags             = local.tags
   database_subnets = module.vpc.database_subnets
@@ -33,6 +38,7 @@ module "store-pod" {
   log_s3_bucket_id = module.log-bucket.s3_bucket_id
   certificate_arn  = var.certificate_arn
   domain           = var.domain
+  domain_zone_id   = data.aws_route53_zone.domain_zone_id.name
   project          = var.project
   tags             = local.tags
   database_subnets = module.vpc.database_subnets
@@ -50,6 +56,7 @@ module "saas-pod" {
   log_s3_bucket_id = module.log-bucket.s3_bucket_id
   certificate_arn  = var.certificate_arn
   domain           = var.domain
+  domain_zone_id   = data.aws_route53_zone.domain_zone_id.name
   project          = var.project
   tags             = local.tags
   vpc_cidr_block   = local.vpc_cidr

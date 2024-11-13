@@ -13,6 +13,3 @@ variable "certificate_arn" {
 variable "domain" {
   type = string
 }
-variable "bastion_ssh_key_name" {
-  type = string
-}

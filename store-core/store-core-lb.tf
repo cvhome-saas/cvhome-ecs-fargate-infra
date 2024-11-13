@@ -141,3 +141,73 @@ module "cluster-lb" {
 
   tags = var.tags
 }
+module "root-record" {
+  source  = "terraform-aws-modules/route53/aws//modules/records"
+  version = "~> 3.0"
+
+  zone_name = var.domain_zone_id
+
+  records = [
+    {
+      name = ""
+      type = "A"
+      alias = {
+        name    = module.cluster-lb.dns_name
+        zone_id = module.cluster-lb.zone_id
+      }
+    }
+  ]
+}
+
+module "www-record" {
+  source  = "terraform-aws-modules/route53/aws//modules/records"
+  version = "~> 3.0"
+
+  zone_name = var.domain_zone_id
+
+  records = [
+    {
+      name = "www"
+      type = "A"
+      alias = {
+        name    = module.cluster-lb.dns_name
+        zone_id = module.cluster-lb.zone_id
+      }
+    }
+  ]
+}
+
+module "auth-record" {
+  source  = "terraform-aws-modules/route53/aws//modules/records"
+  version = "~> 3.0"
+
+  zone_name = var.domain_zone_id
+
+  records = [
+    {
+      name = "auth"
+      type = "A"
+      alias = {
+        name    = module.cluster-lb.dns_name
+        zone_id = module.cluster-lb.zone_id
+      }
+    }
+  ]
+}
+module "store-ui-record" {
+  source  = "terraform-aws-modules/route53/aws//modules/records"
+  version = "~> 3.0"
+
+  zone_name = var.domain_zone_id
+
+  records = [
+    {
+      name = "store-ui"
+      type = "A"
+      alias = {
+        name    = module.cluster-lb.dns_name
+        zone_id = module.cluster-lb.zone_id
+      }
+    }
+  ]
+}

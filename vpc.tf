@@ -23,17 +23,3 @@ module "vpc" {
 
   tags = local.tags
 }
-
-module "bastion" {
-  source  = "umotif-public/bastion/aws"
-  version = "~> 2.1.0"
-
-  name_prefix = var.project
-
-  vpc_id         = module.vpc.vpc_id
-  public_subnets = module.vpc.public_subnets
-
-  ssh_key_name = var.bastion_ssh_key_name
-
-  tags = local.tags
-}
