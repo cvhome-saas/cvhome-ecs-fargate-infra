@@ -119,26 +119,3 @@ resource "aws_ecs_service" "this" {
     rollback = false
   }
 }
-
-
-# services = {
-#   for key, value in local.cluster_services : key => merge(value,
-#     {
-#       security_group_rules = local.cluster-sg
-#       subnet_ids           = var.public_subnets
-#       assign_public_ip     = true
-#       service_registries = {
-#         registry_arn   = aws_service_discovery_service.cluster-service[key].arn
-#         container_name = value.container_definitions.app.port_mappings[0].name
-#         container_port = value.container_definitions.app.port_mappings[0].containerPort
-#       }
-#       load_balancer = try(value.loadbalancer_target_groups, null)!=null ? {
-#         service = {
-#           target_group_arn = module.cluster-lb.target_groups[value.loadbalancer_target_groups].arn
-#           container_name   = value.container_definitions.app.port_mappings[0].name
-#           container_port   = value.container_definitions.app.port_mappings[0].containerPort
-#         }
-#       } : {}
-#     }
-#   )
-# }
