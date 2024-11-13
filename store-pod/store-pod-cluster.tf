@@ -82,10 +82,10 @@ locals {
               "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
             },
             { "name" : "COM_ASREVO_CVHOME_CDN_STORAGE_PROVIDER", "value" : "S3" },
-            { "name" : "COM_ASREVO_CVHOME_CDN_STORAGE_BUCKET", "value" : module.storage-bucket.s3_bucket_id },
+            { "name" : "COM_ASREVO_CVHOME_CDN_STORAGE_BUCKET", "value" : module.cdn-storage-bucket.s3_bucket_id },
             {
               "name" : "COM_ASREVO_CVHOME_CDN_BASE-PATH",
-              "value" : "https://${module.storage-bucket.s3_bucket_bucket_domain_name}"
+              "value" : "https://${module.cdn-storage-bucket.s3_bucket_bucket_domain_name}"
             },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_NAMESPACE", "value" : "store-pod-1.cvhome.lcl" },
             { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-pod-db.db_instance_name },
