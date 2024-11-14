@@ -16,7 +16,7 @@ module "cdn-storage-cloudfront" {
 
   comment             = "cdn storage cloudfront distribution"
   enabled             = true
-  staging = false # If you want to create a staging distribution, set this to true
+  staging             = false # If you want to create a staging distribution, set this to true
   http_version        = "http2and3"
   is_ipv6_enabled     = true
   price_class         = "PriceClass_All"
@@ -62,8 +62,8 @@ module "cdn-storage-cloudfront" {
   default_cache_behavior = {
     target_origin_id       = "cdn_storage"
     viewer_protocol_policy = "allow-all"
-    allowed_methods = ["GET", "HEAD", "OPTIONS"]
-    cached_methods = ["GET", "HEAD"]
+    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
+    cached_methods         = ["GET", "HEAD"]
 
     use_forwarded_values = false
 
@@ -81,7 +81,7 @@ module "cdn-storage-cloudfront" {
       error_code         = 404
       response_code      = 404
       response_page_path = "/errors/404.html"
-    }, {
+      }, {
       error_code         = 403
       response_code      = 403
       response_page_path = "/errors/403.html"

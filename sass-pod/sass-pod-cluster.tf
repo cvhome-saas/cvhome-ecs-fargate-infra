@@ -86,6 +86,7 @@ module "saas-pod-cluster" {
   source                     = "terraform-aws-modules/ecs/aws"
   cluster_name               = "${local.module_name}-${var.project}-${var.env}"
   fargate_capacity_providers = local.fargate_capacity_providers
+  cluster_settings           = []
   tags                       = var.tags
 }
 
