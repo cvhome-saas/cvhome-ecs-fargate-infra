@@ -1,7 +1,9 @@
 provider "aws" {
   profile = var.aws_profile
-  region = var.region
+  region  = var.region
 }
+
+data "aws_caller_identity" "current" {}
 
 resource "random_string" "project" {
   length  = 8
@@ -18,6 +20,8 @@ locals {
     Terraform   = "true"
     Environment = var.env
   }
+  private_ecr_docker_registry = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com"
+  docker_registry             = var.docker_registry != "" ? var.docker_registry : local.private_ecr_docker_registry
 }
 
 data "aws_route53_zone" "domain_zone" {
@@ -40,7 +44,7 @@ module "store-core" {
   env              = var.env
   image_version    = var.image_version
   namespace        = "store-core.${local.project}.lcl"
-  docker_registry  = var.docker_registry
+  docker_registry  = local.docker_registry
 }
 
 module "store-pod" {
@@ -58,7 +62,7 @@ module "store-pod" {
   vpc_cidr_block   = local.vpc_cidr
   env              = var.env
   index            = each.key
-  docker_registry  = var.docker_registry
+  docker_registry  = local.docker_registry
   image_version    = var.image_version
   namespace        = "store-pod-${each.key}.${local.project}.lcl"
   for_each         = toset(["1"])
@@ -78,7 +82,7 @@ module "saas-pod" {
   vpc_cidr_block   = local.vpc_cidr
   env              = var.env
   index            = each.key
-  docker_registry  = var.docker_registry
+  docker_registry  = local.docker_registry
   image_version    = var.image_version
   namespace        = "saas-pod-${each.key}.${local.project}.lcl"
   for_each         = toset(["1"])
