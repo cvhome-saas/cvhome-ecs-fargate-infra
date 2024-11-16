@@ -1,3 +1,4 @@
+aws_profile     = "default"
 region          = "eu-central-1"
 env             = "dev"
 domain          = "best-store.click"
