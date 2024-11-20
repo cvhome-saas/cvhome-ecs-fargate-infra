@@ -119,3 +119,21 @@ module "saas-pod-gateway-record" {
     }
   ]
 }
+
+module "wildcard-saas-pod-gateway-record" {
+  source  = "terraform-aws-modules/route53/aws//modules/records"
+  version = "~> 3.0"
+
+  zone_name = var.domain_zone_name
+
+  records = [
+    {
+      name = "*.saas-pod-gateway-${var.index}"
+      type = "A"
+      alias = {
+        name    = module.cluster-lb.dns_name
+        zone_id = module.cluster-lb.zone_id
+      }
+    }
+  ]
+}
