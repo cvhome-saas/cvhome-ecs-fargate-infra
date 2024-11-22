@@ -41,7 +41,7 @@ module "store-core" {
   database_subnets = module.vpc.database_subnets
   vpc_cidr_block   = local.vpc_cidr
   env              = var.env
-  image_version    = var.image_version
+  image_tag    = var.image_tag
   namespace        = "store-core.${local.project}.lcl"
   docker_registry  = local.docker_registry
 }
@@ -62,7 +62,7 @@ module "store-pod" {
   env              = var.env
   index            = each.key
   docker_registry  = local.docker_registry
-  image_version    = var.image_version
+  image_tag    = var.image_tag
   namespace        = "store-pod-${each.key}.${local.project}.lcl"
   for_each         = toset(["1"])
 }
@@ -82,7 +82,7 @@ module "saas-pod" {
   env              = var.env
   index            = each.key
   docker_registry  = local.docker_registry
-  image_version    = var.image_version
+  image_tag    = var.image_tag
   namespace        = "saas-pod-${each.key}.${local.project}.lcl"
   for_each         = toset(["1"])
 }

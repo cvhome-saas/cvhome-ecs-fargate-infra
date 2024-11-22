@@ -33,7 +33,7 @@ locals {
 
       containers = {
         "store-ui" = {
-          image = "${var.docker_registry}/store-core/store-ui:${var.image_version}"
+          image = "${var.docker_registry}/store-core/store-ui:${var.image_tag}"
           environment : []
           portMappings : [
             {
@@ -67,7 +67,7 @@ locals {
 
       containers = {
         "welcome-ui" = {
-          image = "${var.docker_registry}/store-core/welcome-ui:${var.image_version}"
+          image = "${var.docker_registry}/store-core/welcome-ui:${var.image_tag}"
           environment : []
           portMappings : [
             {
@@ -107,7 +107,7 @@ locals {
 
       containers = {
         "store-core-gateway" = {
-          image = "${var.docker_registry}/store-core/store-core-gateway:${var.image_version}"
+          image = "${var.docker_registry}/store-core/store-core-gateway:${var.image_tag}"
           environment : [
             { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
             { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
@@ -161,7 +161,7 @@ locals {
 
       containers = {
         "auth" = {
-          image = "${var.docker_registry}/store-core/auth:${var.image_version}"
+          image = "${var.docker_registry}/store-core/auth:${var.image_tag}"
           environment : [
             { "name" : "KC_HTTP_PORT", "value" : "9999" },
             { "name" : "KC_HTTP_ENABLED", "value" : "true" },
@@ -213,7 +213,7 @@ locals {
 
       containers = {
         "manager" = {
-          image = "${var.docker_registry}/store-core/manager:${var.image_version}"
+          image = "${var.docker_registry}/store-core/manager:${var.image_tag}"
           environment : [
             { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
             { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },

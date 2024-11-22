@@ -43,7 +43,7 @@ variable "db_allocated_storage" {
 variable "docker_registry" {
   type = string
 }
-variable "image_version" {
+variable "image_tag" {
   type = string
 }
 variable "namespace" {
