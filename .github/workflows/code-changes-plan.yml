@@ -21,17 +21,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - name: Configure AWS credentials For private region
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
       - uses: hashicorp/setup-terraform@v3
       - run: terraform init -backend-config="region=${CONFIG_STATE_BUCKET_REGION}" -backend-config="bucket=${CONFIG_STATE_BUCKET_NAME}" -backend-config="key=${CONFIG_STATE_BUCKET_KEY}"
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           CONFIG_STATE_BUCKET_REGION: ${{ secrets.CONFIG_STATE_BUCKET_REGION }}
           CONFIG_STATE_BUCKET_NAME: ${{ secrets.CONFIG_STATE_BUCKET_NAME }}
           CONFIG_STATE_BUCKET_KEY: ${{ secrets.CONFIG_STATE_BUCKET_KEY }}
       - id: plan
         run: terraform plan
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
