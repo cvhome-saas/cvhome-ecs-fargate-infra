@@ -7,7 +7,7 @@
 # To get a newer version, you will need to update the SHA.
 # You can also reference a tag or branch, but the action may change without warning.
 
-name: Trigger Publishing To Private ECR
+name: Trigger destroy
 
 on:
   workflow_dispatch
@@ -18,53 +18,21 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'corretto'
-      - name: Use Node.js 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew && chmod +x store-core/auth/kc-providers/gradlew
-      - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@v3
       - name: Configure AWS credentials For private region
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: ${{ secrets.PRIVATE_REGISTRY_REGION }}
+          aws-region: ${{ secrets.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      - name: get caller identity
-        id: get-aws-account-id
-        run: echo "aws-account-id=$(aws sts get-caller-identity --query Account --output text)">> $GITHUB_OUTPUT
-      - name: Login to Amazon private ECR
-        id: login-private-ecr
-        run: |
-          echo "aws-ecr-token=$(aws ecr get-login-password --region $REGION)">> $GITHUB_OUTPUT
+
+      - uses: hashicorp/setup-terraform@v3
+      - run: terraform init -backend-config="region=${CONFIG_STATE_BUCKET_REGION}" -backend-config="bucket=${CONFIG_STATE_BUCKET_NAME}" -backend-config="key=${CONFIG_STATE_BUCKET_KEY}"
         env:
-          REGION: ${{ secrets.PRIVATE_REGISTRY_REGION }}
-      - name: Create Ecr Registry
-        id: ecr-registry
-        run: echo "aws-ecr-registry=$REGISTRY">> $GITHUB_OUTPUT
-        env:
-          REGISTRY: "${{ steps.get-aws-account-id.outputs.aws-account-id }}.dkr.ecr.${{ secrets.PRIVATE_REGISTRY_REGION }}.amazonaws.com"
-      - name: Docker Login
-        run: echo $ECR_TOKEN | docker login -u AWS --password-stdin $REGISTRY
-        env:
-          ECR_TOKEN: ${{ steps.login-private-ecr.outputs.aws-ecr-token }}
-          REGISTRY: ${{ steps.ecr-registry.outputs.aws-ecr-registry }}
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-      - name: Suggest Build Version
-        id: suggest-build-version
-        run: echo "build-version=$(source scripts/suggested-version.sh ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }})">> $GITHUB_OUTPUT
-      - name: Print Build Version
-        run:  echo ${{ steps.suggest-build-version.outputs.build-version }}
-      - name: Package And Publish Docker with Gradle
-        run: ./gradlew bootBuildImage --publishImage -Dorg.gradle.project.version="${{ steps.suggest-build-version.outputs.build-version }}" -x test -x check
-        env: # Or as an environment variable
-          REGISTRY: "${{ steps.get-aws-account-id.outputs.aws-account-id }}.dkr.ecr.${{ secrets.PRIVATE_REGISTRY_REGION }}.amazonaws.com"
-          ECR_TOKEN: ${{ steps.login-private-ecr.outputs.aws-ecr-token }}
+          CONFIG_STATE_BUCKET_REGION: ${{ secrets.CONFIG_STATE_BUCKET_REGION }}
+          CONFIG_STATE_BUCKET_NAME: ${{ secrets.CONFIG_STATE_BUCKET_NAME }}
+          CONFIG_STATE_BUCKET_KEY: ${{ secrets.CONFIG_STATE_BUCKET_KEY }}
+      - id: plan
+        run: terraform plan
+      - id: apply
+        run: terraform destroy --auto-approve=true
+
