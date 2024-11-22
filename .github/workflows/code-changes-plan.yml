@@ -30,7 +30,7 @@ jobs:
           CONFIG_STATE_BUCKET_NAME: ${{ secrets.CONFIG_STATE_BUCKET_NAME }}
           CONFIG_STATE_BUCKET_KEY: ${{ secrets.CONFIG_STATE_BUCKET_KEY }}
       - id: plan
-        run: terraform plan -no-color
+        run: terraform plan
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
