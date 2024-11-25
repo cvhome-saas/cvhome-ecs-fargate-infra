@@ -163,7 +163,74 @@ locals {
           ]
         }
       }
+    },
+    "saas-pod-gateway" = {
+      public       = true
+      priority     = 100
+      service_type = "SERVICE"
+      loadbalancer_target_groups = {
+        "gateway-tg-80" : {
+          loadbalancer_target_groups_arn = module.cluster-lb.target_groups["gateway-tg-80"].arn
+          main_container                 = "saas-pod-gateway"
+          main_container_port            = 80
+        }
+        "gateway-tg-443" : {
+          loadbalancer_target_groups_arn = module.cluster-lb.target_groups["gateway-tg-443"].arn
+          main_container                 = "saas-pod-gateway"
+          main_container_port            = 443
+        }
+      }
+
+
+
+      load_balancer_host_matchers = []
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "saas-pod-gateway"
+      main_container_port         = 443
+      health_check = {
+        path                = "/"
+        port                = 80
+        healthy_threshold   = 2
+        interval            = 60
+        unhealthy_threshold = 3
+      }
+
+      containers = {
+        "saas-pod-gateway" = {
+          image = "${var.docker_registry}/saas-pod/saas-pod-gateway-v2:${var.image_tag}"
+          environment : [
+            { "name" : "STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.${var.namespace}:7100" },
+            {
+              "name" : "ASK_TLS_URL",
+              "value" : "http://store-core-gateway.${var.store_core_namespace}:7000/manager/api/v1/router/public/ask-for-tls"
+            }
+          ]
+          portMappings : [
+            {
+              name : "app443",
+              containerPort : 443,
+              hostPort : 443,
+              protocol : "tcp"
+            },
+            {
+              name : "app80",
+              containerPort : 80,
+              hostPort : 80,
+              protocol : "tcp"
+            },
+            {
+              name : "app2019",
+              containerPort : 2019,
+              hostPort : 2019,
+              protocol : "tcp"
+            }
+          ]
+        }
+      }
     }
+
   }
 }
 

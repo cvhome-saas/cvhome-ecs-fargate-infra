@@ -4,6 +4,9 @@ variable "env" {
 variable "project" {
   type = string
 }
+variable "index" {
+  type = number
+}
 variable "module_name" {
   type = string
 }
@@ -29,6 +32,9 @@ variable "log_s3_bucket_id" {
   type = string
 }
 variable "domain" {
+  type = string
+}
+variable "store_core_namespace" {
   type = string
 }
 variable "domain_zone_name" {
