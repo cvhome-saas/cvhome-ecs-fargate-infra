@@ -134,7 +134,7 @@ locals {
 module "cluster-lb" {
   source = "terraform-aws-modules/alb/aws"
 
-  name                       = "${var.module_name}-${var.project}-${var.env}"
+  name                       = "${var.pod.name}-${var.project}-${var.env}"
   vpc_id                     = var.vpc_id
   subnets                    = var.public_subnets
   enable_deletion_protection = false
@@ -148,7 +148,7 @@ module "cluster-lb" {
 
   access_logs = {
     bucket = var.log_s3_bucket_id
-    prefix = "${var.module_name}-lb-access-logs"
+    prefix = "${var.pod.name}-lb-access-logs"
   }
 
   listeners = {
@@ -210,7 +210,7 @@ module "cluster-lb" {
   tags = var.tags
 }
 
-module "saas-pod-gateway-record" {
+module "store-pod-saas-gateway-record" {
   source  = "terraform-aws-modules/route53/aws//modules/records"
   version = "~> 3.0"
 
@@ -218,7 +218,7 @@ module "saas-pod-gateway-record" {
 
   records = [
     {
-      name = "saas-pod-gateway-${var.index}"
+      name = "store-pod-saas-gateway-${var.pod.index}"
       type = "A"
       alias = {
         name    = module.cluster-lb.dns_name
@@ -228,7 +228,7 @@ module "saas-pod-gateway-record" {
   ]
 }
 
-module "wildcard-saas-pod-gateway-record" {
+module "wildcard-store-pod-saas-gateway-record" {
   source  = "terraform-aws-modules/route53/aws//modules/records"
   version = "~> 3.0"
 
@@ -236,7 +236,7 @@ module "wildcard-saas-pod-gateway-record" {
 
   records = [
     {
-      name = "*.saas-pod-gateway-${var.index}"
+      name = "*.store-pod-saas-gateway-${var.pod.index}"
       type = "A"
       alias = {
         name    = module.cluster-lb.dns_name

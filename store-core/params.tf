@@ -54,5 +54,6 @@ variable "pods" {
     index : number
     name : string
     namespace : string
+    size : string
   }))
 }

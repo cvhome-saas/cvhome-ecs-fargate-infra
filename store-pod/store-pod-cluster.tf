@@ -1,4 +1,5 @@
 locals {
+  profiles = join(",", compact(["fargate", var.test_stores ? "test-stores" : ""]))
   fargate_capacity_providers = {
     FARGATE = {
       default_capacity_provider_strategy = {
@@ -70,13 +71,13 @@ locals {
         "store" = {
           image = "${var.docker_registry}/store-pod/store:${var.image_tag}"
           environment : [
-            { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
+            { "name" : "SPRING_PROFILES_ACTIVE", "value" : local.profiles },
             { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_CORE-GATEWAY_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_CORE-GATEWAY_PORT", "value" : "443" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
-            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.namespace },
+            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.namespace },
             {
               "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
               "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
@@ -87,7 +88,7 @@ locals {
               "name" : "COM_ASREVO_CVHOME_CDN_BASE-PATH",
               "value" : "https://${module.cdn-storage-cloudfront.cloudfront_distribution_domain_name}"
             },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_NAMESPACE", "value" : "store-pod-1.${var.project}.lcl" },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_NAMESPACE", "value" : var.pod.namespace },
             { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-pod-db.db_instance_name },
             { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-pod-db.db_instance_address },
             { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-pod-db.db_instance_port },
@@ -146,7 +147,7 @@ locals {
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_CORE-GATEWAY_PORT", "value" : "443" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
-            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.namespace },
+            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.namespace },
             {
               "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
               "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
@@ -201,7 +202,7 @@ locals {
         "store-pod-saas-gateway" = {
           image = "${var.docker_registry}/store-pod/store-pod-saas-gateway:${var.image_tag}"
           environment : [
-            { "name" : "STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.${var.namespace}:7100" },
+            { "name" : "STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.${var.pod.namespace}:7100" },
             {
               "name" : "ASK_TLS_URL",
               "value" : "http://store-core-gateway.${var.store_core_namespace}:7000/manager/api/v1/router/public/ask-for-tls"
@@ -237,7 +238,7 @@ locals {
 
 module "store-pod-cluster" {
   source                     = "terraform-aws-modules/ecs/aws"
-  cluster_name               = "${var.module_name}-${var.project}-${var.env}"
+  cluster_name               = "${var.pod.name}-${var.project}-${var.env}"
   fargate_capacity_providers = local.fargate_capacity_providers
   cluster_settings           = []
   tags                       = var.tags
@@ -250,7 +251,7 @@ module "store-pod-service" {
   tags         = var.tags
   cluster_name = module.store-pod-cluster.cluster_name
   env          = var.env
-  module_name  = var.module_name
+  module_name  = var.pod.name
   project      = var.project
   service      = each.value
   subnet       = var.public_subnets

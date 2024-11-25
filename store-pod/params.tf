@@ -4,12 +4,6 @@ variable "env" {
 variable "project" {
   type = string
 }
-variable "index" {
-  type = number
-}
-variable "module_name" {
-  type = string
-}
 variable "vpc_id" {
   type = string
 }
@@ -55,6 +49,15 @@ variable "docker_registry" {
 variable "image_tag" {
   type = string
 }
-variable "namespace" {
-  type = string
+variable "test_stores" {
+  type    = bool
+  default = false
+}
+variable "pod" {
+  type = object({
+    index : number
+    name : string
+    namespace : string
+    size : string
+  })
 }

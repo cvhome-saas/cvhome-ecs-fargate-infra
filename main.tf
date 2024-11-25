@@ -22,13 +22,13 @@ locals {
   }
   private_ecr_docker_registry = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com"
   docker_registry             = var.docker_registry != "" ? var.docker_registry : local.private_ecr_docker_registry
-  pods_ids                    = range(0, var.pods)
 
   pods = {
-    for n in local.pods_ids : n => {
-      index : n
-      name : "store-pod-${n}"
-      namespace : "store-pod-${n}.${local.project}"
+    for key, value in var.pods : key => {
+      index : lookup(value, "index")
+      name : "store-pod-${lookup(value, "index")}"
+      namespace : "store-pod-${lookup(value, "index")}.${local.project}.lcl"
+      size : lookup(value, "index")
     }
   }
 
@@ -73,10 +73,9 @@ module "store-pod" {
   database_subnets     = module.vpc.database_subnets
   vpc_cidr_block       = local.vpc_cidr
   env                  = var.env
-  module_name          = lookup(each.value, "name")
-  index                = lookup(each.value, "index")
   docker_registry      = local.docker_registry
   image_tag            = var.image_tag
-  namespace            = lookup(each.value, "namespace")
+  test_stores          = each.key == "default"
+  pod                  = each.value
   for_each             = local.pods
 }

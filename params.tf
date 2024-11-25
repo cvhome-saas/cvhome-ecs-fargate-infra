@@ -17,5 +17,9 @@ variable "image_tag" {
   type = string
 }
 variable "pods" {
-  type = number
+  type = map(object({
+    index : number
+    name : string
+    size : string
+  }))
 }
