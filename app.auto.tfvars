@@ -3,4 +3,5 @@ env             = "dev"
 domain          = "best-store.click"
 certificate_arn = "arn:aws:acm:eu-central-1:824591438121:certificate/aefc8907-4d50-43c8-af46-d2f92df6d65a"
 docker_registry = ""
-image_tag   = "develop-0.1.5-11978518940-19-1-SNAPSHOT"
+image_tag       = "develop-0.1.5-11978518940-19-1-SNAPSHOT"
+pods            = 1

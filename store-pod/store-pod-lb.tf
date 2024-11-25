@@ -25,7 +25,7 @@
 # module "cluster-lb" {
 #   source = "terraform-aws-modules/alb/aws"
 #
-#   name                       = "${local.module_name}-${var.project}-${var.env}"
+#   name                       = "${var.module_name}-${var.project}-${var.env}"
 #   vpc_id                     = var.vpc_id
 #   subnets                    = var.public_subnets
 #   enable_deletion_protection = false
@@ -34,7 +34,7 @@
 #
 #   access_logs = {
 #     bucket = var.log_s3_bucket_id
-#     prefix = "${local.module_name}-lb-access-logs"
+#     prefix = "${var.module_name}-lb-access-logs"
 #   }
 #
 #   # Security Group
@@ -73,7 +73,7 @@
 #           conditions = [
 #             {
 #               host_header = {
-#                 values = ["${local.module_name}.${var.domain}"]
+#                 values = ["${var.module_name}.${var.domain}"]
 #               }
 #             }
 #           ]

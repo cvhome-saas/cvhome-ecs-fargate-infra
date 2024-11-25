@@ -49,3 +49,10 @@ variable "image_tag" {
 variable "namespace" {
   type = string
 }
+variable "pods" {
+  type = map(object({
+    index : number
+    name : string
+    namespace : string
+  }))
+}

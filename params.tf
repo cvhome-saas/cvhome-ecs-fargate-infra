@@ -16,3 +16,6 @@ variable "docker_registry" {
 variable "image_tag" {
   type = string
 }
+variable "pods" {
+  type = number
+}

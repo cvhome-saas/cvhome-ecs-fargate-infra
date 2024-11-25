@@ -11,6 +11,14 @@ locals {
       }
     }
   }
+  pods_env = flatten([
+    for key, value in var.pods : [
+      { name : "COM_ASREVO_CVHOME_PODS[${key}]_INDEX", value : value.index },
+      { name : "COM_ASREVO_CVHOME_PODS[${key}]_NAME", value : value.name },
+      { name : "COM_ASREVO_CVHOME_PODS[${key}]_NAMESPACE", value : value.namespace },
+    ]
+  ])
+
   services = {
     "store-ui" = {
       public                      = true
