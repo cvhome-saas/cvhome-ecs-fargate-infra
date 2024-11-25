@@ -55,5 +55,7 @@ variable "pods" {
     name : string
     namespace : string
     size : string
+    type : string
+    org : string
   }))
 }

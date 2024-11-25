@@ -9,10 +9,21 @@ pods = {
     index : "1"
     name : "default",
     size : "large"
+    type : "PUBLIC",
+    org : ""
   }
-  "client-a" : {
+  "globale" : {
     index : "2"
-    name : "client-a",
-    size : "x-large"
+    name : "globale",
+    size : "x-large",
+    type : "PUBLIC"
+    org : ""
+  }
+  "org-352023632b046970c104b76f" : {
+    index : "3"
+    name : "org-352023632b046970c104b76f",
+    size : "x-large",
+    type : "PRIVATE",
+    org : "352023632b046970c104b76f"
   }
 }

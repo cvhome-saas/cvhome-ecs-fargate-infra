@@ -29,6 +29,8 @@ locals {
       name : "store-pod-${lookup(value, "index")}"
       namespace : "store-pod-${lookup(value, "index")}.${local.project}.lcl"
       size : lookup(value, "index")
+      type : lookup(value, "type")
+      org : lookup(value, "org")
     }
   }
 

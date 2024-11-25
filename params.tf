@@ -21,5 +21,7 @@ variable "pods" {
     index : number
     name : string
     size : string
+    type : string
+    org : string
   }))
 }
