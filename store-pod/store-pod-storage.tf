@@ -37,15 +37,15 @@ module "cdn-storage-cloudfront" {
     cdn_storage_access_identity = "My awesome CloudFront can access"
   }
 
-  create_origin_access_control = true
-  origin_access_control = {
-    cdn_storage = {
-      description      = "CloudFront access to S3"
-      origin_type      = "s3"
-      signing_behavior = "always"
-      signing_protocol = "sigv4"
-    }
-  }
+  # create_origin_access_control = false
+  # origin_access_control = {
+  #   cdn_storage = {
+  #     description      = "CloudFront access to S3"
+  #     origin_type      = "s3"
+  #     signing_behavior = "always"
+  #     signing_protocol = "sigv4"
+  #   }
+  # }
 
   origin = {
     cdn_storage = {
