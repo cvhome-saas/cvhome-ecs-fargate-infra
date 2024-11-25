@@ -164,19 +164,19 @@ locals {
         }
       }
     },
-    "saas-pod-gateway" = {
+    "store-pod-saas-gateway" = {
       public       = true
       priority     = 100
       service_type = "SERVICE"
       loadbalancer_target_groups = {
         "gateway-tg-80" : {
           loadbalancer_target_groups_arn = module.cluster-lb.target_groups["gateway-tg-80"].arn
-          main_container                 = "saas-pod-gateway"
+          main_container                 = "store-pod-saas-gateway"
           main_container_port            = 80
         }
         "gateway-tg-443" : {
           loadbalancer_target_groups_arn = module.cluster-lb.target_groups["gateway-tg-443"].arn
-          main_container                 = "saas-pod-gateway"
+          main_container                 = "store-pod-saas-gateway"
           main_container_port            = 443
         }
       }
@@ -187,7 +187,7 @@ locals {
       desired                     = 1
       cpu                         = 512
       memory                      = 1024
-      main_container              = "saas-pod-gateway"
+      main_container              = "store-pod-saas-gateway"
       main_container_port         = 443
       health_check = {
         path                = "/"
@@ -198,7 +198,7 @@ locals {
       }
 
       containers = {
-        "saas-pod-gateway" = {
+        "store-pod-saas-gateway" = {
           image = "${var.docker_registry}/store-pod/store-pod-saas-gateway:${var.image_tag}"
           environment : [
             { "name" : "STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.${var.namespace}:7100" },
