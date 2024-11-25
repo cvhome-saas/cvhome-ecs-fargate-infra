@@ -199,7 +199,7 @@ locals {
 
       containers = {
         "saas-pod-gateway" = {
-          image = "${var.docker_registry}/saas-pod/saas-pod-gateway-v2:${var.image_tag}"
+          image = "${var.docker_registry}/store-pod/store-pod-saas-gateway:${var.image_tag}"
           environment : [
             { "name" : "STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.${var.namespace}:7100" },
             {
