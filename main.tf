@@ -71,7 +71,7 @@ module "store-pod" {
   database_subnets = module.vpc.database_subnets
   vpc_cidr_block   = local.vpc_cidr
   env              = var.env
-  module_name            = lookup(each.value, "name")
+  module_name      = lookup(each.value, "name")
   docker_registry  = local.docker_registry
   image_tag        = var.image_tag
   namespace        = lookup(each.value, "namespace")
