@@ -12,18 +12,11 @@ pods = {
     type : "PUBLIC",
     org : ""
   }
-  "globale" : {
+  "org-d1952c95-312e-4bb9-9a2d-b703d031276f" : {
     index : "2"
-    name : "globale",
-    size : "x-large",
-    type : "PUBLIC"
-    org : ""
-  }
-  "org-352023632b046970c104b76f" : {
-    index : "3"
-    name : "org-352023632b046970c104b76f",
+    name : "org-d1952c95-312e-4bb9-9a2d-b703d031276f",
     size : "x-large",
     type : "PRIVATE",
-    org : "352023632b046970c104b76f"
+    org : "d1952c95-312e-4bb9-9a2d-b703d031276f"
   }
 }
