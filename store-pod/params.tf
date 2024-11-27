@@ -4,9 +4,6 @@ variable "env" {
 variable "project" {
   type = string
 }
-variable "module_name" {
-  type = string
-}
 variable "vpc_id" {
   type = string
 }
@@ -31,6 +28,9 @@ variable "log_s3_bucket_id" {
 variable "domain" {
   type = string
 }
+variable "store_core_namespace" {
+  type = string
+}
 variable "domain_zone_name" {
   type = string
 }
@@ -49,6 +49,17 @@ variable "docker_registry" {
 variable "image_tag" {
   type = string
 }
-variable "namespace" {
-  type = string
+variable "test_stores" {
+  type    = bool
+  default = false
+}
+variable "pod" {
+  type = object({
+    index : number
+    name : string
+    namespace : string
+    size : string
+    type : string
+    org : string
+  })
 }

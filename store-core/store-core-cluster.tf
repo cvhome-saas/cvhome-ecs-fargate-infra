@@ -16,6 +16,8 @@ locals {
       { name : "COM_ASREVO_CVHOME_PODS[${key}]_INDEX", value : value.index },
       { name : "COM_ASREVO_CVHOME_PODS[${key}]_NAME", value : value.name },
       { name : "COM_ASREVO_CVHOME_PODS[${key}]_NAMESPACE", value : value.namespace },
+      { name : "COM_ASREVO_CVHOME_PODS[${key}]_TYPE", value : value.type },
+      { name : "COM_ASREVO_CVHOME_PODS[${key}]_ORG", value : value.org },
     ]
   ])
 
