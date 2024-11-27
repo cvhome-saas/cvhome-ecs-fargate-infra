@@ -20,6 +20,61 @@ locals {
       { name : "COM_ASREVO_CVHOME_PODS[${key}]_ORG", value : value.org },
     ]
   ])
+  store_core_gateway_env=[
+    { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
+    { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_SCHEMA", "value" : "https" },
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_PORT", "value" : "443" },
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
+    { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.namespace },
+    {
+      "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
+      "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
+    },
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_NAMESPACE", "value" : "store-pod-1.${var.project}.lcl" },
+  ]
+  manager_env=[
+    { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
+    { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_SCHEMA", "value" : "https" },
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_PORT", "value" : "443" },
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
+    { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.namespace },
+    {
+      "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
+      "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
+    },
+
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_NAMESPACE", "value" : "store-pod-1.${var.project}.lcl" },
+    { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-core-db.db_instance_name },
+    { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-core-db.db_instance_address },
+    { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-core-db.db_instance_port },
+    { "name" : "SPRING_DATASOURCE_USERNAME", "value" : module.store-core-db.db_instance_username },
+    {
+      "name" : "SPRING_DATASOURCE_PASSWORD",
+      "value" : jsondecode(data.aws_secretsmanager_secret_version.current_db_secret_version.secret_string)["password"]
+    },
+  ]
+  auth_env=[
+    { "name" : "KC_HTTP_PORT", "value" : "9999" },
+    { "name" : "KC_HTTP_ENABLED", "value" : "true" },
+    { "name" : "KC_HTTP_MANAGEMENT_PORT", "value" : "9000" },
+    { "name" : "KC_HEALTH_ENABLED", "value" : "true" },
+    { "name" : "KC_HOSTNAME_STRICT_HTTPS", "value" : "false" },
+    { "name" : "KEYCLOAK_ADMIN", "value" : "sys-admin@mail.com" },
+    { "name" : "KEYCLOAK_ADMIN_PASSWORD", "value" : "admin" },
+    { "name" : "KC_DB", "value" : "postgres" },
+    { "name" : "KC_DB_URL_DATABASE", "value" : module.store-core-db.db_instance_name },
+    { "name" : "KC_DB_URL_HOST", "value" : module.store-core-db.db_instance_address },
+    { "name" : "KC_DB_URL_PORT", "value" : module.store-core-db.db_instance_port },
+    { "name" : "KC_DB_USERNAME", "value" : module.store-core-db.db_instance_username },
+    {
+      "name" : "KC_DB_PASSWORD",
+      "value" : jsondecode(data.aws_secretsmanager_secret_version.current_db_secret_version.secret_string)["password"]
+    },
+  ]
 
   services = {
     "store-ui" = {
@@ -118,20 +173,7 @@ locals {
       containers = {
         "store-core-gateway" = {
           image = "${var.docker_registry}/store-core/store-core-gateway:${var.image_tag}"
-          environment : [
-            { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
-            { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_SCHEMA", "value" : "https" },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_PORT", "value" : "443" },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
-            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.namespace },
-            {
-              "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
-              "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
-            },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_NAMESPACE", "value" : "store-pod-1.${var.project}.lcl" },
-          ]
+          environment : concat(local.store_core_gateway_env,local.pods_env)
           portMappings : [
             {
               name : "app",
@@ -172,24 +214,7 @@ locals {
       containers = {
         "auth" = {
           image = "${var.docker_registry}/store-core/auth:${var.image_tag}"
-          environment : [
-            { "name" : "KC_HTTP_PORT", "value" : "9999" },
-            { "name" : "KC_HTTP_ENABLED", "value" : "true" },
-            { "name" : "KC_HTTP_MANAGEMENT_PORT", "value" : "9000" },
-            { "name" : "KC_HEALTH_ENABLED", "value" : "true" },
-            { "name" : "KC_HOSTNAME_STRICT_HTTPS", "value" : "false" },
-            { "name" : "KEYCLOAK_ADMIN", "value" : "sys-admin@mail.com" },
-            { "name" : "KEYCLOAK_ADMIN_PASSWORD", "value" : "admin" },
-            { "name" : "KC_DB", "value" : "postgres" },
-            { "name" : "KC_DB_URL_DATABASE", "value" : module.store-core-db.db_instance_name },
-            { "name" : "KC_DB_URL_HOST", "value" : module.store-core-db.db_instance_address },
-            { "name" : "KC_DB_URL_PORT", "value" : module.store-core-db.db_instance_port },
-            { "name" : "KC_DB_USERNAME", "value" : module.store-core-db.db_instance_username },
-            {
-              "name" : "KC_DB_PASSWORD",
-              "value" : jsondecode(data.aws_secretsmanager_secret_version.current_db_secret_version.secret_string)["password"]
-            },
-          ]
+          environment : local.auth_env
           portMappings : [
             {
               name : "app",
@@ -224,29 +249,7 @@ locals {
       containers = {
         "manager" = {
           image = "${var.docker_registry}/store-core/manager:${var.image_tag}"
-          environment : [
-            { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
-            { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_SCHEMA", "value" : "https" },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_PORT", "value" : "443" },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
-            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.namespace },
-            {
-              "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
-              "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
-            },
-
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_NAMESPACE", "value" : "store-pod-1.${var.project}.lcl" },
-            { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-core-db.db_instance_name },
-            { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-core-db.db_instance_address },
-            { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-core-db.db_instance_port },
-            { "name" : "SPRING_DATASOURCE_USERNAME", "value" : module.store-core-db.db_instance_username },
-            {
-              "name" : "SPRING_DATASOURCE_PASSWORD",
-              "value" : jsondecode(data.aws_secretsmanager_secret_version.current_db_secret_version.secret_string)["password"]
-            },
-          ]
+          environment : concat(local.manager_env,local.pods_env)
           portMappings : [
             {
               name : "app",
