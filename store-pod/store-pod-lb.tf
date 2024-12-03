@@ -218,7 +218,7 @@ module "store-pod-saas-gateway-record" {
 
   records = [
     {
-      name = "store-pod-saas-gateway-${var.pod.index}"
+      name = "store-pod-saas-gateway-${var.pod.id}"
       type = "A"
       alias = {
         name    = module.cluster-lb.dns_name
@@ -236,7 +236,7 @@ module "wildcard-store-pod-saas-gateway-record" {
 
   records = [
     {
-      name = "*.store-pod-saas-gateway-${var.pod.index}"
+      name = "*.store-pod-saas-gateway-${var.pod.id}"
       type = "A"
       alias = {
         name    = module.cluster-lb.dns_name

@@ -13,7 +13,7 @@ locals {
   }
   pods_env = flatten([
     for key, value in var.pods : [
-      { name : "COM_ASREVO_CVHOME_PODS[${value.index}]_ID_ID", value : value.index },
+      { name : "COM_ASREVO_CVHOME_PODS[${value.index}]_ID_ID", value : value.id },
       { name : "COM_ASREVO_CVHOME_PODS[${value.index}]_NAME", value : value.name },
       { name : "COM_ASREVO_CVHOME_PODS[${value.index}]_ENDPOINT_ENDPOINT", value : value.endpoint },
       { name : "COM_ASREVO_CVHOME_PODS[${value.index}]_ENDPOINT_ENDPOINT-TYPE", value : value.endpointType },
