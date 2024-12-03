@@ -10,7 +10,12 @@
 name: Trigger Apply
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
+    inputs:
+      imageTag:
+        description: 'Docker images tag'
+        required: true
+        default: '0.2.0'
 
 jobs:
   build:
@@ -33,6 +38,9 @@ jobs:
           CONFIG_STATE_BUCKET_KEY: ${{ secrets.CONFIG_STATE_BUCKET_KEY }}
       - id: plan
         run: terraform plan
+        env:
+          TF_VAR_image_tag=${{ inputs.imageTag }}
       - id: apply
         run: terraform apply --auto-approve=true
-
+        env:
+          TF_VAR_image_tag=${{ inputs.imageTag }}
