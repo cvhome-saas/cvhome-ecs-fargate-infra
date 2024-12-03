@@ -40,4 +40,6 @@ jobs:
           CONFIG_STATE_BUCKET_KEY: ${{ secrets.CONFIG_STATE_BUCKET_KEY }}
       - id: plan
         run: terraform plan
+        env:
+          TF_VAR_image_tag: default
 
