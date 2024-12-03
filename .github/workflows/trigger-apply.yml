@@ -39,8 +39,8 @@ jobs:
       - id: plan
         run: terraform plan
         env:
-          TF_VAR_image_tag=${{ inputs.imageTag }}
+          TF_VAR_image_tag: ${{ inputs.imageTag }}
       - id: apply
         run: terraform apply --auto-approve=true
         env:
-          TF_VAR_image_tag=${{ inputs.imageTag }}
+          TF_VAR_image_tag: ${{ inputs.imageTag }}

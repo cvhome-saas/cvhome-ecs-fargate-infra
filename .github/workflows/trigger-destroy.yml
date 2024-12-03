@@ -34,9 +34,9 @@ jobs:
       - id: plan
         run: terraform plan
         env:
-          TF_VAR_image_tag='default'
+          TF_VAR_image_tag: default
       - id: apply
         run: terraform destroy --auto-approve=true
         env:
-          TF_VAR_image_tag='default'
+          TF_VAR_image_tag: default
 
