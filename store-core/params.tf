@@ -51,11 +51,12 @@ variable "namespace" {
 }
 variable "pods" {
   type = map(object({
-    index : number
+    index:number
+    id : string
     name : string
-    namespace : string
-    size : string
-    type : string
     org : string
+    endpoint : string
+    endpointType : string
+    size : string
   }))
 }

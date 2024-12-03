@@ -56,10 +56,11 @@ variable "test_stores" {
 variable "pod" {
   type = object({
     index : number
+    id : string
     name : string
-    namespace : string
-    size : string
-    type : string
     org : string
+    endpoint : string
+    endpointType : string
+    size : string
   })
 }

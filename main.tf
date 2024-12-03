@@ -26,11 +26,12 @@ locals {
   pods = {
     for key, value in var.pods : key => {
       index : lookup(value, "index")
+      id : lookup(value, "id")
       name : "store-pod-${lookup(value, "index")}"
-      namespace : "store-pod-${lookup(value, "index")}.${local.project}.lcl"
-      size : lookup(value, "index")
-      type : lookup(value, "type")
       org : lookup(value, "org")
+      endpoint : lookup(value, "endpointType")=="EXTERNAL"?lookup(value, "endpoint"):"store-pod-${lookup(value, "id")}.${local.project}.lcl"
+      endpointType : lookup(value, "endpointType")
+      size : lookup(value, "size")
     }
   }
 

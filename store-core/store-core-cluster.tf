@@ -13,11 +13,11 @@ locals {
   }
   pods_env = flatten([
     for key, value in var.pods : [
-      { name : "COM_ASREVO_CVHOME_PODS[${value.index -1 }]_INDEX", value : value.index },
-      { name : "COM_ASREVO_CVHOME_PODS[${value.index -1 }]_NAME", value : value.name },
-      { name : "COM_ASREVO_CVHOME_PODS[${value.index -1 }]_NAMESPACE", value : value.namespace },
-      { name : "COM_ASREVO_CVHOME_PODS[${value.index -1 }]_TYPE", value : value.type },
-      { name : "COM_ASREVO_CVHOME_PODS[${value.index -1 }]_ORG", value : value.org },
+      { name : "COM_ASREVO_CVHOME_PODS[${value.index}]_ID_ID", value : value.index },
+      { name : "COM_ASREVO_CVHOME_PODS[${value.index}]_NAME", value : value.name },
+      { name : "COM_ASREVO_CVHOME_PODS[${value.index}]_ENDPOINT_ENDPOINT", value : value.endpoint },
+      { name : "COM_ASREVO_CVHOME_PODS[${value.index}]_ENDPOINT_ENDPOINT-TYPE", value : value.endpointType },
+      { name : "COM_ASREVO_CVHOME_PODS[${value.index}]_ORG-ID_ID", value : value.org },
     ]
   ])
   store_core_gateway_env=[
