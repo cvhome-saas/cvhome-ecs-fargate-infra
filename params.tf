@@ -19,9 +19,11 @@ variable "image_tag" {
 variable "pods" {
   type = map(object({
     index : number
+    id : string
     name : string
-    size : string
-    type : string
     org : string
+    endpoint : string
+    endpointType : string
+    size : string
   }))
 }

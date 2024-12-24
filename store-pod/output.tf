@@ -1,3 +1,3 @@
 output "domain" {
-  value = "store-pod-saas-gateway-${var.pod.index}.${var.domain_zone_name}"
+  value = "store-pod-saas-gateway-${var.pod.id}.${var.domain_zone_name}"
 }

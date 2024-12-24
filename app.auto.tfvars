@@ -5,17 +5,21 @@ certificate_arn = "arn:aws:acm:eu-central-1:824591438121:certificate/aefc8907-4d
 docker_registry = ""
 pods = {
   "default" : {
-    index : "1"
+    index : 0
+    id : "1"
     name : "default",
-    size : "large"
-    type : "PUBLIC",
     org : ""
+    endpoint : ""
+    endpointType : "INTERNAL"
+    size : "large"
   }
   "org-d1952c95-312e-4bb9-9a2d-b703d031276f" : {
-    index : "2"
+    index : 1
+    id : "2"
     name : "org-d1952c95-312e-4bb9-9a2d-b703d031276f",
-    size : "x-large",
-    type : "PRIVATE",
     org : "d1952c95-312e-4bb9-9a2d-b703d031276f"
+    endpoint : ""
+    endpointType : "INTERNAL"
+    size : "x-large",
   }
 }

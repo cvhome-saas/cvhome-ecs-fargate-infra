@@ -77,7 +77,7 @@ locals {
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_CORE-GATEWAY_PORT", "value" : "443" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
-            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.namespace },
+            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.endpoint },
             {
               "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
               "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
@@ -88,7 +88,7 @@ locals {
               "name" : "COM_ASREVO_CVHOME_CDN_BASE-PATH",
               "value" : "https://${module.cdn-storage-cloudfront.cloudfront_distribution_domain_name}"
             },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_NAMESPACE", "value" : var.pod.namespace },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_NAMESPACE", "value" : var.pod.endpoint },
             { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-pod-db.db_instance_name },
             { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-pod-db.db_instance_address },
             { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-pod-db.db_instance_port },
@@ -147,7 +147,7 @@ locals {
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_CORE-GATEWAY_PORT", "value" : "443" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
-            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.namespace },
+            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.endpoint },
             {
               "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
               "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
@@ -202,7 +202,7 @@ locals {
         "store-pod-saas-gateway" = {
           image = "${var.docker_registry}/store-pod/store-pod-saas-gateway:${var.image_tag}"
           environment : [
-            { "name" : "STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.${var.pod.namespace}:7100" },
+            { "name" : "STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.${var.pod.endpoint}:7100" },
             {
               "name" : "ASK_TLS_URL",
               "value" : "http://store-core-gateway.${var.store_core_namespace}:7000/manager/api/v1/router/public/ask-for-tls"
