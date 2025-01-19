@@ -60,3 +60,11 @@ variable "pods" {
     size : string
   }))
 }
+variable "mq_username" {
+  type = string
+  default = "admin"
+}
+variable "mq_password" {
+  type = string
+  default = "admin-123-123"
+}

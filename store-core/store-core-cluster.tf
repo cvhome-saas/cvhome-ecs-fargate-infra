@@ -56,6 +56,22 @@ locals {
       "name" : "SPRING_DATASOURCE_PASSWORD",
       "value" : jsondecode(data.aws_secretsmanager_secret_version.current_db_secret_version.secret_string)["password"]
     },
+    {
+      "name" : "SPRING_RABBITMQ_HOST",
+      "value" : "b-c9532cca-8412-484f-8f65-0ea5313658a8.mq.eu-central-1.amazonaws.com"
+    },
+    {
+      "name" : "SPRING_RABBITMQ_PORT",
+      "value" : "5671"
+    },
+    {
+      "name" : "SPRING_RABBITMQ_USERNAME",
+      "value" : var.mq_username
+    },
+    {
+      "name" : "SPRING_RABBITMQ_PASSWORD",
+      "value" : var.mq_password
+    },
   ]
   subscription_env=[
     { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
@@ -78,6 +94,22 @@ locals {
     {
       "name" : "SPRING_DATASOURCE_PASSWORD",
       "value" : jsondecode(data.aws_secretsmanager_secret_version.current_db_secret_version.secret_string)["password"]
+    },
+    {
+      "name" : "SPRING_RABBITMQ_HOST",
+      "value" : "b-c9532cca-8412-484f-8f65-0ea5313658a8.mq.eu-central-1.amazonaws.com"
+    },
+    {
+      "name" : "SPRING_RABBITMQ_PORT",
+      "value" : "5671"
+    },
+    {
+      "name" : "SPRING_RABBITMQ_USERNAME",
+      "value" : var.mq_username
+    },
+    {
+      "name" : "SPRING_RABBITMQ_PASSWORD",
+      "value" : var.mq_password
     },
   ]
   auth_env=[

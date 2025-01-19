@@ -12,8 +12,8 @@ resource "aws_mq_broker" "mq" {
   }
 
   user {
-    username = "admin"
-    password = "admin-123-123"
+    username = var.mq_username
+    password = var.mq_password
   }
 
   apply_immediately = true
