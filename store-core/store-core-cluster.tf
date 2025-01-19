@@ -57,12 +57,8 @@ locals {
       "value" : jsondecode(data.aws_secretsmanager_secret_version.current_db_secret_version.secret_string)["password"]
     },
     {
-      "name" : "SPRING_RABBITMQ_HOST",
-      "value" : "b-c9532cca-8412-484f-8f65-0ea5313658a8.mq.eu-central-1.amazonaws.com"
-    },
-    {
-      "name" : "SPRING_RABBITMQ_PORT",
-      "value" : "5671"
+      "name" : "SPRING_RABBITMQ_ADDRESSES",
+      "value" : ["amqps://b-c9532cca-8412-484f-8f65-0ea5313658a8.mq.eu-central-1.amazonaws.com:5671"]
     },
     {
       "name" : "SPRING_RABBITMQ_VIRTUAL-HOST",
@@ -100,12 +96,8 @@ locals {
       "value" : jsondecode(data.aws_secretsmanager_secret_version.current_db_secret_version.secret_string)["password"]
     },
     {
-      "name" : "SPRING_RABBITMQ_HOST",
-      "value" : "b-c9532cca-8412-484f-8f65-0ea5313658a8.mq.eu-central-1.amazonaws.com"
-    },
-    {
-      "name" : "SPRING_RABBITMQ_PORT",
-      "value" : "5671"
+      "name" : "SPRING_RABBITMQ_ADDRESSES",
+      "value" : ["amqps://b-c9532cca-8412-484f-8f65-0ea5313658a8.mq.eu-central-1.amazonaws.com:5671"]
     },
     {
       "name" : "SPRING_RABBITMQ_VIRTUAL-HOST",
