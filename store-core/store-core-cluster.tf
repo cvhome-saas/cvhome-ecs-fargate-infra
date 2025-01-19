@@ -57,6 +57,29 @@ locals {
       "value" : jsondecode(data.aws_secretsmanager_secret_version.current_db_secret_version.secret_string)["password"]
     },
   ]
+  subscription_env=[
+    { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
+    { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_SCHEMA", "value" : "https" },
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_PORT", "value" : "443" },
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
+    { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.namespace },
+    {
+      "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
+      "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
+    },
+
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_NAMESPACE", "value" : "store-pod-1.${var.project}.lcl" },
+    { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-core-db.db_instance_name },
+    { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-core-db.db_instance_address },
+    { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-core-db.db_instance_port },
+    { "name" : "SPRING_DATASOURCE_USERNAME", "value" : module.store-core-db.db_instance_username },
+    {
+      "name" : "SPRING_DATASOURCE_PASSWORD",
+      "value" : jsondecode(data.aws_secretsmanager_secret_version.current_db_secret_version.secret_string)["password"]
+    },
+  ]
   auth_env=[
     { "name" : "KC_HTTP_PORT", "value" : "9999" },
     { "name" : "KC_HTTP_ENABLED", "value" : "true" },
@@ -255,6 +278,41 @@ locals {
               name : "app",
               containerPort : 7001,
               hostPort : 7001,
+              protocol : "tcp"
+            }
+          ]
+        }
+      }
+    }
+    "subscription" = {
+      public                     = true
+      priority                   = 100
+      service_type               = "SERVICE"
+      loadbalancer_target_groups = {}
+
+      load_balancer_host_matchers = []
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "subscription"
+      main_container_port         = 7002
+      health_check = {
+        path                = "/actuator/health"
+        port                = 7002
+        healthy_threshold   = 2
+        interval            = 60
+        unhealthy_threshold = 3
+      }
+
+      containers = {
+        "subscription" = {
+          image = "${var.docker_registry}/store-core/subscription:${var.image_tag}"
+          environment : concat(local.subscription_env,local.pods_env)
+          portMappings : [
+            {
+              name : "app",
+              containerPort : 7002,
+              hostPort : 7002,
               protocol : "tcp"
             }
           ]

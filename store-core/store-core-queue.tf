@@ -1,0 +1,32 @@
+resource "aws_mq_broker" "mq" {
+  broker_name = "${local.module_name}-${var.project}-${var.env}"
+  engine_type         = "RabbitMQ"
+  engine_version      = "3.11.20"
+  host_instance_type  = "mq.t3.micro"
+  deployment_mode     = "SINGLE_INSTANCE"
+  subnet_ids          = [var.public_subnets[0]]
+  publicly_accessible = true
+  configuration {
+    id       = aws_mq_configuration.mq_config.id
+    revision = aws_mq_configuration.mq_config.latest_revision
+  }
+
+  user {
+    username = "admin"
+    password = "admin-123-123"
+  }
+
+  apply_immediately = true
+}
+
+
+resource "aws_mq_configuration" "mq_config" {
+  description    = "RabbitMQ config"
+  name           = "rabbitmq-broker"
+  engine_type    = "RabbitMQ"
+  engine_version = "3.13"
+  data           = <<DATA
+# Default RabbitMQ delivery acknowledgement timeout is 30 minutes in milliseconds
+consumer_timeout = 1800000
+DATA
+}
