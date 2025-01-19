@@ -65,6 +65,10 @@ locals {
       "value" : "5672"
     },
     {
+      "name" : "SPRING_RABBITMQ_VIRTUAL-HOST",
+      "value" : "/"
+    },
+    {
       "name" : "SPRING_RABBITMQ_USERNAME",
       "value" : var.mq_username
     },
@@ -102,6 +106,10 @@ locals {
     {
       "name" : "SPRING_RABBITMQ_PORT",
       "value" : "5672"
+    },
+    {
+      "name" : "SPRING_RABBITMQ_VIRTUAL-HOST",
+      "value" : "/"
     },
     {
       "name" : "SPRING_RABBITMQ_USERNAME",
