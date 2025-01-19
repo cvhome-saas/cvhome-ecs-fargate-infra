@@ -62,7 +62,7 @@ locals {
     },
     {
       "name" : "SPRING_RABBITMQ_PORT",
-      "value" : "5671"
+      "value" : "5672"
     },
     {
       "name" : "SPRING_RABBITMQ_USERNAME",
@@ -101,7 +101,7 @@ locals {
     },
     {
       "name" : "SPRING_RABBITMQ_PORT",
-      "value" : "5671"
+      "value" : "5672"
     },
     {
       "name" : "SPRING_RABBITMQ_USERNAME",
