@@ -58,7 +58,7 @@ locals {
     },
     {
       "name" : "SPRING_RABBITMQ_ADDRESSES[0]",
-      "value" : "amqps://b-c9532cca-8412-484f-8f65-0ea5313658a8.mq.eu-central-1.amazonaws.com:5671"
+      "value" : aws_mq_broker.mq.instances.0.endpoints.0
     },
     {
       "name" : "SPRING_RABBITMQ_VIRTUAL-HOST",
@@ -97,7 +97,7 @@ locals {
     },
     {
       "name" : "SPRING_RABBITMQ_ADDRESSES[0]",
-      "value" : "amqps://b-c9532cca-8412-484f-8f65-0ea5313658a8.mq.eu-central-1.amazonaws.com:5671"
+      "value" : aws_mq_broker.mq.instances.0.endpoints.0
     },
     {
       "name" : "SPRING_RABBITMQ_VIRTUAL-HOST",
