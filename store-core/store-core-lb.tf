@@ -111,8 +111,8 @@ module "cluster-lb" {
         interval            = 150
         path                = "/health"
         port                = 9000
-        healthy_threshold   = 3
-        unhealthy_threshold = 2
+        healthy_threshold   = 2
+        unhealthy_threshold = 5
         timeout             = 5
         protocol            = "HTTP"
         matcher             = "200"
@@ -130,8 +130,8 @@ module "cluster-lb" {
         interval            = 45
         path                = "/actuator/health"
         port                = 7000
-        healthy_threshold   = 3
-        unhealthy_threshold = 2
+        healthy_threshold   = 2
+        unhealthy_threshold = 5
         timeout             = 5
         protocol            = "HTTP"
         matcher             = "200"
