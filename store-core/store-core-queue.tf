@@ -1,7 +1,7 @@
 resource "aws_mq_broker" "mq" {
   broker_name = "${local.module_name}-${var.project}-${var.env}"
   engine_type         = "RabbitMQ"
-  engine_version      = "3.11.20"
+  engine_version      = "3.11.28"
   host_instance_type  = "mq.t3.micro"
   deployment_mode     = "SINGLE_INSTANCE"
   subnet_ids          = [var.public_subnets[0]]
