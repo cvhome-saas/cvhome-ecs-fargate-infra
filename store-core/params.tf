@@ -68,3 +68,9 @@ variable "mq_password" {
   type = string
   default = "admin-123-123"
 }
+variable "stripe_key" {
+  type = string
+}
+variable "stripe_webhook_signing_key" {
+  type = string
+}

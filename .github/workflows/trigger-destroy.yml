@@ -39,4 +39,8 @@ jobs:
         run: terraform destroy --auto-approve=true
         env:
           TF_VAR_image_tag: default
+          TF_VAR_stripe_key: default
+          TF_VAR_stripe_webhook_signing_key: default
+          TF_VAR_domain: default
+          TF_VAR_domain_certificate_arn: default
 

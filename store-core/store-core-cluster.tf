@@ -87,6 +87,10 @@ locals {
     },
 
     { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_NAMESPACE", "value" : "store-pod-1.${var.project}.lcl" },
+
+    { "name" : "COM_ASREVO_CVHOME_STRIPE_KEY", "value" : var.stripe_key },
+    { "name" : "COM_ASREVO_CVHOME_STRIPE_WEBHOOK-SIGNING-KEY", "value" : var.stripe_webhook_signing_key },
+
     { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-core-db.db_instance_name },
     { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-core-db.db_instance_address },
     { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-core-db.db_instance_port },

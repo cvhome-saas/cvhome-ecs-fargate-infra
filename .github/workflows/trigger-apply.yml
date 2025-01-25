@@ -40,7 +40,15 @@ jobs:
         run: terraform plan
         env:
           TF_VAR_image_tag: ${{ inputs.imageTag }}
+          TF_VAR_stripe_key: ${{ secrets.STRIPE_KEY }}
+          TF_VAR_stripe_webhook_signing_key: ${{ secrets.STRIPE_WEBHOOK_SIGNING_KEY }}
+          TF_VAR_domain: ${{ inputs.DOMAIN }}
+          TF_VAR_domain_certificate_arn: ${{ inputs.DOMAIN_CERTIFICATE_ARN }}
       - id: apply
         run: terraform apply --auto-approve=true
         env:
           TF_VAR_image_tag: ${{ inputs.imageTag }}
+          TF_VAR_stripe_key: ${{ secrets.STRIPE_KEY }}
+          TF_VAR_stripe_webhook_signing_key: ${{ secrets.STRIPE_WEBHOOK_SIGNING_KEY }}
+          TF_VAR_domain: ${{ inputs.DOMAIN }}
+          TF_VAR_domain_certificate_arn: ${{ inputs.DOMAIN_CERTIFICATE_ARN }}
