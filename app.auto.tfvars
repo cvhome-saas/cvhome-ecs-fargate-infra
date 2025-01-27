@@ -11,13 +11,13 @@ pods = {
     endpointType : "INTERNAL"
     size : "large"
   }
-  "org-d1952c95-312e-4bb9-9a2d-b703d031276f" : {
-    index : 1
-    id : "2"
-    name : "org-d1952c95-312e-4bb9-9a2d-b703d031276f",
-    org : "d1952c95-312e-4bb9-9a2d-b703d031276f"
-    endpoint : ""
-    endpointType : "INTERNAL"
-    size : "x-large",
-  }
+  # "org-d1952c95-312e-4bb9-9a2d-b703d031276f" : {
+  #   index : 1
+  #   id : "2"
+  #   name : "org-d1952c95-312e-4bb9-9a2d-b703d031276f",
+  #   org : "d1952c95-312e-4bb9-9a2d-b703d031276f"
+  #   endpoint : ""
+  #   endpointType : "INTERNAL"
+  #   size : "x-large",
+  # }
 }
