@@ -40,8 +40,8 @@ data "aws_ssm_parameter" "config-stripe" {
 locals {
   domain               = jsonencode(data.aws_ssm_parameter.config-domain.value).domain
   domainCertificateArn = jsonencode(data.aws_ssm_parameter.config-domain.value).domainCertificateArn
-  key = jsonencode(data.aws_ssm_parameter.config-stripe.value).key
-  signingKey = jsonencode(data.aws_ssm_parameter.config-stripe.value).signingKey
+  stripeKey = jsonencode(data.aws_ssm_parameter.config-stripe.value).key
+  stripeWebhockSigningKey = jsonencode(data.aws_ssm_parameter.config-stripe.value).signingKey
 
 }
 data "aws_route53_zone" "domain_zone" {
@@ -65,8 +65,8 @@ module "store-core" {
   image_tag                  = var.image_tag
   namespace                  = local.store_core_namespace
   pods                       = local.pods
-  stripe_key                 = local.key
-  stripe_webhook_signing_key = local.signingKey
+  stripe_key                 = local.stripeKey
+  stripe_webhook_signing_key = local.stripeWebhockSigningKey
   docker_registry            = local.docker_registry
 }
 
