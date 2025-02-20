@@ -22,8 +22,7 @@ locals {
       id : lookup(value, "id")
       name : "store-pod-${lookup(value, "index")}"
       org : lookup(value, "org")
-      endpoint : lookup(value, "endpointType") == "EXTERNAL" ? lookup(value, "endpoint") :
-        "store-pod-${lookup(value, "id")}.${var.project}.lcl"
+      endpoint : lookup(value, "endpointType") == "EXTERNAL" ? lookup(value, "endpoint") : "store-pod-${lookup(value, "id")}.${var.project}.lcl"
       endpointType : lookup(value, "endpointType")
       size : lookup(value, "size")
     }
