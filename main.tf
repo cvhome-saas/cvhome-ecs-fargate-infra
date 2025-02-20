@@ -45,7 +45,7 @@ locals {
 
 }
 data "aws_route53_zone" "domain_zone" {
-  name = jsonencode(data.aws_ssm_parameter.config-domain.value).domain
+  name = local.domain
 }
 
 module "store-core" {
