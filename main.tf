@@ -38,7 +38,7 @@ data "aws_ssm_parameter" "config-stripe" {
 }
 
 locals {
-  domain               = jsondecode(data.aws_ssm_parameter.config-domain.value).domain
+  domain               = nonsensitive(jsondecode(data.aws_ssm_parameter.config-domain.value).domain)
   domainCertificateArn = jsondecode(data.aws_ssm_parameter.config-domain.value).domainCertificateArn
   stripeKey = jsondecode(data.aws_ssm_parameter.config-stripe.value).stripeKey
   stripeWebhockSigningKey = jsondecode(data.aws_ssm_parameter.config-stripe.value).stripeWebhockSigningKey
