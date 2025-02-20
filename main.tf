@@ -17,16 +17,7 @@ locals {
   docker_registry             = var.docker_registry != "" ? var.docker_registry : local.private_ecr_docker_registry
 
   pods = {
-    for key, value in var.pods : key => {
-      index : lookup(value, "index")
-      id : lookup(value, "id")
-      name : "store-pod-${lookup(value, "index")}"
-      org : lookup(value, "org")
-      endpoint : lookup(value, "endpointType") == "EXTERNAL" ? lookup(value, "endpoint") :
-        "store-pod-${lookup(value, "id")}.${var.project}.lcl"
-      endpointType : lookup(value, "endpointType")
-      size : lookup(value, "size")
-    }
+
   }
 
 }
