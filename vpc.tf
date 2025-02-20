@@ -7,7 +7,7 @@ locals {
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
-  name = "${local.project}-${var.env}"
+  name = "${var.project}-${var.env}"
   cidr = local.vpc_cidr
 
   enable_dns_hostnames = true

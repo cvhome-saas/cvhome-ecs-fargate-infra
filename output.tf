@@ -1,6 +1,3 @@
-output "project_id" {
-  value = local.project
-}
 output "store_ui_url" {
   value = module.store-core.store_ui_url
 }
