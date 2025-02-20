@@ -18,6 +18,8 @@ module "vpc" {
   private_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 3)]
   database_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 6)]
 
+  create_database_subnet_group=false
+
   enable_nat_gateway = false
   enable_vpn_gateway = false
 
