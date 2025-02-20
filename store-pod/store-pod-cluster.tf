@@ -34,7 +34,7 @@ locals {
 
       containers = {
         "landing-ui" = {
-          image = "${var.docker_registry}/store-pod/landing-ui:${var.image_tag}"
+          image = "${var.docker_registry}/${var.project}/store-pod/landing-ui:${var.image_tag}"
           environment : []
           portMappings : [
             {
@@ -69,7 +69,7 @@ locals {
 
       containers = {
         "store" = {
-          image = "${var.docker_registry}/store-pod/store:${var.image_tag}"
+          image = "${var.docker_registry}/${var.project}/store-pod/store:${var.image_tag}"
           environment : [
             { "name" : "SPRING_PROFILES_ACTIVE", "value" : local.profiles },
             { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
@@ -139,7 +139,7 @@ locals {
 
       containers = {
         "store-pod-gateway" = {
-          image = "${var.docker_registry}/store-pod/store-pod-gateway:${var.image_tag}"
+          image = "${var.docker_registry}/${var.project}/store-pod/store-pod-gateway:${var.image_tag}"
           environment : [
             { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
             { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
@@ -200,7 +200,7 @@ locals {
 
       containers = {
         "store-pod-saas-gateway" = {
-          image = "${var.docker_registry}/store-pod/store-pod-saas-gateway:${var.image_tag}"
+          image = "${var.docker_registry}/${var.project}/store-pod/store-pod-saas-gateway:${var.image_tag}"
           environment : [
             { "name" : "STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.${var.pod.endpoint}:7100" },
             {

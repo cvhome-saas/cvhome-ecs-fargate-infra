@@ -4,19 +4,12 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
-resource "random_string" "project" {
-  length  = 8
-  upper   = false
-  lower   = true
-  numeric = false
-  special = false
-}
+
 
 locals {
-  project              = random_string.project.result
-  store_core_namespace = "store-core.${local.project}.lcl"
+  store_core_namespace = "store-core.${var.project}.lcl"
   tags = {
-    Project     = local.project
+    Project     = var.project
     Terraform   = "true"
     Environment = var.env
   }
@@ -29,7 +22,7 @@ locals {
       id : lookup(value, "id")
       name : "store-pod-${lookup(value, "index")}"
       org : lookup(value, "org")
-      endpoint : lookup(value, "endpointType") == "EXTERNAL" ? lookup(value, "endpoint") : "store-pod-${lookup(value, "id")}.${local.project}.lcl"
+      endpoint : lookup(value, "endpointType") == "EXTERNAL" ? lookup(value, "endpoint") : "store-pod-${lookup(value, "id")}.${var.project}.lcl"
       endpointType : lookup(value, "endpointType")
       size : lookup(value, "size")
     }
@@ -37,8 +30,22 @@ locals {
 
 }
 
+data "aws_ssm_parameter" "config-domain" {
+  name = "/${var.project}/config/domain"
+}
+data "aws_ssm_parameter" "config-stripe" {
+  name = "/${var.project}/config/stripe"
+}
+
+locals {
+  domain               = nonsensitive(jsondecode(data.aws_ssm_parameter.config-domain.value).domain)
+  domainCertificateArn = jsondecode(data.aws_ssm_parameter.config-domain.value).domainCertificateArn
+  stripeKey = jsondecode(data.aws_ssm_parameter.config-stripe.value).stripeKey
+  stripeWebhockSigningKey = jsondecode(data.aws_ssm_parameter.config-stripe.value).stripeWebhockSigningKey
+
+}
 data "aws_route53_zone" "domain_zone" {
-  name = var.domain
+  name = local.domain
 }
 
 module "store-core" {
@@ -47,10 +54,10 @@ module "store-core" {
   public_subnets             = module.vpc.public_subnets
   private_subnets            = module.vpc.private_subnets
   log_s3_bucket_id           = module.log-bucket.s3_bucket_id
-  certificate_arn            = var.domain_certificate_arn
-  domain                     = var.domain
+  domain                     = local.domain
+  certificate_arn            = local.domainCertificateArn
   domain_zone_name           = data.aws_route53_zone.domain_zone.name
-  project                    = local.project
+  project                    = var.project
   tags                       = local.tags
   database_subnets           = module.vpc.database_subnets
   vpc_cidr_block             = local.vpc_cidr
@@ -58,8 +65,8 @@ module "store-core" {
   image_tag                  = var.image_tag
   namespace                  = local.store_core_namespace
   pods                       = local.pods
-  stripe_key                 = var.stripe_key
-  stripe_webhook_signing_key = var.stripe_webhook_signing_key
+  stripe_key                 = local.stripeKey
+  stripe_webhook_signing_key = local.stripeWebhockSigningKey
   docker_registry            = local.docker_registry
 }
 
@@ -69,11 +76,11 @@ module "store-pod" {
   public_subnets       = module.vpc.public_subnets
   private_subnets      = module.vpc.private_subnets
   log_s3_bucket_id     = module.log-bucket.s3_bucket_id
-  certificate_arn      = var.domain_certificate_arn
-  domain               = var.domain
+  domain               = local.domain
+  certificate_arn      = local.domainCertificateArn
   store_core_namespace = local.store_core_namespace
   domain_zone_name     = data.aws_route53_zone.domain_zone.name
-  project              = local.project
+  project              = var.project
   tags                 = local.tags
   database_subnets     = module.vpc.database_subnets
   vpc_cidr_block       = local.vpc_cidr

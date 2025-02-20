@@ -20,7 +20,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - name: Configure AWS credentials
@@ -29,26 +28,28 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
+      - name: build state bucket
+        id: build-state-bucket
+        run: |
+          aai=$(aws sts get-caller-identity --query Account --output text)
+          bucket="${aai}-${GITHUB_REPOSITORY_OWNER_ID}-${AWS_REGION}"
+          project=$(cksum <<< $bucket | cut -f 1 -d ' ')
+          echo "bucket-name=${bucket}">> $GITHUB_OUTPUT
+          echo "project=${project}">> $GITHUB_OUTPUT
+          aws s3api create-bucket --bucket ${bucket} --create-bucket-configuration LocationConstraint=${AWS_REGION} --region ${AWS_REGION} > /dev/null 2> /dev/null || echo "already created"
       - uses: hashicorp/setup-terraform@v3
-      - run: terraform init -backend-config="region=${CONFIG_STATE_BUCKET_REGION}" -backend-config="bucket=${CONFIG_STATE_BUCKET_NAME}" -backend-config="key=${CONFIG_STATE_BUCKET_KEY}"
+      - run: terraform init -backend-config="region=${AWS_REGION}" -backend-config="bucket=${CONFIG_STATE_BUCKET_NAME}" -backend-config="key=${GITHUB_REPOSITORY_ID}"
         env:
-          CONFIG_STATE_BUCKET_REGION: ${{ secrets.CONFIG_STATE_BUCKET_REGION }}
-          CONFIG_STATE_BUCKET_NAME: ${{ secrets.CONFIG_STATE_BUCKET_NAME }}
-          CONFIG_STATE_BUCKET_KEY: ${{ secrets.CONFIG_STATE_BUCKET_KEY }}
+          CONFIG_STATE_BUCKET_NAME: ${{ steps.build-state-bucket.outputs.bucket-name }}
       - id: plan
         run: terraform plan
         env:
           TF_VAR_image_tag: ${{ inputs.imageTag }}
-          TF_VAR_stripe_key: ${{ secrets.STRIPE_KEY }}
-          TF_VAR_stripe_webhook_signing_key: ${{ secrets.STRIPE_WEBHOOK_SIGNING_KEY }}
-          TF_VAR_domain: ${{ secrets.DOMAIN }}
-          TF_VAR_domain_certificate_arn: ${{ secrets.DOMAIN_CERTIFICATE_ARN }}
+          TF_VAR_region: ${{ secrets.AWS_REGION }}
+          TF_VAR_project: ${{ steps.build-state-bucket.outputs.project }}
       - id: apply
         run: terraform apply --auto-approve=true
         env:
           TF_VAR_image_tag: ${{ inputs.imageTag }}
-          TF_VAR_stripe_key: ${{ secrets.STRIPE_KEY }}
-          TF_VAR_stripe_webhook_signing_key: ${{ secrets.STRIPE_WEBHOOK_SIGNING_KEY }}
-          TF_VAR_domain: ${{ secrets.DOMAIN }}
-          TF_VAR_domain_certificate_arn: ${{ secrets.DOMAIN_CERTIFICATE_ARN }}
+          TF_VAR_region: ${{ secrets.AWS_REGION }}
+          TF_VAR_project: ${{ steps.build-state-bucket.outputs.project }}
