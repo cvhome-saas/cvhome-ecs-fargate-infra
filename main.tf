@@ -38,10 +38,10 @@ data "aws_ssm_parameter" "config-stripe" {
 }
 
 locals {
-  domain               = jsonencode(data.aws_ssm_parameter.config-domain.value).domain
-  domainCertificateArn = jsonencode(data.aws_ssm_parameter.config-domain.value).domainCertificateArn
-  stripeKey = jsonencode(data.aws_ssm_parameter.config-stripe.value).key
-  stripeWebhockSigningKey = jsonencode(data.aws_ssm_parameter.config-stripe.value).signingKey
+  domain               = data.aws_ssm_parameter.config-domain.value
+  domainCertificateArn = data.aws_ssm_parameter.config-domain.value
+  stripeKey = data.aws_ssm_parameter.config-stripe.value
+  stripeWebhockSigningKey = data.aws_ssm_parameter.config-stripe.value
 
 }
 data "aws_route53_zone" "domain_zone" {
