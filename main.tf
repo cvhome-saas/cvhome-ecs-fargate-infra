@@ -29,7 +29,8 @@ locals {
       id : lookup(value, "id")
       name : "store-pod-${lookup(value, "index")}"
       org : lookup(value, "org")
-      endpoint : lookup(value, "endpointType") == "EXTERNAL" ? lookup(value, "endpoint") : "store-pod-${lookup(value, "id")}.${local.project}.lcl"
+      endpoint : lookup(value, "endpointType") == "EXTERNAL" ? lookup(value, "endpoint") :
+        "store-pod-${lookup(value, "id")}.${local.project}.lcl"
       endpointType : lookup(value, "endpointType")
       size : lookup(value, "size")
     }
@@ -37,8 +38,22 @@ locals {
 
 }
 
+data "aws_ssm_parameter" "config-domain" {
+  name = "/${var.project}/config/domain"
+}
+data "aws_ssm_parameter" "config-stripe" {
+  name = "/${var.project}/config/stripe"
+}
+
+locals {
+  domain               = jsonencode(data.aws_ssm_parameter.config-domain.value).domain
+  domainCertificateArn = jsonencode(data.aws_ssm_parameter.config-domain.value).domainCertificateArn
+  key = jsonencode(data.aws_ssm_parameter.config-stripe.value).key
+  signingKey = jsonencode(data.aws_ssm_parameter.config-stripe.value).signingKey
+
+}
 data "aws_route53_zone" "domain_zone" {
-  name = var.domain
+  name = jsonencode(data.aws_ssm_parameter.config-domain.value).domain
 }
 
 module "store-core" {
@@ -47,8 +62,8 @@ module "store-core" {
   public_subnets             = module.vpc.public_subnets
   private_subnets            = module.vpc.private_subnets
   log_s3_bucket_id           = module.log-bucket.s3_bucket_id
-  certificate_arn            = var.domain_certificate_arn
-  domain                     = var.domain
+  domain                     = local.domain
+  certificate_arn            = local.domainCertificateArn
   domain_zone_name           = data.aws_route53_zone.domain_zone.name
   project                    = local.project
   tags                       = local.tags
@@ -58,8 +73,8 @@ module "store-core" {
   image_tag                  = var.image_tag
   namespace                  = local.store_core_namespace
   pods                       = local.pods
-  stripe_key                 = var.stripe_key
-  stripe_webhook_signing_key = var.stripe_webhook_signing_key
+  stripe_key                 = local.key
+  stripe_webhook_signing_key = local.signingKey
   docker_registry            = local.docker_registry
 }
 
@@ -69,8 +84,8 @@ module "store-pod" {
   public_subnets       = module.vpc.public_subnets
   private_subnets      = module.vpc.private_subnets
   log_s3_bucket_id     = module.log-bucket.s3_bucket_id
-  certificate_arn      = var.domain_certificate_arn
-  domain               = var.domain
+  domain               = local.domain
+  certificate_arn      = local.domainCertificateArn
   store_core_namespace = local.store_core_namespace
   domain_zone_name     = data.aws_route53_zone.domain_zone.name
   project              = local.project
