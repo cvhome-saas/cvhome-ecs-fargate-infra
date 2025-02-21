@@ -122,14 +122,14 @@ module "cluster-lb" {
       create_attachment = false
       name_prefix       = "core"
       protocol          = "HTTP"
-      port              = 7000
+      port              = 8000
       target_type       = "ip"
 
       health_check = {
         enabled             = true
         interval            = 45
         path                = "/actuator/health"
-        port                = 7000
+        port                = 8000
         healthy_threshold   = 2
         unhealthy_threshold = 5
         timeout             = 5

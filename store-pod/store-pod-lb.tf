@@ -87,14 +87,14 @@
 #       create_attachment = false
 #       name_prefix       = "pod"
 #       protocol          = "HTTP"
-#       port              = 7100
+#       port              = 8100
 #       target_type       = "ip"
 #
 #       health_check = {
 #         enabled             = true
 #         interval            = 45
 #         path                = "/actuator/health"
-#         port                = 7100
+#         port                = 8100
 #         healthy_threshold   = 3
 #         unhealthy_threshold = 2
 #         timeout             = 5

@@ -146,10 +146,10 @@ locals {
       cpu                         = 512
       memory                      = 1024
       main_container              = "store-ui"
-      main_container_port         = 4200
+      main_container_port         = 8010
       health_check = {
         path                = "/"
-        port                = 4200
+        port                = 8010
         healthy_threshold   = 2
         interval            = 60
         unhealthy_threshold = 3
@@ -162,8 +162,8 @@ locals {
           portMappings : [
             {
               name : "app",
-              containerPort : 4200,
-              hostPort : 4200,
+              containerPort : 8010,
+              hostPort : 8010,
               protocol : "tcp"
             }
           ]
@@ -180,10 +180,10 @@ locals {
       cpu                         = 512
       memory                      = 1024
       main_container              = "welcome-ui"
-      main_container_port         = 4300
+      main_container_port         = 8011
       health_check = {
         path                = "/"
-        port                = 4300
+        port                = 8011
         healthy_threshold   = 2
         interval            = 60
         unhealthy_threshold = 3
@@ -196,8 +196,8 @@ locals {
           portMappings : [
             {
               name : "app",
-              containerPort : 4300,
-              hostPort : 4300,
+              containerPort : 8011,
+              hostPort : 8011,
               protocol : "tcp"
             }
           ]
@@ -212,7 +212,7 @@ locals {
         "gateway-tg" : {
           loadbalancer_target_groups_arn = module.cluster-lb.target_groups["gateway-tg"].arn
           main_container                 = "store-core-gateway"
-          main_container_port            = 7000
+          main_container_port            = 8000
         }
       }
       load_balancer_host_matchers = []
@@ -220,10 +220,10 @@ locals {
       cpu                         = 512
       memory                      = 1024
       main_container              = "store-core-gateway"
-      main_container_port         = 7000
+      main_container_port         = 8000
       health_check = {
         path                = "/actuator/health"
-        port                = 7000
+        port                = 8000
         healthy_threshold   = 2
         interval            = 60
         unhealthy_threshold = 3
@@ -236,8 +236,8 @@ locals {
           portMappings : [
             {
               name : "app",
-              containerPort : 7000,
-              hostPort : 7000,
+              containerPort : 8000,
+              hostPort : 8000,
               protocol : "tcp"
             }
           ]
@@ -296,10 +296,10 @@ locals {
       cpu                         = 512
       memory                      = 1024
       main_container              = "manager"
-      main_container_port         = 7001
+      main_container_port         = 8020
       health_check = {
         path                = "/actuator/health"
-        port                = 7001
+        port                = 8020
         healthy_threshold   = 2
         interval            = 60
         unhealthy_threshold = 3
@@ -312,8 +312,8 @@ locals {
           portMappings : [
             {
               name : "app",
-              containerPort : 7001,
-              hostPort : 7001,
+              containerPort : 8020,
+              hostPort : 8020,
               protocol : "tcp"
             }
           ]
@@ -331,10 +331,10 @@ locals {
       cpu                         = 512
       memory                      = 1024
       main_container              = "subscription"
-      main_container_port         = 7002
+      main_container_port         = 8021
       health_check = {
         path                = "/actuator/health"
-        port                = 7002
+        port                = 8021
         healthy_threshold   = 2
         interval            = 60
         unhealthy_threshold = 3
@@ -347,8 +347,8 @@ locals {
           portMappings : [
             {
               name : "app",
-              containerPort : 7002,
-              hostPort : 7002,
+              containerPort : 8021,
+              hostPort : 8021,
               protocol : "tcp"
             }
           ]

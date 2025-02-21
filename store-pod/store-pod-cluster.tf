@@ -23,10 +23,10 @@ locals {
       cpu                         = 512
       memory                      = 1024
       main_container              = "landing-ui"
-      main_container_port         = 7102
+      main_container_port         = 8110
       health_check = {
         path                = "/"
-        port                = 7102
+        port                = 8110
         healthy_threshold   = 2
         interval            = 60
         unhealthy_threshold = 3
@@ -39,8 +39,8 @@ locals {
           portMappings : [
             {
               name : "app",
-              containerPort : 7102,
-              hostPort : 7102,
+              containerPort : 8110,
+              hostPort : 8110,
               protocol : "tcp"
             }
           ]
@@ -58,10 +58,10 @@ locals {
       cpu                         = 512
       memory                      = 1024
       main_container              = "store"
-      main_container_port         = 7101
+      main_container_port         = 8120
       health_check = {
         path                = "/actuator/health"
-        port                = 7101
+        port                = 8120
         healthy_threshold   = 2
         interval            = 60
         unhealthy_threshold = 3
@@ -101,8 +101,8 @@ locals {
           portMappings : [
             {
               name : "app",
-              containerPort : 7101,
-              hostPort : 7101,
+              containerPort : 8120,
+              hostPort : 8120,
               protocol : "tcp"
             }
           ]
@@ -119,7 +119,7 @@ locals {
       #   "gateway-tg" : {
       #     loadbalancer_target_groups_arn = module.cluster-lb.target_groups["gateway-tg"].arn
       #     main_container                 = "store-pod-gateway"
-      #     main_container_port            = 7100
+      #     main_container_port            = 8100
       #   }
       # }
 
@@ -128,10 +128,10 @@ locals {
       cpu                         = 512
       memory                      = 1024
       main_container              = "store-pod-gateway"
-      main_container_port         = 7100
+      main_container_port         = 8100
       health_check = {
         path                = "/actuator/health"
-        port                = 7100
+        port                = 8100
         healthy_threshold   = 2
         interval            = 60
         unhealthy_threshold = 3
@@ -157,8 +157,8 @@ locals {
           portMappings : [
             {
               name : "app",
-              containerPort : 7100,
-              hostPort : 7100,
+              containerPort : 8100,
+              hostPort : 8100,
               protocol : "tcp"
             }
           ]
@@ -202,10 +202,10 @@ locals {
         "store-pod-saas-gateway" = {
           image = "${var.docker_registry}/${var.project}/store-pod/store-pod-saas-gateway:${var.image_tag}"
           environment : [
-            { "name" : "STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.${var.pod.endpoint}:7100" },
+            { "name" : "STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.${var.pod.endpoint}:8100" },
             {
               "name" : "ASK_TLS_URL",
-              "value" : "http://store-core-gateway.${var.store_core_namespace}:7000/manager/api/v1/router/public/ask-for-tls"
+              "value" : "http://store-core-gateway.${var.store_core_namespace}:8000/manager/api/v1/router/public/ask-for-tls"
             }
           ]
           portMappings : [
