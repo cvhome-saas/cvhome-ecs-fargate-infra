@@ -51,7 +51,7 @@ variable "namespace" {
 }
 variable "pods" {
   type = map(object({
-    index:number
+    index : number
     id : string
     name : string
     org : string
@@ -60,17 +60,17 @@ variable "pods" {
     size : string
   }))
 }
-variable "mq_username" {
-  type = string
-  default = "admin"
-}
-variable "mq_password" {
-  type = string
-  default = "admin-123-123"
-}
 variable "stripe_key" {
   type = string
 }
 variable "stripe_webhook_signing_key" {
   type = string
 }
+variable "kc_username" {
+  type = string
+}
+variable "kc_password" {
+  type = string
+}
+
+

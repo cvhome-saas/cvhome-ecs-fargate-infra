@@ -30,20 +30,6 @@ locals {
 
 }
 
-data "aws_ssm_parameter" "config-domain" {
-  name = "/${var.project}/config/domain"
-}
-data "aws_ssm_parameter" "config-stripe" {
-  name = "/${var.project}/config/stripe"
-}
-
-locals {
-  domain               = nonsensitive(jsondecode(data.aws_ssm_parameter.config-domain.value).domain)
-  domainCertificateArn = jsondecode(data.aws_ssm_parameter.config-domain.value).domainCertificateArn
-  stripeKey = jsondecode(data.aws_ssm_parameter.config-stripe.value).stripeKey
-  stripeWebhockSigningKey = jsondecode(data.aws_ssm_parameter.config-stripe.value).stripeWebhockSigningKey
-
-}
 data "aws_route53_zone" "domain_zone" {
   name = local.domain
 }
@@ -68,6 +54,8 @@ module "store-core" {
   stripe_key                 = local.stripeKey
   stripe_webhook_signing_key = local.stripeWebhockSigningKey
   docker_registry            = local.docker_registry
+  kc_username                = local.kcUsername
+  kc_password                = local.kcPassword
 }
 
 module "store-pod" {

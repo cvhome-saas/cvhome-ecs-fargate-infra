@@ -20,7 +20,7 @@ locals {
       { name : "COM_ASREVO_CVHOME_PODS[${value.index}]_ORG-ID_ID", value : value.org },
     ]
   ])
-  store_core_gateway_env=[
+  store_core_gateway_env = [
     { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
     { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
     { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_SCHEMA", "value" : "https" },
@@ -34,7 +34,7 @@ locals {
     },
     { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_NAMESPACE", "value" : "store-pod-1.${var.project}.lcl" },
   ]
-  manager_env=[
+  manager_env = [
     { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
     { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
     { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_SCHEMA", "value" : "https" },
@@ -73,7 +73,7 @@ locals {
       "value" : var.mq_password
     },
   ]
-  subscription_env=[
+  subscription_env = [
     { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
     { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
     { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_SCHEMA", "value" : "https" },
@@ -116,14 +116,14 @@ locals {
       "value" : var.mq_password
     },
   ]
-  auth_env=[
+  auth_env = [
     { "name" : "KC_HTTP_PORT", "value" : "9999" },
     { "name" : "KC_HTTP_ENABLED", "value" : "true" },
     { "name" : "KC_HTTP_MANAGEMENT_PORT", "value" : "9000" },
     { "name" : "KC_HEALTH_ENABLED", "value" : "true" },
     { "name" : "KC_HOSTNAME_STRICT_HTTPS", "value" : "false" },
-    { "name" : "KEYCLOAK_ADMIN", "value" : "sys-admin@mail.com" },
-    { "name" : "KEYCLOAK_ADMIN_PASSWORD", "value" : "admin" },
+    { "name" : "KEYCLOAK_ADMIN", "value" : var.kc_username },
+    { "name" : "KEYCLOAK_ADMIN_PASSWORD", "value" : var.kc_password },
     { "name" : "KC_DB", "value" : "postgres" },
     { "name" : "KC_DB_URL_DATABASE", "value" : module.store-core-db.db_instance_name },
     { "name" : "KC_DB_URL_HOST", "value" : module.store-core-db.db_instance_address },
@@ -232,7 +232,7 @@ locals {
       containers = {
         "store-core-gateway" = {
           image = "${var.docker_registry}/${var.project}/store-core/store-core-gateway:${var.image_tag}"
-          environment : concat(local.store_core_gateway_env,local.pods_env)
+          environment : concat(local.store_core_gateway_env, local.pods_env)
           portMappings : [
             {
               name : "app",
@@ -308,7 +308,7 @@ locals {
       containers = {
         "manager" = {
           image = "${var.docker_registry}/${var.project}/store-core/manager:${var.image_tag}"
-          environment : concat(local.manager_env,local.pods_env)
+          environment : concat(local.manager_env, local.pods_env)
           portMappings : [
             {
               name : "app",
@@ -343,7 +343,7 @@ locals {
       containers = {
         "subscription" = {
           image = "${var.docker_registry}/${var.project}/store-core/subscription:${var.image_tag}"
-          environment : concat(local.subscription_env,local.pods_env)
+          environment : concat(local.subscription_env, local.pods_env)
           portMappings : [
             {
               name : "app",

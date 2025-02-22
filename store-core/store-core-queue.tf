@@ -1,5 +1,26 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "5.81.0"
+    }
+  }
+}
+
+resource "aws_secretsmanager_secret" "mq_secret" {
+  name = "mq-${local.module_name}-${var.project}-${var.env}"
+}
+
+resource "aws_secretsmanager_secret_version" "mq_secret_version" {
+  secret_id = aws_secretsmanager_secret.mq_secret.id
+  secret_string = jsonencode({
+    "username" : "admin"
+    "password" : random_password.password.result
+  })
+}
+
 resource "aws_mq_broker" "mq" {
-  broker_name = "${local.module_name}-${var.project}-${var.env}"
+  broker_name         = "${local.module_name}-${var.project}-${var.env}"
   engine_type         = "RabbitMQ"
   engine_version      = "3.11.28"
   host_instance_type  = "mq.t3.micro"
@@ -12,8 +33,8 @@ resource "aws_mq_broker" "mq" {
   }
 
   user {
-    username = var.mq_username
-    password = var.mq_password
+    username = jsondecode(aws_secretsmanager_secret_version.mq_secret_version.secret_string)["username"]
+    password = jsondecode(aws_secretsmanager_secret_version.mq_secret_version.secret_string)["password"]
   }
 
   apply_immediately = true
