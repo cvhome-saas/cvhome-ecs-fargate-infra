@@ -19,8 +19,13 @@ locals {
   private_ecr_docker_registry = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com"
   docker_registry             = var.docker_registry != "" ? var.docker_registry : local.private_ecr_docker_registry
   xxpods = {
-    for key in local.xpods : lookup(key,"id" ) => {
-      xxid : lookup(key,"id" )
+    for key in local.xpods : lookup(key,"name" ) => {
+      index : lookup(value, "index")
+      id : lookup(value, "id")
+      name : "store-pod-${lookup(value, "index")}"
+      org : lookup(value, "org")
+      endpoint :  "store-pod-${lookup(value, "id")}.${var.project}.lcl"
+      size : lookup(value, "size")
     }
   }
   pods = {
