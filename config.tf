@@ -10,7 +10,6 @@ data "aws_ssm_parameter" "config-kc" {
 
 locals {
   domain                  = nonsensitive(jsondecode(data.aws_ssm_parameter.config-domain.value).domain)
-  domainCertificateArn    = jsondecode(data.aws_ssm_parameter.config-domain.value).domainCertificateArn
   stripeKey               = jsondecode(data.aws_ssm_parameter.config-stripe.value).stripeKey
   stripeWebhockSigningKey = jsondecode(data.aws_ssm_parameter.config-stripe.value).stripeWebhockSigningKey
   kcUsername              = jsondecode(data.aws_ssm_parameter.config-kc.value).username

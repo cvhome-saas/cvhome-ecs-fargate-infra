@@ -4,7 +4,10 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
-
+data "aws_acm_certificate" "certificate" {
+  domain   = local.domain
+  statuses = ["ISSUED"]
+}
 
 locals {
   store_core_namespace = "store-core.${var.project}.lcl"
@@ -41,7 +44,7 @@ module "store-core" {
   private_subnets            = module.vpc.private_subnets
   log_s3_bucket_id           = module.log-bucket.s3_bucket_id
   domain                     = local.domain
-  certificate_arn            = local.domainCertificateArn
+  certificate_arn            = data.aws_acm_certificate.certificate.arn
   domain_zone_name           = data.aws_route53_zone.domain_zone.name
   project                    = var.project
   tags                       = local.tags
