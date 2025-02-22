@@ -7,6 +7,9 @@ data "aws_ssm_parameter" "config-stripe" {
 data "aws_ssm_parameter" "config-kc" {
   name = "/${var.project}/config/kc"
 }
+data "aws_ssm_parameter" "config-pods" {
+  name = "/${var.project}/config/pods"
+}
 
 locals {
   domain                  = nonsensitive(jsondecode(data.aws_ssm_parameter.config-domain.value).domain)
@@ -14,4 +17,5 @@ locals {
   stripeWebhockSigningKey = jsondecode(data.aws_ssm_parameter.config-stripe.value).stripeWebhockSigningKey
   kcUsername              = jsondecode(data.aws_ssm_parameter.config-kc.value).username
   kcPassword              = jsondecode(data.aws_ssm_parameter.config-kc.value).password
+  xpods                   = jsondecode(nonsensitive(data.aws_ssm_parameter.config-pods))
 }
