@@ -26,7 +26,7 @@ locals {
       org : try(lookup(value, "org"), "")
       endpoint : "store-pod-${lookup(value, "id")}.${var.project}.lcl"
       size : try(lookup(value, "size"), "large"),
-      endpointType:"INTERNAL"
+      endpointType : "INTERNAL"
     }
   }
 }
