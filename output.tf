@@ -20,5 +20,5 @@ output "org2_store2_url" {
   value = "https://org2-store2.${module.store-pod["default"].domain}"
 }
 output "xxpods" {
-  value = local.xpods
+  value = local.xxpods
 }
