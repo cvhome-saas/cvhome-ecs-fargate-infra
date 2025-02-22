@@ -17,5 +17,5 @@ locals {
   stripeWebhockSigningKey = jsondecode(data.aws_ssm_parameter.config-stripe.value).stripeWebhockSigningKey
   kcUsername              = jsondecode(data.aws_ssm_parameter.config-kc.value).username
   kcPassword              = jsondecode(data.aws_ssm_parameter.config-kc.value).password
-  xpods                   = jsondecode(nonsensitive(data.aws_ssm_parameter.config-pods))
+  xpods                   = jsondecode(data.aws_ssm_parameter.config-pods)
 }
