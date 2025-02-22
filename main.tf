@@ -23,9 +23,9 @@ locals {
       index : lookup(value, "index")
       id : lookup(value, "id")
       name : "store-pod-${lookup(value, "index")}"
-      org : lookup(value, "org")
+      org : try(lookup(value, "org"), "")
       endpoint : "store-pod-${lookup(value, "id")}.${var.project}.lcl"
-      size : lookup(value, "size")
+      size : try(lookup(value, "size"), "large")
     }
   }
   pods = {
