@@ -66,11 +66,11 @@ locals {
     },
     {
       "name" : "SPRING_RABBITMQ_USERNAME",
-      "value" : var.mq_username
+      "value" : jsondecode(aws_secretsmanager_secret_version.mq_secret_version.secret_string)["username"]
     },
     {
       "name" : "SPRING_RABBITMQ_PASSWORD",
-      "value" : var.mq_password
+      "value" : jsondecode(aws_secretsmanager_secret_version.mq_secret_version.secret_string)["password"]
     },
   ]
   subscription_env = [
