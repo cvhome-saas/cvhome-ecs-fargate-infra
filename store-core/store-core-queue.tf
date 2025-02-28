@@ -28,7 +28,7 @@ resource "aws_mq_broker" "mq" {
   deployment_mode     = "SINGLE_INSTANCE"
   subnet_ids          = [var.public_subnets[0]]
   publicly_accessible = true
-  autoMinorVersionUpgrade = true
+  auto_minor_version_upgrade = true
   configuration {
     id       = aws_mq_configuration.mq_config.id
     revision = aws_mq_configuration.mq_config.latest_revision
