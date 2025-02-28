@@ -8,7 +8,8 @@ terraform {
 }
 
 resource "aws_secretsmanager_secret" "mq_secret" {
-  name = "mq-${local.module_name}-${var.project}-${var.env}"
+  name = "${local.module_name}-${var.project}-${var.env}-mq"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "mq_secret_version" {
