@@ -22,7 +22,7 @@ locals {
     for value in local.xpods : lookup(value, "name") => {
       index : lookup(value, "index")
       id : lookup(value, "id")
-      name : "store-pod-${lookup(value, "index")}"
+      name : lookup(value, "name")
       org : try(lookup(value, "org"), "")
       endpoint : "store-pod-${lookup(value, "id")}.${var.project}.lcl"
       size : try(lookup(value, "size"), "large"),
