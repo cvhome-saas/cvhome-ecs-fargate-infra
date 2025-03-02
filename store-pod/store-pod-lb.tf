@@ -134,7 +134,7 @@ locals {
 module "cluster-lb" {
   source = "terraform-aws-modules/alb/aws"
 
-  name                       = "${var.pod.name}-${var.project}-${var.env}"
+  name                       = "${var.project}-${var.pod.id}-${var.env}"
   vpc_id                     = var.vpc_id
   subnets                    = var.public_subnets
   enable_deletion_protection = false
@@ -148,7 +148,7 @@ module "cluster-lb" {
 
   access_logs = {
     bucket = var.log_s3_bucket_id
-    prefix = "${var.pod.name}-lb-access-logs"
+    prefix = "${var.pod.id}-lb-access-logs"
   }
 
   listeners = {
