@@ -272,7 +272,7 @@ locals {
 
 module "store-pod-cluster" {
   source                     = "terraform-aws-modules/ecs/aws"
-  cluster_name               = "${var.project}-${var.pod.id}-${var.env}"
+  cluster_name               = "store-pod-${var.project}-${var.pod.id}-${var.env}"
   fargate_capacity_providers = local.fargate_capacity_providers
   cluster_settings           = []
   tags                       = var.tags
