@@ -122,7 +122,10 @@ locals {
               "name" : "COM_ASREVO_CVHOME_CDN_BASE-PATH",
               "value" : "https://${module.cdn-storage-cloudfront.cloudfront_distribution_domain_name}"
             },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_NAMESPACE", "value" : var.pod.endpoint },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_MERCHANT_NAMESPACE", "value" : var.pod.endpoint },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CONTENT_NAMESPACE", "value" : var.pod.endpoint },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CATALOG_NAMESPACE", "value" : var.pod.endpoint },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_ORDER_NAMESPACE", "value" : var.pod.endpoint },
             { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-pod-db.db_instance_name },
             { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-pod-db.db_instance_address },
             { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-pod-db.db_instance_port },
@@ -184,7 +187,10 @@ locals {
               "name" : "COM_ASREVO_CVHOME_CDN_BASE-PATH",
               "value" : "https://${module.cdn-storage-cloudfront.cloudfront_distribution_domain_name}"
             },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_MERCHANT_NAMESPACE", "value" : var.pod.endpoint },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_CONTENT_NAMESPACE", "value" : var.pod.endpoint },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CATALOG_NAMESPACE", "value" : var.pod.endpoint },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_ORDER_NAMESPACE", "value" : var.pod.endpoint },
             { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-pod-db.db_instance_name },
             { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-pod-db.db_instance_address },
             { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-pod-db.db_instance_port },
@@ -246,7 +252,10 @@ locals {
               "name" : "COM_ASREVO_CVHOME_CDN_BASE-PATH",
               "value" : "https://${module.cdn-storage-cloudfront.cloudfront_distribution_domain_name}"
             },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_MERCHANT_NAMESPACE", "value" : var.pod.endpoint },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CONTENT_NAMESPACE", "value" : var.pod.endpoint },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_CATALOG_NAMESPACE", "value" : var.pod.endpoint },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_ORDER_NAMESPACE", "value" : var.pod.endpoint },
             { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-pod-db.db_instance_name },
             { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-pod-db.db_instance_address },
             { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-pod-db.db_instance_port },
@@ -308,6 +317,9 @@ locals {
               "name" : "COM_ASREVO_CVHOME_CDN_BASE-PATH",
               "value" : "https://${module.cdn-storage-cloudfront.cloudfront_distribution_domain_name}"
             },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_MERCHANT_NAMESPACE", "value" : var.pod.endpoint },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CONTENT_NAMESPACE", "value" : var.pod.endpoint },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CATALOG_NAMESPACE", "value" : var.pod.endpoint },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_ORDER_NAMESPACE", "value" : var.pod.endpoint },
             { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-pod-db.db_instance_name },
             { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-pod-db.db_instance_address },
