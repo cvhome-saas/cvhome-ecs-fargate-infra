@@ -81,7 +81,7 @@ locals {
         }
       }
     }
-    "store" = {
+    "merchant" = {
       public                     = true
       priority                   = 100
       service_type               = "SERVICE"
@@ -91,7 +91,7 @@ locals {
       desired                     = 1
       cpu                         = 512
       memory                      = 1024
-      main_container              = "store"
+      main_container              = "merchant"
       main_container_port         = 8120
       health_check = {
         path                = "/actuator/health"
@@ -102,8 +102,8 @@ locals {
       }
 
       containers = {
-        "store" = {
-          image = "${var.docker_registry}/${var.project}/store-pod/store:${var.image_tag}"
+        "merchant" = {
+          image = "${var.docker_registry}/${var.project}/store-pod/merchant:${var.image_tag}"
           environment : [
             { "name" : "SPRING_PROFILES_ACTIVE", "value" : local.profiles },
             { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
@@ -137,6 +137,192 @@ locals {
               name : "app",
               containerPort : 8120,
               hostPort : 8120,
+              protocol : "tcp"
+            }
+          ]
+        }
+      }
+    }
+    "content" = {
+      public                     = true
+      priority                   = 100
+      service_type               = "SERVICE"
+      loadbalancer_target_groups = {}
+
+      load_balancer_host_matchers = []
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "content"
+      main_container_port         = 8121
+      health_check = {
+        path                = "/actuator/health"
+        port                = 8121
+        healthy_threshold   = 2
+        interval            = 60
+        unhealthy_threshold = 3
+      }
+
+      containers = {
+        "content" = {
+          image = "${var.docker_registry}/${var.project}/store-pod/content:${var.image_tag}"
+          environment : [
+            { "name" : "SPRING_PROFILES_ACTIVE", "value" : local.profiles },
+            { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_CORE-GATEWAY_SCHEMA", "value" : "https" },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_CORE-GATEWAY_PORT", "value" : "443" },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
+            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.endpoint },
+            {
+              "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
+              "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
+            },
+            { "name" : "COM_ASREVO_CVHOME_CDN_STORAGE_PROVIDER", "value" : "S3" },
+            { "name" : "COM_ASREVO_CVHOME_CDN_STORAGE_BUCKET", "value" : module.cdn-storage-bucket.s3_bucket_id },
+            {
+              "name" : "COM_ASREVO_CVHOME_CDN_BASE-PATH",
+              "value" : "https://${module.cdn-storage-cloudfront.cloudfront_distribution_domain_name}"
+            },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CONTENT_NAMESPACE", "value" : var.pod.endpoint },
+            { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-pod-db.db_instance_name },
+            { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-pod-db.db_instance_address },
+            { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-pod-db.db_instance_port },
+            { "name" : "SPRING_DATASOURCE_USERNAME", "value" : module.store-pod-db.db_instance_username },
+            {
+              "name" : "SPRING_DATASOURCE_PASSWORD",
+              "value" : jsondecode(data.aws_secretsmanager_secret_version.current_db_secret_version.secret_string)["password"]
+            },
+          ]
+          portMappings : [
+            {
+              name : "app",
+              containerPort : 8121,
+              hostPort : 8121,
+              protocol : "tcp"
+            }
+          ]
+        }
+      }
+    }
+    "catalog" = {
+      public                     = true
+      priority                   = 100
+      service_type               = "SERVICE"
+      loadbalancer_target_groups = {}
+
+      load_balancer_host_matchers = []
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "catalog"
+      main_container_port         = 8122
+      health_check = {
+        path                = "/actuator/health"
+        port                = 8122
+        healthy_threshold   = 2
+        interval            = 60
+        unhealthy_threshold = 3
+      }
+
+      containers = {
+        "catalog" = {
+          image = "${var.docker_registry}/${var.project}/store-pod/catalog:${var.image_tag}"
+          environment : [
+            { "name" : "SPRING_PROFILES_ACTIVE", "value" : local.profiles },
+            { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_CORE-GATEWAY_SCHEMA", "value" : "https" },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_CORE-GATEWAY_PORT", "value" : "443" },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
+            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.endpoint },
+            {
+              "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
+              "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
+            },
+            { "name" : "COM_ASREVO_CVHOME_CDN_STORAGE_PROVIDER", "value" : "S3" },
+            { "name" : "COM_ASREVO_CVHOME_CDN_STORAGE_BUCKET", "value" : module.cdn-storage-bucket.s3_bucket_id },
+            {
+              "name" : "COM_ASREVO_CVHOME_CDN_BASE-PATH",
+              "value" : "https://${module.cdn-storage-cloudfront.cloudfront_distribution_domain_name}"
+            },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CATALOG_NAMESPACE", "value" : var.pod.endpoint },
+            { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-pod-db.db_instance_name },
+            { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-pod-db.db_instance_address },
+            { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-pod-db.db_instance_port },
+            { "name" : "SPRING_DATASOURCE_USERNAME", "value" : module.store-pod-db.db_instance_username },
+            {
+              "name" : "SPRING_DATASOURCE_PASSWORD",
+              "value" : jsondecode(data.aws_secretsmanager_secret_version.current_db_secret_version.secret_string)["password"]
+            },
+          ]
+          portMappings : [
+            {
+              name : "app",
+              containerPort : 8122,
+              hostPort : 8122,
+              protocol : "tcp"
+            }
+          ]
+        }
+      }
+    }
+    "order" = {
+      public                     = true
+      priority                   = 100
+      service_type               = "SERVICE"
+      loadbalancer_target_groups = {}
+
+      load_balancer_host_matchers = []
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "order"
+      main_container_port         = 8123
+      health_check = {
+        path                = "/actuator/health"
+        port                = 8123
+        healthy_threshold   = 2
+        interval            = 60
+        unhealthy_threshold = 3
+      }
+
+      containers = {
+        "order" = {
+          image = "${var.docker_registry}/${var.project}/store-pod/order:${var.image_tag}"
+          environment : [
+            { "name" : "SPRING_PROFILES_ACTIVE", "value" : local.profiles },
+            { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_CORE-GATEWAY_SCHEMA", "value" : "https" },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_CORE-GATEWAY_PORT", "value" : "443" },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
+            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.endpoint },
+            {
+              "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
+              "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
+            },
+            { "name" : "COM_ASREVO_CVHOME_CDN_STORAGE_PROVIDER", "value" : "S3" },
+            { "name" : "COM_ASREVO_CVHOME_CDN_STORAGE_BUCKET", "value" : module.cdn-storage-bucket.s3_bucket_id },
+            {
+              "name" : "COM_ASREVO_CVHOME_CDN_BASE-PATH",
+              "value" : "https://${module.cdn-storage-cloudfront.cloudfront_distribution_domain_name}"
+            },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_ORDER_NAMESPACE", "value" : var.pod.endpoint },
+            { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-pod-db.db_instance_name },
+            { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-pod-db.db_instance_address },
+            { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-pod-db.db_instance_port },
+            { "name" : "SPRING_DATASOURCE_USERNAME", "value" : module.store-pod-db.db_instance_username },
+            {
+              "name" : "SPRING_DATASOURCE_PASSWORD",
+              "value" : jsondecode(data.aws_secretsmanager_secret_version.current_db_secret_version.secret_string)["password"]
+            },
+          ]
+          portMappings : [
+            {
+              name : "app",
+              containerPort : 8123,
+              hostPort : 8123,
               protocol : "tcp"
             }
           ]
