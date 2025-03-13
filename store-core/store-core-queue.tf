@@ -1,12 +1,3 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "5.88.0"
-    }
-  }
-}
-
 resource "aws_secretsmanager_secret" "mq_secret" {
   name = "${local.module_name}-${var.project}-${var.env}-mq"
   recovery_window_in_days = 0
