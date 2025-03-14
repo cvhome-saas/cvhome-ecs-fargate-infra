@@ -384,7 +384,7 @@ locals {
               "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
               "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
             },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_MANAGER_NAMESPACE", "value" : "store-core.${var.project}.lcl" },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_CORE-GATEWAY_NAMESPACE", "value" : "store-core.${var.project}.lcl" },
           ]
           portMappings : [
             {
