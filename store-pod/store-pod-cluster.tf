@@ -377,6 +377,7 @@ locals {
             { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_CORE-GATEWAY_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_CORE-GATEWAY_PORT", "value" : "443" },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_CORE-GATEWAY_NAMESPACE", "value" : "store-core.${var.project}.lcl" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
             { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.endpoint },
@@ -384,7 +385,6 @@ locals {
               "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
               "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
             },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_CORE-GATEWAY_NAMESPACE", "value" : "store-core.${var.project}.lcl" },
           ]
           portMappings : [
             {
