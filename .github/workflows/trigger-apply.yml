@@ -54,7 +54,7 @@ jobs:
           TF_VAR_region: ${{ secrets.AWS_REGION }}
           TF_VAR_project: ${{ steps.build-state-bucket.outputs.project }}
       - id: output
-        run: terraform output -json
+        run: terraform output
         env:
           TF_VAR_image_tag: ${{ inputs.imageTag }}
           TF_VAR_region: ${{ secrets.AWS_REGION }}
