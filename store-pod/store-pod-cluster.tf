@@ -14,16 +14,16 @@ locals {
   }
   services = {
     "landing-ui" = {
-      public                      = true
-      priority                    = 100
-      service_type                = "SERVICE"
-      loadbalancer_target_groups  = {}
+      public              = true
+      priority            = 100
+      service_type        = "SERVICE"
+      loadbalancer_target_groups = {}
       load_balancer_host_matchers = []
-      desired                     = 1
-      cpu                         = 512
-      memory                      = 1024
-      main_container              = "landing-ui"
-      main_container_port         = 8110
+      desired             = 1
+      cpu                 = 512
+      memory              = 1024
+      main_container      = "landing-ui"
+      main_container_port = 8110
       health_check = {
         path                = "/"
         port                = 8110
@@ -48,16 +48,16 @@ locals {
       }
     }
     "merchant-ui" = {
-      public                      = true
-      priority                    = 100
-      service_type                = "SERVICE"
-      loadbalancer_target_groups  = {}
+      public              = true
+      priority            = 100
+      service_type        = "SERVICE"
+      loadbalancer_target_groups = {}
       load_balancer_host_matchers = []
-      desired                     = 1
-      cpu                         = 512
-      memory                      = 1024
-      main_container              = "merchant-ui"
-      main_container_port         = 8111
+      desired             = 1
+      cpu                 = 512
+      memory              = 1024
+      main_container      = "merchant-ui"
+      main_container_port = 8111
       health_check = {
         path                = "/"
         port                = 8111
@@ -69,7 +69,9 @@ locals {
       containers = {
         "merchant-ui" = {
           image = "${var.docker_registry}/${var.project}/store-pod/merchant-ui:${var.image_tag}"
-          environment : []
+          environment : [
+            { "name" : "STORE_POD_GATEWAY_URL", "value" : "http://store-pod-gateway.${var.pod.endpoint}:8100" },
+          ]
           portMappings : [
             {
               name : "app",
@@ -82,17 +84,17 @@ locals {
       }
     }
     "merchant" = {
-      public                     = true
-      priority                   = 100
-      service_type               = "SERVICE"
+      public       = true
+      priority     = 100
+      service_type = "SERVICE"
       loadbalancer_target_groups = {}
 
       load_balancer_host_matchers = []
-      desired                     = 1
-      cpu                         = 512
-      memory                      = 1024
-      main_container              = "merchant"
-      main_container_port         = 8120
+      desired             = 1
+      cpu                 = 512
+      memory              = 1024
+      main_container      = "merchant"
+      main_container_port = 8120
       health_check = {
         path                = "/actuator/health"
         port                = 8120
@@ -147,17 +149,17 @@ locals {
       }
     }
     "content" = {
-      public                     = true
-      priority                   = 100
-      service_type               = "SERVICE"
+      public       = true
+      priority     = 100
+      service_type = "SERVICE"
       loadbalancer_target_groups = {}
 
       load_balancer_host_matchers = []
-      desired                     = 1
-      cpu                         = 512
-      memory                      = 1024
-      main_container              = "content"
-      main_container_port         = 8121
+      desired             = 1
+      cpu                 = 512
+      memory              = 1024
+      main_container      = "content"
+      main_container_port = 8121
       health_check = {
         path                = "/actuator/health"
         port                = 8121
@@ -212,17 +214,17 @@ locals {
       }
     }
     "catalog" = {
-      public                     = true
-      priority                   = 100
-      service_type               = "SERVICE"
+      public       = true
+      priority     = 100
+      service_type = "SERVICE"
       loadbalancer_target_groups = {}
 
       load_balancer_host_matchers = []
-      desired                     = 1
-      cpu                         = 512
-      memory                      = 1024
-      main_container              = "catalog"
-      main_container_port         = 8122
+      desired             = 1
+      cpu                 = 512
+      memory              = 1024
+      main_container      = "catalog"
+      main_container_port = 8122
       health_check = {
         path                = "/actuator/health"
         port                = 8122
@@ -277,17 +279,17 @@ locals {
       }
     }
     "order" = {
-      public                     = true
-      priority                   = 100
-      service_type               = "SERVICE"
+      public       = true
+      priority     = 100
+      service_type = "SERVICE"
       loadbalancer_target_groups = {}
 
       load_balancer_host_matchers = []
-      desired                     = 1
-      cpu                         = 512
-      memory                      = 1024
-      main_container              = "order"
-      main_container_port         = 8123
+      desired             = 1
+      cpu                 = 512
+      memory              = 1024
+      main_container      = "order"
+      main_container_port = 8123
       health_check = {
         path                = "/actuator/health"
         port                = 8123
@@ -342,9 +344,9 @@ locals {
       }
     }
     "store-pod-gateway" = {
-      public                     = true
-      priority                   = 100
-      service_type               = "SERVICE"
+      public       = true
+      priority     = 100
+      service_type = "SERVICE"
       loadbalancer_target_groups = {}
 
       # loadbalancer_target_groups = {
@@ -356,11 +358,11 @@ locals {
       # }
 
       load_balancer_host_matchers = []
-      desired                     = 1
-      cpu                         = 512
-      memory                      = 1024
-      main_container              = "store-pod-gateway"
-      main_container_port         = 8100
+      desired             = 1
+      cpu                 = 512
+      memory              = 1024
+      main_container      = "store-pod-gateway"
+      main_container_port = 8100
       health_check = {
         path                = "/actuator/health"
         port                = 8100
@@ -377,7 +379,10 @@ locals {
             { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-CORE-GATEWAY_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-CORE-GATEWAY_PORT", "value" : "443" },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-CORE-GATEWAY_NAMESPACE", "value" : "store-core.${var.project}.lcl" },
+            {
+              "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-CORE-GATEWAY_NAMESPACE",
+              "value" : "store-core.${var.project}.lcl"
+            },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
             { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.endpoint },
@@ -417,11 +422,11 @@ locals {
 
 
       load_balancer_host_matchers = []
-      desired                     = 1
-      cpu                         = 512
-      memory                      = 1024
-      main_container              = "store-pod-saas-gateway"
-      main_container_port         = 443
+      desired             = 1
+      cpu                 = 512
+      memory              = 1024
+      main_container      = "store-pod-saas-gateway"
+      main_container_port = 443
       health_check = {
         path                = "/"
         port                = 80
@@ -472,7 +477,7 @@ module "store-pod-cluster" {
   source                     = "terraform-aws-modules/ecs/aws"
   cluster_name               = "store-pod-${var.project}-${var.pod.id}-${var.env}"
   fargate_capacity_providers = local.fargate_capacity_providers
-  cluster_settings           = []
+  cluster_settings = []
   tags                       = var.tags
 }
 
