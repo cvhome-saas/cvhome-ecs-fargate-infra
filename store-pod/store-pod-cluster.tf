@@ -36,7 +36,8 @@ locals {
         "landing-ui" = {
           image = "${var.docker_registry}/${var.project}/store-pod/landing-ui:${var.image_tag}"
           environment : [
-            { "name" : "STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.${var.pod.endpoint}:8100" }
+            { "name" : "INTERNAL_STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.${var.pod.endpoint}:8100" }
+            # { "name" : "EXTERNAL_STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.${var.pod.endpoint}:8100" }
           ]
           portMappings : [
             {
