@@ -445,6 +445,10 @@ locals {
             {
               "name" : "ASK_TLS_URL",
               "value" : "http://store-core-gateway.${var.store_core_namespace}:8000/manager/api/v1/router/public/ask-for-tls"
+            },
+            {
+              "name" : "DOMAIN_LOOKUP_URL",
+              "value" : "http://store-core-gateway.${var.store_core_namespace}:8000/manager/api/v1/router/public/lookup-by-domain"
             }
           ]
           portMappings : [
