@@ -56,22 +56,6 @@ locals {
       "name" : "SPRING_DATASOURCE_PASSWORD",
       "value" : jsondecode(data.aws_secretsmanager_secret_version.current_db_secret_version.secret_string)["password"]
     },
-    {
-      "name" : "SPRING_RABBITMQ_ADDRESSES[0]",
-      "value" : aws_mq_broker.mq.instances.0.endpoints.0
-    },
-    {
-      "name" : "SPRING_RABBITMQ_VIRTUAL-HOST",
-      "value" : "/"
-    },
-    {
-      "name" : "SPRING_RABBITMQ_USERNAME",
-      "value" : jsondecode(aws_secretsmanager_secret_version.mq_secret_version.secret_string)["username"]
-    },
-    {
-      "name" : "SPRING_RABBITMQ_PASSWORD",
-      "value" : jsondecode(aws_secretsmanager_secret_version.mq_secret_version.secret_string)["password"]
-    },
   ]
   subscription_env = [
     { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
@@ -99,22 +83,6 @@ locals {
       "name" : "SPRING_DATASOURCE_PASSWORD",
       "value" : jsondecode(data.aws_secretsmanager_secret_version.current_db_secret_version.secret_string)["password"]
     },
-    {
-      "name" : "SPRING_RABBITMQ_ADDRESSES[0]",
-      "value" : aws_mq_broker.mq.instances.0.endpoints.0
-    },
-    {
-      "name" : "SPRING_RABBITMQ_VIRTUAL-HOST",
-      "value" : "/"
-    },
-    {
-      "name" : "SPRING_RABBITMQ_USERNAME",
-      "value" : jsondecode(aws_secretsmanager_secret_version.mq_secret_version.secret_string)["username"]
-    },
-    {
-      "name" : "SPRING_RABBITMQ_PASSWORD",
-      "value" : jsondecode(aws_secretsmanager_secret_version.mq_secret_version.secret_string)["password"]
-    },
   ]
   auth_env = [
     { "name" : "KC_HTTP_PORT", "value" : "9999" },
@@ -137,16 +105,16 @@ locals {
 
   services = {
     "store-ui" = {
-      public                      = true
-      priority                    = 100
-      service_type                = "SERVICE"
-      loadbalancer_target_groups  = {}
+      public              = true
+      priority            = 100
+      service_type        = "SERVICE"
+      loadbalancer_target_groups = {}
       load_balancer_host_matchers = []
-      desired                     = 1
-      cpu                         = 512
-      memory                      = 1024
-      main_container              = "store-ui"
-      main_container_port         = 8010
+      desired             = 1
+      cpu                 = 512
+      memory              = 1024
+      main_container      = "store-ui"
+      main_container_port = 8010
       health_check = {
         path                = "/"
         port                = 8010
@@ -171,16 +139,16 @@ locals {
       }
     }
     "welcome-ui" = {
-      public                      = true
-      priority                    = 100
-      service_type                = "SERVICE"
-      loadbalancer_target_groups  = {}
+      public              = true
+      priority            = 100
+      service_type        = "SERVICE"
+      loadbalancer_target_groups = {}
       load_balancer_host_matchers = []
-      desired                     = 1
-      cpu                         = 512
-      memory                      = 1024
-      main_container              = "welcome-ui"
-      main_container_port         = 8011
+      desired             = 1
+      cpu                 = 512
+      memory              = 1024
+      main_container      = "welcome-ui"
+      main_container_port = 8011
       health_check = {
         path                = "/"
         port                = 8011
@@ -216,11 +184,11 @@ locals {
         }
       }
       load_balancer_host_matchers = []
-      desired                     = 1
-      cpu                         = 512
-      memory                      = 1024
-      main_container              = "store-core-gateway"
-      main_container_port         = 8000
+      desired             = 1
+      cpu                 = 512
+      memory              = 1024
+      main_container      = "store-core-gateway"
+      main_container_port = 8000
       health_check = {
         path                = "/actuator/health"
         port                = 8000
@@ -257,11 +225,11 @@ locals {
       }
 
       load_balancer_host_matchers = []
-      desired                     = 1
-      cpu                         = 512
-      memory                      = 1024
-      main_container              = "auth"
-      main_container_port         = 9999
+      desired             = 1
+      cpu                 = 512
+      memory              = 1024
+      main_container      = "auth"
+      main_container_port = 9999
       health_check = {
         path                = "/health"
         port                = 9000
@@ -286,17 +254,17 @@ locals {
       }
     }
     "manager" = {
-      public                     = true
-      priority                   = 100
-      service_type               = "SERVICE"
+      public       = true
+      priority     = 100
+      service_type = "SERVICE"
       loadbalancer_target_groups = {}
 
       load_balancer_host_matchers = []
-      desired                     = 1
-      cpu                         = 512
-      memory                      = 1024
-      main_container              = "manager"
-      main_container_port         = 8020
+      desired             = 1
+      cpu                 = 512
+      memory              = 1024
+      main_container      = "manager"
+      main_container_port = 8020
       health_check = {
         path                = "/actuator/health"
         port                = 8020
@@ -321,17 +289,17 @@ locals {
       }
     }
     "subscription" = {
-      public                     = true
-      priority                   = 100
-      service_type               = "SERVICE"
+      public       = true
+      priority     = 100
+      service_type = "SERVICE"
       loadbalancer_target_groups = {}
 
       load_balancer_host_matchers = []
-      desired                     = 1
-      cpu                         = 512
-      memory                      = 1024
-      main_container              = "subscription"
-      main_container_port         = 8021
+      desired             = 1
+      cpu                 = 512
+      memory              = 1024
+      main_container      = "subscription"
+      main_container_port = 8021
       health_check = {
         path                = "/actuator/health"
         port                = 8021
@@ -363,7 +331,7 @@ module "store-core-cluster" {
   source                     = "terraform-aws-modules/ecs/aws"
   cluster_name               = "${local.module_name}-${var.project}-${var.env}"
   fargate_capacity_providers = local.fargate_capacity_providers
-  cluster_settings           = []
+  cluster_settings = []
   tags                       = var.tags
 }
 
