@@ -134,7 +134,7 @@ locals {
 module "cluster-lb" {
   source = "terraform-aws-modules/alb/aws"
 
-  name                       = "${var.project}-${var.pod.id}-${var.env}"
+  name                       = "${local.module_name}-${var.pod.id}-${var.env}"
   vpc_id                     = var.vpc_id
   subnets                    = var.public_subnets
   enable_deletion_protection = false
