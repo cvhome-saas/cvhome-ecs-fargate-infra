@@ -2,7 +2,7 @@ module "cdn-storage-bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "~> 3.0"
 
-  bucket_prefix = "${local.module_name}-${var.pod.id}-${var.env}-cdn-"
+  bucket_prefix = "${var.project}-${var.pod.id}-${var.env}-cdn-"
 
 
   force_destroy = true
