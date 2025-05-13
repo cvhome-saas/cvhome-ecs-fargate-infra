@@ -28,6 +28,10 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: print image tag
+        run: echo $IMAGE_TAG
+        env:
+          IMAGE_TAG: ${{ inputs.imageTag }}
       - name: build state bucket
         id: build-state-bucket
         run: |
