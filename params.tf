@@ -6,6 +6,7 @@ variable "env" {
 }
 variable "docker_registry" {
   type = string
+  default = ""
 }
 variable "image_tag" {
   type = string
