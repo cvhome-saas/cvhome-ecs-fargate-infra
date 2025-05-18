@@ -16,6 +16,10 @@ on:
         description: 'Docker images tag'
         required: true
         default: '0.2.1'
+      dockerRegistry:
+        description: 'Docker registry Skip for private registry'
+        required: false
+        default: ''
 
 jobs:
   build:
@@ -51,15 +55,18 @@ jobs:
           TF_VAR_image_tag: ${{ inputs.imageTag }}
           TF_VAR_region: ${{ secrets.AWS_REGION }}
           TF_VAR_project: ${{ steps.build-state-bucket.outputs.project }}
+          TF_VAR_docker_registry: ${{ inputs.dockerRegistry }}
       - id: apply
         run: terraform apply --auto-approve=true
         env:
           TF_VAR_image_tag: ${{ inputs.imageTag }}
           TF_VAR_region: ${{ secrets.AWS_REGION }}
           TF_VAR_project: ${{ steps.build-state-bucket.outputs.project }}
+          TF_VAR_docker_registry: ${{ inputs.dockerRegistry }}
       - id: output
         run: terraform output
         env:
           TF_VAR_image_tag: ${{ inputs.imageTag }}
           TF_VAR_region: ${{ secrets.AWS_REGION }}
           TF_VAR_project: ${{ steps.build-state-bucket.outputs.project }}
+          TF_VAR_docker_registry: ${{ inputs.dockerRegistry }}

@@ -16,7 +16,7 @@ locals {
     Terraform   = "true"
     Environment = var.env
   }
-  private_ecr_docker_registry = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com"
+  private_ecr_docker_registry = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com/${var.project}"
   docker_registry             = var.docker_registry != "" ? var.docker_registry : local.private_ecr_docker_registry
   pods = {
     for value in local.xpods : lookup(value, "name") => {

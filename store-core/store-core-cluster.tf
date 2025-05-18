@@ -125,7 +125,7 @@ locals {
 
       containers = {
         "store-ui" = {
-          image = "${var.docker_registry}/${var.project}/store-core/store-ui:${var.image_tag}"
+          image = "${var.docker_registry}/store-core/store-ui:${var.image_tag}"
           environment : []
           portMappings : [
             {
@@ -159,7 +159,7 @@ locals {
 
       containers = {
         "welcome-ui" = {
-          image = "${var.docker_registry}/${var.project}/store-core/welcome-ui:${var.image_tag}"
+          image = "${var.docker_registry}/store-core/welcome-ui:${var.image_tag}"
           environment : []
           portMappings : [
             {
@@ -199,7 +199,7 @@ locals {
 
       containers = {
         "store-core-gateway" = {
-          image = "${var.docker_registry}/${var.project}/store-core/store-core-gateway:${var.image_tag}"
+          image = "${var.docker_registry}/store-core/store-core-gateway:${var.image_tag}"
           environment : concat(local.store_core_gateway_env, local.pods_env)
           portMappings : [
             {
@@ -240,7 +240,7 @@ locals {
 
       containers = {
         "auth" = {
-          image = "${var.docker_registry}/${var.project}/store-core/auth:${var.image_tag}"
+          image = "${var.docker_registry}/store-core/auth:${var.image_tag}"
           environment : local.auth_env
           portMappings : [
             {
@@ -275,7 +275,7 @@ locals {
 
       containers = {
         "manager" = {
-          image = "${var.docker_registry}/${var.project}/store-core/manager:${var.image_tag}"
+          image = "${var.docker_registry}/store-core/manager:${var.image_tag}"
           environment : concat(local.manager_env, local.pods_env)
           portMappings : [
             {
@@ -310,7 +310,7 @@ locals {
 
       containers = {
         "subscription" = {
-          image = "${var.docker_registry}/${var.project}/store-core/subscription:${var.image_tag}"
+          image = "${var.docker_registry}/store-core/subscription:${var.image_tag}"
           environment : concat(local.subscription_env, local.pods_env)
           portMappings : [
             {
