@@ -5,6 +5,7 @@ resource "aws_service_discovery_service" "this" {
     dns_records {
       ttl  = 10
       type = "A"
+      # type = "SRV" caddy not working for it now
     }
     routing_policy = "MULTIVALUE"
   }

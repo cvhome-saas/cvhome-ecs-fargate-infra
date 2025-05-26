@@ -24,9 +24,10 @@ locals {
       id : lookup(value, "id")
       name : lookup(value, "name")
       org : try(lookup(value, "org"), "")
-      endpoint : "store-pod-${lookup(value, "id")}.${var.project}.lcl"
+      endpoint : "https://store-pod-${lookup(value, "id")}.${local.domain}"
+      namespace : "store-pod-${lookup(value, "id")}.${var.project}.lcl"
       size : try(lookup(value, "size"), "large"),
-      endpointType : "INTERNAL"
+      endpointType : "EXTERNAL"
     }
   }
 }
