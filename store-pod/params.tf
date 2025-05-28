@@ -60,6 +60,7 @@ variable "pod" {
     name : string
     org : string
     endpoint : string
+    namespace : string
     endpointType : string
     size : string
   })

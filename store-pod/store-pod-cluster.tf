@@ -36,8 +36,8 @@ locals {
         "landing-ui" = {
           image = "${var.docker_registry}/store-pod/landing-ui:${var.image_tag}"
           environment : [
-            { "name" : "INTERNAL_STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.${var.pod.endpoint}:8100" }
-            # { "name" : "EXTERNAL_STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.${var.pod.endpoint}:8100" }
+            { "name" : "INTERNAL_STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.${var.pod.namespace}:8100" },
+            # { "name" : "EXTERNAL_STORE_POD_GATEWAY", "value" : var.pod.endpoint }
           ]
           portMappings : [
             {
@@ -115,7 +115,7 @@ locals {
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-CORE-GATEWAY_PORT", "value" : "443" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
-            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.endpoint },
+            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.namespace },
             {
               "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
               "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
@@ -126,10 +126,10 @@ locals {
               "name" : "COM_ASREVO_CVHOME_CDN_BASE-PATH",
               "value" : "https://${module.cdn-storage-cloudfront.cloudfront_distribution_domain_name}"
             },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_MERCHANT_NAMESPACE", "value" : var.pod.endpoint },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_CONTENT_NAMESPACE", "value" : var.pod.endpoint },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_CATALOG_NAMESPACE", "value" : var.pod.endpoint },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_ORDER_NAMESPACE", "value" : var.pod.endpoint },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_MERCHANT_NAMESPACE", "value" : var.pod.namespace },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CONTENT_NAMESPACE", "value" : var.pod.namespace },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CATALOG_NAMESPACE", "value" : var.pod.namespace },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_ORDER_NAMESPACE", "value" : var.pod.namespace },
             { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-pod-db.db_instance_name },
             { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-pod-db.db_instance_address },
             { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-pod-db.db_instance_port },
@@ -180,7 +180,7 @@ locals {
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-CORE-GATEWAY_PORT", "value" : "443" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
-            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.endpoint },
+            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.namespace },
             {
               "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
               "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
@@ -191,10 +191,10 @@ locals {
               "name" : "COM_ASREVO_CVHOME_CDN_BASE-PATH",
               "value" : "https://${module.cdn-storage-cloudfront.cloudfront_distribution_domain_name}"
             },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_MERCHANT_NAMESPACE", "value" : var.pod.endpoint },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_CONTENT_NAMESPACE", "value" : var.pod.endpoint },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_CATALOG_NAMESPACE", "value" : var.pod.endpoint },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_ORDER_NAMESPACE", "value" : var.pod.endpoint },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_MERCHANT_NAMESPACE", "value" : var.pod.namespace },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CONTENT_NAMESPACE", "value" : var.pod.namespace },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CATALOG_NAMESPACE", "value" : var.pod.namespace },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_ORDER_NAMESPACE", "value" : var.pod.namespace },
             { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-pod-db.db_instance_name },
             { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-pod-db.db_instance_address },
             { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-pod-db.db_instance_port },
@@ -245,7 +245,7 @@ locals {
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-CORE-GATEWAY_PORT", "value" : "443" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
-            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.endpoint },
+            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.namespace },
             {
               "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
               "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
@@ -256,10 +256,10 @@ locals {
               "name" : "COM_ASREVO_CVHOME_CDN_BASE-PATH",
               "value" : "https://${module.cdn-storage-cloudfront.cloudfront_distribution_domain_name}"
             },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_MERCHANT_NAMESPACE", "value" : var.pod.endpoint },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_CONTENT_NAMESPACE", "value" : var.pod.endpoint },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_CATALOG_NAMESPACE", "value" : var.pod.endpoint },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_ORDER_NAMESPACE", "value" : var.pod.endpoint },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_MERCHANT_NAMESPACE", "value" : var.pod.namespace },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CONTENT_NAMESPACE", "value" : var.pod.namespace },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CATALOG_NAMESPACE", "value" : var.pod.namespace },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_ORDER_NAMESPACE", "value" : var.pod.namespace },
             { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-pod-db.db_instance_name },
             { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-pod-db.db_instance_address },
             { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-pod-db.db_instance_port },
@@ -310,7 +310,7 @@ locals {
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-CORE-GATEWAY_PORT", "value" : "443" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
-            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.endpoint },
+            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.namespace },
             {
               "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
               "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
@@ -321,10 +321,10 @@ locals {
               "name" : "COM_ASREVO_CVHOME_CDN_BASE-PATH",
               "value" : "https://${module.cdn-storage-cloudfront.cloudfront_distribution_domain_name}"
             },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_MERCHANT_NAMESPACE", "value" : var.pod.endpoint },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_CONTENT_NAMESPACE", "value" : var.pod.endpoint },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_CATALOG_NAMESPACE", "value" : var.pod.endpoint },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_ORDER_NAMESPACE", "value" : var.pod.endpoint },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_MERCHANT_NAMESPACE", "value" : var.pod.namespace },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CONTENT_NAMESPACE", "value" : var.pod.namespace },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CATALOG_NAMESPACE", "value" : var.pod.namespace },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_ORDER_NAMESPACE", "value" : var.pod.namespace },
             { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-pod-db.db_instance_name },
             { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-pod-db.db_instance_address },
             { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-pod-db.db_instance_port },
@@ -351,13 +351,13 @@ locals {
       service_type = "SERVICE"
       loadbalancer_target_groups = {}
 
-      # loadbalancer_target_groups = {
-      #   "gateway-tg" : {
-      #     loadbalancer_target_groups_arn = module.cluster-lb.target_groups["gateway-tg"].arn
-      #     main_container                 = "store-pod-gateway"
-      #     main_container_port            = 8100
-      #   }
-      # }
+      loadbalancer_target_groups = {
+        "gateway-tg" : {
+          loadbalancer_target_groups_arn = module.cluster-lb.target_groups["gateway-tg"].arn
+          main_container                 = "store-pod-gateway"
+          main_container_port            = 8100
+        }
+      }
 
       load_balancer_host_matchers = []
       desired             = 1
@@ -387,7 +387,7 @@ locals {
             },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
-            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.endpoint },
+            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.namespace },
             {
               "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
               "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
@@ -410,12 +410,12 @@ locals {
       service_type = "SERVICE"
       loadbalancer_target_groups = {
         "gateway-tg-80" : {
-          loadbalancer_target_groups_arn = module.cluster-lb.target_groups["gateway-tg-80"].arn
+          loadbalancer_target_groups_arn = module.cluster-nlb.target_groups["gateway-tg-80"].arn
           main_container                 = "store-pod-saas-gateway"
           main_container_port            = 80
         }
         "gateway-tg-443" : {
-          loadbalancer_target_groups_arn = module.cluster-lb.target_groups["gateway-tg-443"].arn
+          loadbalancer_target_groups_arn = module.cluster-nlb.target_groups["gateway-tg-443"].arn
           main_container                 = "store-pod-saas-gateway"
           main_container_port            = 443
         }
@@ -441,14 +441,14 @@ locals {
         "store-pod-saas-gateway" = {
           image = "${var.docker_registry}/store-pod/store-pod-saas-gateway:${var.image_tag}"
           environment : [
-            { "name" : "STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.${var.pod.endpoint}:8100" },
+            { "name" : "STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.${var.pod.namespace}:8100" },
             {
               "name" : "ASK_TLS_URL",
-              "value" : "http://store-core-gateway.${var.store_core_namespace}:8000/manager/api/v1/router/public/ask-for-tls"
+              "value" : "https://www.${var.domain}/manager/api/v1/router/public/ask-for-tls"
             },
             {
               "name" : "DOMAIN_LOOKUP_URL",
-              "value" : "http://store-core-gateway.${var.store_core_namespace}:8000/manager/api/v1/router/public/lookup-by-domain"
+              "value" : "https://www.${var.domain}/manager/api/v1/router/public/lookup-by-domain"
             }
           ]
           portMappings : [
