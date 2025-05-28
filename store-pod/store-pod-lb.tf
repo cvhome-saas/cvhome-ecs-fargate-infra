@@ -193,7 +193,7 @@ module "cluster-lb" {
   target_groups = {
     gateway-tg = {
       create_attachment = false
-      name_prefix       = "core"
+      name_prefix       = "p-g"
       protocol          = "HTTP"
       port              = 8100
       target_type       = "ip"
@@ -273,7 +273,7 @@ module "cluster-nlb" {
   target_groups = {
     gateway-tg-80 = {
       create_attachment = false
-      name_prefix       = "saas"
+      name_prefix       = "p-s"
       protocol          = "TCP"
       port              = 80
       target_type       = "ip"

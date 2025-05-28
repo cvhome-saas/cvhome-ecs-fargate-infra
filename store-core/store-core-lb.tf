@@ -62,18 +62,18 @@ module "cluster-lb" {
         status_code  = "404"
       }
       rules = {
-        auth-forward = {
+        core-auth-forward = {
           priority = 1
           actions = [
             {
               type             = "forward"
-              target_group_key = "auth-tg"
+              target_group_key = "core-auth-tg"
             }
           ]
           conditions = [
             {
               host_header = {
-                values = ["auth.${var.domain}"]
+                values = ["core-auth.${var.domain}"]
               }
             }
           ]
@@ -99,9 +99,9 @@ module "cluster-lb" {
   }
 
   target_groups = {
-    auth-tg = {
+    core-auth-tg = {
       create_attachment = false
-      name_prefix       = "auth"
+      name_prefix       = "c-a"
       protocol          = "HTTP"
       port              = 9999
       target_type       = "ip"
@@ -120,7 +120,7 @@ module "cluster-lb" {
     }
     gateway-tg = {
       create_attachment = false
-      name_prefix       = "core"
+      name_prefix       = "c-g"
       protocol          = "HTTP"
       port              = 8000
       target_type       = "ip"
@@ -177,7 +177,7 @@ module "www-record" {
   ]
 }
 
-module "auth-record" {
+module "core-auth-record" {
   source  = "terraform-aws-modules/route53/aws//modules/records"
   version = "~> 3.0"
 
@@ -185,7 +185,7 @@ module "auth-record" {
 
   records = [
     {
-      name = "auth"
+      name = "core-auth"
       type = "A"
       alias = {
         name    = module.cluster-lb.dns_name
