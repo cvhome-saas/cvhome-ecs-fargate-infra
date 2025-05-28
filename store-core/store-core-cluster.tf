@@ -85,7 +85,7 @@ locals {
     },
   ]
   core-auth_env = [
-    { "name" : "KC_HTTP_PORT", "value" : "9999" },
+    { "name" : "KC_HTTP_PORT", "value" : "8001" },
     { "name" : "KC_HTTP_ENABLED", "value" : "true" },
     { "name" : "KC_HTTP_MANAGEMENT_PORT", "value" : "9000" },
     { "name" : "KC_HEALTH_ENABLED", "value" : "true" },
@@ -220,7 +220,7 @@ locals {
         "core-auth-tg" : {
           loadbalancer_target_groups_arn = module.cluster-lb.target_groups["core-auth-tg"].arn
           main_container                 = "core-auth"
-          main_container_port            = 9999
+          main_container_port            = 8001
         }
       }
 
@@ -229,7 +229,7 @@ locals {
       cpu                 = 512
       memory              = 1024
       main_container      = "core-auth"
-      main_container_port = 9999
+      main_container_port = 8001
       health_check = {
         path                = "/health"
         port                = 9000
@@ -245,8 +245,8 @@ locals {
           portMappings : [
             {
               name : "app",
-              containerPort : 9999,
-              hostPort : 9999,
+              containerPort : 8001,
+              hostPort : 8001,
               protocol : "tcp"
             }
           ]

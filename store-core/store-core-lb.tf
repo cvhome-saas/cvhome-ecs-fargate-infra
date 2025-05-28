@@ -103,7 +103,7 @@ module "cluster-lb" {
       create_attachment = false
       name_prefix       = "c-a"
       protocol          = "HTTP"
-      port              = 9999
+      port              = 8001
       target_type       = "ip"
 
       health_check = {
