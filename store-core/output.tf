@@ -4,6 +4,6 @@ output "store_ui_url" {
 output "welcome_ui_url" {
   value = "https://www.${var.domain}"
 }
-output "auth_url" {
-  value = "https://auth.${var.domain}"
+output "core-auth_url" {
+  value = "https://core-auth.${var.domain}"
 }

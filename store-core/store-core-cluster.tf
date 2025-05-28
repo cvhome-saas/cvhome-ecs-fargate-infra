@@ -25,8 +25,8 @@ locals {
     { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
     { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_SCHEMA", "value" : "https" },
     { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_PORT", "value" : "443" },
-    { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
-    { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_SCHEMA", "value" : "https" },
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_PORT", "value" : "443" },
     { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.namespace },
     {
       "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
@@ -39,8 +39,8 @@ locals {
     { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
     { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_SCHEMA", "value" : "https" },
     { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_PORT", "value" : "443" },
-    { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
-    { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_SCHEMA", "value" : "https" },
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_PORT", "value" : "443" },
     { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.namespace },
     {
       "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
@@ -62,8 +62,8 @@ locals {
     { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
     { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_SCHEMA", "value" : "https" },
     { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_PORT", "value" : "443" },
-    { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
-    { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_SCHEMA", "value" : "https" },
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_PORT", "value" : "443" },
     { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.namespace },
     {
       "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
@@ -84,7 +84,7 @@ locals {
       "value" : jsondecode(data.aws_secretsmanager_secret_version.current_db_secret_version.secret_string)["password"]
     },
   ]
-  auth_env = [
+  core-auth_env = [
     { "name" : "KC_HTTP_PORT", "value" : "9999" },
     { "name" : "KC_HTTP_ENABLED", "value" : "true" },
     { "name" : "KC_HTTP_MANAGEMENT_PORT", "value" : "9000" },
@@ -212,14 +212,14 @@ locals {
         }
       }
     }
-    "auth" = {
+    "core-auth" = {
       public       = true
       priority     = 100
       service_type = "SERVICE"
       loadbalancer_target_groups = {
-        "auth-tg" : {
-          loadbalancer_target_groups_arn = module.cluster-lb.target_groups["auth-tg"].arn
-          main_container                 = "auth"
+        "core-auth-tg" : {
+          loadbalancer_target_groups_arn = module.cluster-lb.target_groups["core-auth-tg"].arn
+          main_container                 = "core-auth"
           main_container_port            = 9999
         }
       }
@@ -228,7 +228,7 @@ locals {
       desired             = 1
       cpu                 = 512
       memory              = 1024
-      main_container      = "auth"
+      main_container      = "core-auth"
       main_container_port = 9999
       health_check = {
         path                = "/health"
@@ -239,9 +239,9 @@ locals {
       }
 
       containers = {
-        "auth" = {
-          image = "${var.docker_registry}/store-core/auth:${var.image_tag}"
-          environment : local.auth_env
+        "core-auth" = {
+          image = "${var.docker_registry}/store-core/core-auth:${var.image_tag}"
+          environment : local.core-auth_env
           portMappings : [
             {
               name : "app",

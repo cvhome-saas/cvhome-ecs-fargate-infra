@@ -113,8 +113,8 @@ locals {
             { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-CORE-GATEWAY_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-CORE-GATEWAY_PORT", "value" : "443" },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_SCHEMA", "value" : "https" },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_PORT", "value" : "443" },
             { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.namespace },
             {
               "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
@@ -178,8 +178,8 @@ locals {
             { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-CORE-GATEWAY_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-CORE-GATEWAY_PORT", "value" : "443" },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_SCHEMA", "value" : "https" },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_PORT", "value" : "443" },
             { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.namespace },
             {
               "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
@@ -243,8 +243,8 @@ locals {
             { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-CORE-GATEWAY_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-CORE-GATEWAY_PORT", "value" : "443" },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_SCHEMA", "value" : "https" },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_PORT", "value" : "443" },
             { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.namespace },
             {
               "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
@@ -308,8 +308,8 @@ locals {
             { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-CORE-GATEWAY_SCHEMA", "value" : "https" },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-CORE-GATEWAY_PORT", "value" : "443" },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_SCHEMA", "value" : "https" },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_PORT", "value" : "443" },
             { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.namespace },
             {
               "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
@@ -385,8 +385,8 @@ locals {
               "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-CORE-GATEWAY_NAMESPACE",
               "value" : "store-core.${var.project}.lcl"
             },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_SCHEMA", "value" : "https" },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_AUTH_PORT", "value" : "443" },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_SCHEMA", "value" : "https" },
+            { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_PORT", "value" : "443" },
             { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.namespace },
             {
               "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
