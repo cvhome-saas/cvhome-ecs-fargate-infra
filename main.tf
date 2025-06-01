@@ -5,7 +5,7 @@ provider "aws" {
 data "aws_caller_identity" "current" {}
 
 data "aws_acm_certificate" "certificate" {
-  domain   = local.domain
+  domain = local.domain
   statuses = ["ISSUED"]
 }
 
@@ -18,6 +18,14 @@ locals {
   }
   private_ecr_docker_registry = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com/${var.project}"
   docker_registry             = var.docker_registry != "" ? var.docker_registry : local.private_ecr_docker_registry
+  xpods = [
+    {
+      index : 0
+      id : "1"
+      name : "default",
+      size : "large"
+    },
+  ]
   pods = {
     for value in local.xpods : lookup(value, "name") => {
       index : lookup(value, "index")
