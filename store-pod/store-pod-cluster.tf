@@ -452,11 +452,11 @@ locals {
             },
             {
               "name" : "CERT_BUCKET",
-              "value" : module.cdn-storage-bucket.s3_bucket_id
+              "value" : module.cert-storage-bucket.s3_bucket_id
             },
             {
               "name" : "CERT_BUCKET_REGION",
-              "value" : module.cdn-storage-bucket.s3_bucket_region
+              "value" : module.cert-storage-bucket.s3_bucket_region
             }
           ]
           portMappings : [

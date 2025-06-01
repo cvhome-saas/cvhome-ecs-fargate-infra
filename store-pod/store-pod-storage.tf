@@ -9,6 +9,17 @@ module "cdn-storage-bucket" {
   tags          = var.tags
 }
 
+module "cert-storage-bucket" {
+  source  = "terraform-aws-modules/s3-bucket/aws"
+  version = "~> 3.0"
+
+  bucket_prefix = "${var.project}-${var.pod.id}-${var.env}-cert-"
+
+
+  force_destroy = true
+  tags          = var.tags
+}
+
 
 module "cdn-storage-cloudfront" {
   source = "terraform-aws-modules/cloudfront/aws"
