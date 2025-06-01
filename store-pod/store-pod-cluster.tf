@@ -449,6 +449,14 @@ locals {
             {
               "name" : "DOMAIN_LOOKUP_URL",
               "value" : "https://www.${var.domain}/manager/api/v1/router/public/lookup-by-domain"
+            },
+            {
+              "name" : "CERT_BUCKET",
+              "value" : module.cdn-storage-bucket.s3_bucket_id
+            },
+            {
+              "name" : "CERT_BUCKET_REGION",
+              "value" : module.cdn-storage-bucket.s3_bucket_region
             }
           ]
           portMappings : [
