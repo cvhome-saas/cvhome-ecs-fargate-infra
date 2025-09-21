@@ -45,7 +45,7 @@ jobs:
         env:
           CONFIG_STATE_BUCKET_NAME: ${{ steps.build-state-bucket.outputs.bucket-name }}
       - id: plan
-        run: terraform plan
+        run: terraform destroy --auto-approve=true
         env:
           TF_VAR_image_tag: default
           TF_VAR_region: ${{ secrets.AWS_REGION }}

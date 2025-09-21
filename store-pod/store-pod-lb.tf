@@ -154,27 +154,20 @@ module "cluster-lb" {
     ex-http-https-redirect = {
       port     = 80
       protocol = "HTTP"
-      default_action = {
-        type = "redirect"
-        redirect = {
-          protocol    = "HTTPS"
-          port        = "443"
-          status_code = "HTTP_301"
-        }
+      redirect = {
+        port        = "443"
+        protocol    = "HTTPS"
+        status_code = "HTTP_301"
       }
     }
-
-    ex-fallback-response = {
+    ex-fallabck-response = {
       port            = 443
       protocol        = "HTTPS"
       certificate_arn = var.certificate_arn
-      default_action = {
-        type = "fixed-response"
-        fixed_response = {
-          content_type = "text/plain"
-          message_body = "ALB not matched any routes"
-          status_code  = "404"
-        }
+      fixed_response = {
+        content_type = "text/plain"
+        message_body = "ALB not matched any routes"
+        status_code  = "404"
       }
       rules = {
         core-forward = {
@@ -196,7 +189,7 @@ module "cluster-lb" {
       }
     }
   }
-  
+
   target_groups = {
     gateway-tg = {
       create_attachment = false
