@@ -1,15 +1,11 @@
 locals {
   profiles = join(",", compact(["fargate", var.test_stores ? "test-stores" : ""]))
-  fargate_capacity_providers = {
+  default_capacity_provider = {
     FARGATE = {
-      default_capacity_provider_strategy = {
-        weight = 50
-      }
+      weight = 50
     }
     FARGATE_SPOT = {
-      default_capacity_provider_strategy = {
-        weight = 50
-      }
+      weight = 50
     }
   }
   services = {
@@ -490,8 +486,7 @@ locals {
 module "store-pod-cluster" {
   source                     = "terraform-aws-modules/ecs/aws"
   cluster_name               = "store-pod-${var.project}-${var.pod.id}-${var.env}"
-  fargate_capacity_providers = local.fargate_capacity_providers
-  cluster_settings = []
+  default_capacity_provider_strategy = local.default_capacity_provider
   tags                       = var.tags
 }
 
