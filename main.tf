@@ -1,4 +1,4 @@
-provider "aws" {
+/*provider "aws" {
   region = var.region
 }
 
@@ -89,3 +89,4 @@ module "store-pod" {
   pod                  = each.value
   for_each             = local.pods
 }
+*/

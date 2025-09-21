@@ -17,5 +17,5 @@ module "log-bucket" {
   attach_deny_insecure_transport_policy = true
   attach_require_latest_tls_policy      = true
 
-  tags = local.tags
+  # tags = local.tags
 }
