@@ -101,7 +101,7 @@ locals {
 
   services = {
     "store-ui" = {
-      public              = true
+      public              = false
       priority            = 100
       service_type        = "SERVICE"
       loadbalancer_target_groups = {}
@@ -135,7 +135,7 @@ locals {
       }
     }
     "welcome-ui" = {
-      public              = true
+      public              = false
       priority            = 100
       service_type        = "SERVICE"
       loadbalancer_target_groups = {}
@@ -169,7 +169,7 @@ locals {
       }
     }
     "store-core-gateway" = {
-      public       = true
+      public       = false
       priority     = 100
       service_type = "SERVICE"
       loadbalancer_target_groups = {
@@ -209,7 +209,7 @@ locals {
       }
     }
     "core-auth" = {
-      public       = true
+      public       = false
       priority     = 100
       service_type = "SERVICE"
       loadbalancer_target_groups = {
@@ -250,7 +250,7 @@ locals {
       }
     }
     "manager" = {
-      public       = true
+      public       = false
       priority     = 100
       service_type = "SERVICE"
       loadbalancer_target_groups = {}
@@ -285,7 +285,7 @@ locals {
       }
     }
     "subscription" = {
-      public       = true
+      public       = false
       priority     = 100
       service_type = "SERVICE"
       loadbalancer_target_groups = {}
@@ -340,7 +340,7 @@ module "store-core-service" {
   module_name  = local.module_name
   project      = var.project
   service      = each.value
-  subnet       = var.public_subnets
+  subnet       = var.private_subnets
   ingress_with_cidr_blocks = [
     {
       from_port   = 0

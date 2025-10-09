@@ -10,7 +10,7 @@ locals {
   }
   services = {
     "landing-ui" = {
-      public              = true
+      public              = false
       priority            = 100
       service_type        = "SERVICE"
       loadbalancer_target_groups = {}
@@ -47,7 +47,7 @@ locals {
       }
     }
     "merchant-ui" = {
-      public              = true
+      public              = false
       priority            = 100
       service_type        = "SERVICE"
       loadbalancer_target_groups = {}
@@ -82,7 +82,7 @@ locals {
       }
     }
     "merchant" = {
-      public       = true
+      public       = false
       priority     = 100
       service_type = "SERVICE"
       loadbalancer_target_groups = {}
@@ -147,7 +147,7 @@ locals {
       }
     }
     "content" = {
-      public       = true
+      public       = false
       priority     = 100
       service_type = "SERVICE"
       loadbalancer_target_groups = {}
@@ -212,7 +212,7 @@ locals {
       }
     }
     "catalog" = {
-      public       = true
+      public       = false
       priority     = 100
       service_type = "SERVICE"
       loadbalancer_target_groups = {}
@@ -277,7 +277,7 @@ locals {
       }
     }
     "order" = {
-      public       = true
+      public       = false
       priority     = 100
       service_type = "SERVICE"
       loadbalancer_target_groups = {}
@@ -342,7 +342,7 @@ locals {
       }
     }
     "store-pod-gateway" = {
-      public       = true
+      public       = false
       priority     = 100
       service_type = "SERVICE"
       loadbalancer_target_groups = {}
@@ -401,7 +401,7 @@ locals {
       }
     },
     "store-pod-saas-gateway" = {
-      public       = true
+      public       = false
       priority     = 100
       service_type = "SERVICE"
       loadbalancer_target_groups = {
@@ -500,7 +500,7 @@ module "store-pod-service" {
   module_name  = var.pod.id
   project      = var.project
   service      = each.value
-  subnet       = var.public_subnets
+  subnet       = var.private_subnets
   ingress_with_cidr_blocks = [
     {
       from_port   = 0
