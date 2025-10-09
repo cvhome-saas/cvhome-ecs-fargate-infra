@@ -3,3 +3,4 @@
 /.terraform/
 /backend.conf
 /env.sh
+/builds/*.zip
