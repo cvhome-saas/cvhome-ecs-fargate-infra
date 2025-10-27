@@ -27,10 +27,10 @@ module "store-core-db" {
   identifier = "${local.module_name}-${var.project}-${var.env}"
 
   engine            = "postgres"
-  engine_version    = "16.4"
+  engine_version    = "17.4"
   instance_class    = var.db_instance_class
   allocated_storage = var.db_allocated_storage
-  family            = "postgres16"
+  family            = "postgres17"
 
 
   db_name  = "postgres"

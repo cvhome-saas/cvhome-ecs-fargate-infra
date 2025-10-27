@@ -27,10 +27,10 @@ module "store-pod-db" {
   identifier = "db-${var.project}-${var.pod.id}-${var.env}"
 
   engine            = "postgres"
-  engine_version    = "16.4"
+  engine_version    = "17.4"
   instance_class    = var.db_instance_class
   allocated_storage = var.db_allocated_storage
-  family            = "postgres16"
+  family            = "postgres17"
 
 
   db_name  = "postgres"
