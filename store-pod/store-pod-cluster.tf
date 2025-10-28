@@ -437,6 +437,7 @@ locals {
         "store-pod-saas-gateway" = {
           image = "${var.docker_registry}/store-pod/store-pod-saas-gateway:${var.image_tag}"
           environment : [
+            { "name" : "NAMESPACE", "value" : var.pod.namespace },
             { "name" : "STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.${var.pod.namespace}:8100" },
             {
               "name" : "ASK_TLS_URL",
