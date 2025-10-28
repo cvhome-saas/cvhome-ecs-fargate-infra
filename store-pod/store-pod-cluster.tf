@@ -32,7 +32,7 @@ locals {
         "landing-ui" = {
           image = "${var.docker_registry}/store-pod/landing-ui:${var.image_tag}"
           environment : [
-            { "name" : "INTERNAL_STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.${var.pod.namespace}:8100" },
+            { "name" : "INTERNAL_STORE_POD_GATEWAY", "value" : "http://store-pod-saas-gateway.${var.pod.namespace}:80" },
             { "name" : "EXTERNAL_STORE_POD_GATEWAY", "value" : var.pod.endpoint }
           ]
           portMappings : [
@@ -438,7 +438,6 @@ locals {
           image = "${var.docker_registry}/store-pod/store-pod-saas-gateway:${var.image_tag}"
           environment : [
             { "name" : "NAMESPACE", "value" : var.pod.namespace },
-            { "name" : "STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.${var.pod.namespace}:8100" },
             {
               "name" : "ASK_TLS_URL",
               "value" : "https://www.${var.domain}/manager/api/v1/router/public/ask-for-tls"
