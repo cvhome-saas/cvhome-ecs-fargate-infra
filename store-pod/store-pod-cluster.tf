@@ -32,7 +32,7 @@ locals {
         "landing-ui" = {
           image = "${var.docker_registry}/store-pod/landing-ui:${var.image_tag}"
           environment : [
-            { "name" : "INTERNAL_STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.${var.pod.namespace}:8100" },
+            { "name" : "INTERNAL_STORE_POD_GATEWAY", "value" : "http://store-pod-saas-gateway.${var.pod.namespace}:80" },
             { "name" : "EXTERNAL_STORE_POD_GATEWAY", "value" : var.pod.endpoint }
           ]
           portMappings : [
@@ -341,65 +341,6 @@ locals {
         }
       }
     }
-    "store-pod-gateway" = {
-      public       = true
-      priority     = 100
-      service_type = "SERVICE"
-      loadbalancer_target_groups = {}
-
-      loadbalancer_target_groups = {
-        "gateway-tg" : {
-          loadbalancer_target_groups_arn = module.cluster-lb.target_groups["gateway-tg"].arn
-          main_container                 = "store-pod-gateway"
-          main_container_port            = 8100
-        }
-      }
-
-      load_balancer_host_matchers = []
-      desired             = 1
-      cpu                 = 512
-      memory              = 1024
-      main_container      = "store-pod-gateway"
-      main_container_port = 8100
-      health_check = {
-        path                = "/actuator/health"
-        port                = 8100
-        healthy_threshold   = 2
-        interval            = 60
-        unhealthy_threshold = 3
-      }
-
-      containers = {
-        "store-pod-gateway" = {
-          image = "${var.docker_registry}/store-pod/store-pod-gateway:${var.image_tag}"
-          environment : [
-            { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
-            { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-CORE-GATEWAY_SCHEMA", "value" : "https" },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-CORE-GATEWAY_PORT", "value" : "443" },
-            {
-              "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-CORE-GATEWAY_NAMESPACE",
-              "value" : "store-core.${var.project}.lcl"
-            },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_SCHEMA", "value" : "https" },
-            { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_PORT", "value" : "443" },
-            { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.pod.namespace },
-            {
-              "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
-              "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
-            },
-          ]
-          portMappings : [
-            {
-              name : "app",
-              containerPort : 8100,
-              hostPort : 8100,
-              protocol : "tcp"
-            }
-          ]
-        }
-      }
-    },
     "store-pod-saas-gateway" = {
       public       = true
       priority     = 100
@@ -438,7 +379,6 @@ locals {
           image = "${var.docker_registry}/store-pod/store-pod-saas-gateway:${var.image_tag}"
           environment : [
             { "name" : "NAMESPACE", "value" : var.pod.namespace },
-            { "name" : "STORE_POD_GATEWAY", "value" : "http://store-pod-gateway.${var.pod.namespace}:8100" },
             {
               "name" : "ASK_TLS_URL",
               "value" : "https://www.${var.domain}/manager/api/v1/router/public/ask-for-tls"
