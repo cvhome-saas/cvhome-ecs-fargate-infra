@@ -4,9 +4,13 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
+data "aws_acm_certificate" "certificate" {
+  domain = local.domain
+  statuses = ["ISSUED"]
+}
+
 locals {
   store_core_namespace = "store-core.${var.project}.lcl"
-  domain = data.aws_route53_zone.domain_zone.name
   tags = {
     Project     = var.project
     Terraform   = "true"
@@ -37,12 +41,7 @@ locals {
 }
 
 data "aws_route53_zone" "domain_zone" {
-  zone_id = local.zone_id
-}
-
-data "aws_acm_certificate" "certificate" {
-  domain = local.domain
-  statuses = ["ISSUED"]
+  name = local.domain
 }
 
 module "store-core" {
