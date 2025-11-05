@@ -28,13 +28,7 @@ variable "log_s3_bucket_id" {
 variable "domain" {
   type = string
 }
-variable "store_core_namespace" {
-  type = string
-}
 variable "domain_zone_name" {
-  type = string
-}
-variable "certificate_arn" {
   type = string
 }
 variable "db_instance_class" {

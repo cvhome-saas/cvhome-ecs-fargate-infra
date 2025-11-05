@@ -71,8 +71,6 @@ module "store-pod" {
   private_subnets      = module.vpc.private_subnets
   log_s3_bucket_id     = module.log-bucket.s3_bucket_id
   domain               = data.aws_route53_zone.domain_zone.name
-  certificate_arn      = data.aws_acm_certificate.certificate.arn
-  store_core_namespace = local.store_core_namespace
   domain_zone_name     = data.aws_route53_zone.domain_zone.name
   project              = var.project
   tags                 = local.tags
