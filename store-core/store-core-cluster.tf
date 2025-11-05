@@ -48,10 +48,12 @@ locals {
     { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-core-db.db_instance_address },
     { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-core-db.db_instance_port },
     { "name" : "SPRING_DATASOURCE_USERNAME", "value" : module.store-core-db.db_instance_username },
+  ]
+  manager_secret = [
     {
-      "name" : "SPRING_DATASOURCE_PASSWORD",
-      "value" : jsondecode(data.aws_secretsmanager_secret_version.current_db_secret_version.secret_string)["password"]
-    },
+      name : "SPRING_DATASOURCE_PASSWORD",
+      valueFrom = "${module.store-core-db.db_instance_master_user_secret_arn}:password::"
+    }
   ]
   subscription_env = [
     { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
@@ -68,17 +70,25 @@ locals {
 
     { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_NAMESPACE", "value" : "store-pod-1.${var.project}.lcl" },
 
-    { "name" : "COM_ASREVO_CVHOME_STRIPE_KEY", "value" : var.stripe_key },
-    { "name" : "COM_ASREVO_CVHOME_STRIPE_WEBHOOK-SIGNING-KEY", "value" : var.stripe_webhook_signing_key },
 
     { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-core-db.db_instance_name },
     { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-core-db.db_instance_address },
     { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-core-db.db_instance_port },
     { "name" : "SPRING_DATASOURCE_USERNAME", "value" : module.store-core-db.db_instance_username },
+  ]
+  subscription_secret = [
     {
-      "name" : "SPRING_DATASOURCE_PASSWORD",
-      "value" : jsondecode(data.aws_secretsmanager_secret_version.current_db_secret_version.secret_string)["password"]
+      name      = "COM_ASREVO_CVHOME_STRIPE_KEY"
+      valueFrom = "${data.aws_secretsmanager_secret.stripe.arn}:STRIPE_KEY::"
     },
+    {
+      name      = "COM_ASREVO_CVHOME_STRIPE_WEBHOOK"
+      valueFrom = "${data.aws_secretsmanager_secret.stripe.arn}:STRIPE_WEBHOOK-SIGNING-KEY::"
+    },
+    {
+      name : "SPRING_DATASOURCE_PASSWORD",
+      valueFrom = "${module.store-core-db.db_instance_master_user_secret_arn}:password::"
+    }
   ]
   core-auth_env = [
     { "name" : "KC_HTTP_PORT", "value" : "8001" },
@@ -86,31 +96,40 @@ locals {
     { "name" : "KC_HTTP_MANAGEMENT_PORT", "value" : "9000" },
     { "name" : "KC_HEALTH_ENABLED", "value" : "true" },
     { "name" : "KC_HOSTNAME_STRICT_HTTPS", "value" : "false" },
-    { "name" : "KEYCLOAK_ADMIN", "value" : var.kc_username },
-    { "name" : "KEYCLOAK_ADMIN_PASSWORD", "value" : var.kc_password },
     { "name" : "KC_DB", "value" : "postgres" },
     { "name" : "KC_DB_URL_DATABASE", "value" : module.store-core-db.db_instance_name },
     { "name" : "KC_DB_URL_HOST", "value" : module.store-core-db.db_instance_address },
     { "name" : "KC_DB_URL_PORT", "value" : module.store-core-db.db_instance_port },
     { "name" : "KC_DB_USERNAME", "value" : module.store-core-db.db_instance_username },
+  ]
+  core-auth_secret = [
     {
-      "name" : "KC_DB_PASSWORD",
-      "value" : jsondecode(data.aws_secretsmanager_secret_version.current_db_secret_version.secret_string)["password"]
+      name      = "KEYCLOAK_ADMIN"
+      valueFrom = "${data.aws_secretsmanager_secret.kc.arn}:KEYCLOAK_ADMIN::"
     },
+    {
+      name      = "KEYCLOAK_ADMIN_PASSWORD"
+      valueFrom = "${data.aws_secretsmanager_secret.kc.arn}:KEYCLOAK_ADMIN_PASSWORD::"
+    },
+    {
+      name : "KC_DB_PASSWORD",
+      valueFrom = "${module.store-core-db.db_instance_master_user_secret_arn}:password::"
+    }
+
   ]
 
   services = {
     "store-ui" = {
-      public              = true
-      priority            = 100
-      service_type        = "SERVICE"
-      loadbalancer_target_groups = {}
+      public                      = true
+      priority                    = 100
+      service_type                = "SERVICE"
+      loadbalancer_target_groups  = {}
       load_balancer_host_matchers = []
-      desired             = 1
-      cpu                 = 512
-      memory              = 1024
-      main_container      = "store-ui"
-      main_container_port = 8010
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "store-ui"
+      main_container_port         = 8010
       health_check = {
         path                = "/"
         port                = 8010
@@ -123,6 +142,7 @@ locals {
         "store-ui" = {
           image = "${var.docker_registry}/store-core/store-ui:${var.image_tag}"
           environment : []
+          secrets : []
           portMappings : [
             {
               name : "app",
@@ -135,16 +155,16 @@ locals {
       }
     }
     "welcome-ui" = {
-      public              = true
-      priority            = 100
-      service_type        = "SERVICE"
-      loadbalancer_target_groups = {}
+      public                      = true
+      priority                    = 100
+      service_type                = "SERVICE"
+      loadbalancer_target_groups  = {}
       load_balancer_host_matchers = []
-      desired             = 1
-      cpu                 = 512
-      memory              = 1024
-      main_container      = "welcome-ui"
-      main_container_port = 8011
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "welcome-ui"
+      main_container_port         = 8011
       health_check = {
         path                = "/"
         port                = 8011
@@ -157,6 +177,7 @@ locals {
         "welcome-ui" = {
           image = "${var.docker_registry}/store-core/welcome-ui:${var.image_tag}"
           environment : []
+          secrets : []
           portMappings : [
             {
               name : "app",
@@ -180,11 +201,11 @@ locals {
         }
       }
       load_balancer_host_matchers = []
-      desired             = 1
-      cpu                 = 512
-      memory              = 1024
-      main_container      = "store-core-gateway"
-      main_container_port = 8000
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "store-core-gateway"
+      main_container_port         = 8000
       health_check = {
         path                = "/actuator/health"
         port                = 8000
@@ -197,6 +218,7 @@ locals {
         "store-core-gateway" = {
           image = "${var.docker_registry}/store-core/store-core-gateway:${var.image_tag}"
           environment : concat(local.store_core_gateway_env, local.pods_env)
+          secrets : []
           portMappings : [
             {
               name : "app",
@@ -221,11 +243,11 @@ locals {
       }
 
       load_balancer_host_matchers = []
-      desired             = 1
-      cpu                 = 512
-      memory              = 1024
-      main_container      = "core-auth"
-      main_container_port = 8001
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "core-auth"
+      main_container_port         = 8001
       health_check = {
         path                = "/health"
         port                = 9000
@@ -238,6 +260,7 @@ locals {
         "core-auth" = {
           image = "${var.docker_registry}/store-core/core-auth:${var.image_tag}"
           environment : local.core-auth_env
+          secrets : local.core-auth_secret
           portMappings : [
             {
               name : "app",
@@ -250,17 +273,17 @@ locals {
       }
     }
     "manager" = {
-      public       = true
-      priority     = 100
-      service_type = "SERVICE"
+      public                     = true
+      priority                   = 100
+      service_type               = "SERVICE"
       loadbalancer_target_groups = {}
 
       load_balancer_host_matchers = []
-      desired             = 1
-      cpu                 = 512
-      memory              = 1024
-      main_container      = "manager"
-      main_container_port = 8020
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "manager"
+      main_container_port         = 8020
       health_check = {
         path                = "/actuator/health"
         port                = 8020
@@ -273,6 +296,7 @@ locals {
         "manager" = {
           image = "${var.docker_registry}/store-core/manager:${var.image_tag}"
           environment : concat(local.manager_env, local.pods_env)
+          secrets : local.manager_secret
           portMappings : [
             {
               name : "app",
@@ -285,17 +309,17 @@ locals {
       }
     }
     "subscription" = {
-      public       = true
-      priority     = 100
-      service_type = "SERVICE"
+      public                     = true
+      priority                   = 100
+      service_type               = "SERVICE"
       loadbalancer_target_groups = {}
 
       load_balancer_host_matchers = []
-      desired             = 1
-      cpu                 = 512
-      memory              = 1024
-      main_container      = "subscription"
-      main_container_port = 8021
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "subscription"
+      main_container_port         = 8021
       health_check = {
         path                = "/actuator/health"
         port                = 8021
@@ -308,6 +332,7 @@ locals {
         "subscription" = {
           image = "${var.docker_registry}/store-core/subscription:${var.image_tag}"
           environment : concat(local.subscription_env, local.pods_env)
+          secrets : local.subscription_secret
           portMappings : [
             {
               name : "app",
@@ -324,10 +349,10 @@ locals {
 
 
 module "store-core-cluster" {
-  source                     = "terraform-aws-modules/ecs/aws"
-  cluster_name               = "${local.module_name}-${var.project}-${var.env}"
+  source                             = "terraform-aws-modules/ecs/aws"
+  cluster_name                       = "${local.module_name}-${var.project}-${var.env}"
   default_capacity_provider_strategy = local.default_capacity_provider
-  tags                       = var.tags
+  tags                               = var.tags
 }
 
 module "store-core-service" {

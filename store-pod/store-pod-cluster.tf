@@ -34,6 +34,7 @@ locals {
           environment : [
             { "name" : "INTERNAL_STORE_POD_GATEWAY", "value" : "http://store-pod-saas-gateway.${var.pod.namespace}:80" }
           ]
+          secrets: []
           portMappings : [
             {
               name : "app",
@@ -69,6 +70,7 @@ locals {
           image = "${var.docker_registry}/store-pod/merchant-ui:${var.image_tag}"
           environment : [
           ]
+          secrets: []
           portMappings : [
             {
               name : "app",
@@ -129,10 +131,12 @@ locals {
             { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-pod-db.db_instance_address },
             { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-pod-db.db_instance_port },
             { "name" : "SPRING_DATASOURCE_USERNAME", "value" : module.store-pod-db.db_instance_username },
+          ]
+          secrets : [
             {
-              "name" : "SPRING_DATASOURCE_PASSWORD",
-              "value" : jsondecode(data.aws_secretsmanager_secret_version.current_db_secret_version.secret_string)["password"]
-            },
+              name : "SPRING_DATASOURCE_PASSWORD",
+              valueFrom = "${module.store-pod-db.db_instance_master_user_secret_arn}:password::"
+            }
           ]
           portMappings : [
             {
@@ -194,10 +198,12 @@ locals {
             { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-pod-db.db_instance_address },
             { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-pod-db.db_instance_port },
             { "name" : "SPRING_DATASOURCE_USERNAME", "value" : module.store-pod-db.db_instance_username },
+          ]
+          secrets : [
             {
-              "name" : "SPRING_DATASOURCE_PASSWORD",
-              "value" : jsondecode(data.aws_secretsmanager_secret_version.current_db_secret_version.secret_string)["password"]
-            },
+              name : "SPRING_DATASOURCE_PASSWORD",
+              valueFrom = "${module.store-pod-db.db_instance_master_user_secret_arn}:password::"
+            }
           ]
           portMappings : [
             {
@@ -259,10 +265,12 @@ locals {
             { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-pod-db.db_instance_address },
             { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-pod-db.db_instance_port },
             { "name" : "SPRING_DATASOURCE_USERNAME", "value" : module.store-pod-db.db_instance_username },
+          ]
+          secrets : [
             {
-              "name" : "SPRING_DATASOURCE_PASSWORD",
-              "value" : jsondecode(data.aws_secretsmanager_secret_version.current_db_secret_version.secret_string)["password"]
-            },
+              name : "SPRING_DATASOURCE_PASSWORD",
+              valueFrom = "${module.store-pod-db.db_instance_master_user_secret_arn}:password::"
+            }
           ]
           portMappings : [
             {
@@ -324,11 +332,14 @@ locals {
             { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-pod-db.db_instance_address },
             { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-pod-db.db_instance_port },
             { "name" : "SPRING_DATASOURCE_USERNAME", "value" : module.store-pod-db.db_instance_username },
-            {
-              "name" : "SPRING_DATASOURCE_PASSWORD",
-              "value" : jsondecode(data.aws_secretsmanager_secret_version.current_db_secret_version.secret_string)["password"]
-            },
           ]
+          secrets : [
+            {
+              name : "SPRING_DATASOURCE_PASSWORD",
+              valueFrom = "${module.store-pod-db.db_instance_master_user_secret_arn}:password::"
+            }
+          ]
+
           portMappings : [
             {
               name : "app",
@@ -395,6 +406,7 @@ locals {
               "value" : module.cert-storage-bucket.s3_bucket_region
             }
           ]
+          secrets: []
           portMappings : [
             {
               name : "app443",

@@ -56,11 +56,3 @@ module "store-pod-db" {
 
   tags = var.tags
 }
-
-
-data "aws_secretsmanager_secret" "db_secret" {
-  arn = module.store-pod-db.db_instance_master_user_secret_arn
-}
-data "aws_secretsmanager_secret_version" "current_db_secret_version" {
-  secret_id = data.aws_secretsmanager_secret.db_secret.id
-}

@@ -32,7 +32,8 @@ resource "aws_iam_role_policy" "ecs_task_execution_role_policy" {
           "ecr:BatchGetImage",
           "logs:CreateLogStream",
           "logs:PutLogEvents",
-          "ssm:*"
+          "ssm:*",
+          "secretsmanager:*"
         ]
         Resource : [
           "*"

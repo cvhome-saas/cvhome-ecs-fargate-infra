@@ -149,7 +149,7 @@ module "root-record" {
   source  = "terraform-aws-modules/route53/aws//modules/records"
   version = "~> 3.0"
 
-  zone_name = var.domain_zone_name
+  zone_name = var.domain
 
   records = [
     {
@@ -167,7 +167,7 @@ module "www-record" {
   source  = "terraform-aws-modules/route53/aws//modules/records"
   version = "~> 3.0"
 
-  zone_name = var.domain_zone_name
+  zone_name = var.domain
 
   records = [
     {
@@ -185,7 +185,7 @@ module "core-auth-record" {
   source  = "terraform-aws-modules/route53/aws//modules/records"
   version = "~> 3.0"
 
-  zone_name = var.domain_zone_name
+  zone_name = var.domain
 
   records = [
     {
@@ -202,7 +202,7 @@ module "store-ui-record" {
   source  = "terraform-aws-modules/route53/aws//modules/records"
   version = "~> 3.0"
 
-  zone_name = var.domain_zone_name
+  zone_name = var.domain
 
   records = [
     {

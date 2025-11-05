@@ -28,9 +28,6 @@ variable "log_s3_bucket_id" {
 variable "domain" {
   type = string
 }
-variable "domain_zone_name" {
-  type = string
-}
 variable "certificate_arn" {
   type = string
 }
@@ -61,17 +58,4 @@ variable "pods" {
     size : string
   }))
 }
-variable "stripe_key" {
-  type = string
-}
-variable "stripe_webhook_signing_key" {
-  type = string
-}
-variable "kc_username" {
-  type = string
-}
-variable "kc_password" {
-  type = string
-}
-
 
