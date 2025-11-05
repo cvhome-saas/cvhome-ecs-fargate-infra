@@ -22,6 +22,7 @@ resource "aws_ecs_task_definition" "this" {
       user : "root",
       essential : true,
       environment : var.service.containers[it].environment,
+      secrets : var.service.containers[it].secrets,
       logConfiguration : {
         logDriver : "awslogs",
         options : {

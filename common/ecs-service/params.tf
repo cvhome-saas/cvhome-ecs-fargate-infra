@@ -62,6 +62,10 @@ variable "service" {
         name : string
         value : string
       }))
+      secrets : list(object({
+        name : string
+        valueFrom : string
+      }))
       portMappings : list(object({
         name : string,
         containerPort : number,
