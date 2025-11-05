@@ -356,7 +356,7 @@ module "store-core-cluster" {
 }
 
 module "store-core-service" {
-  source       = "../common/ecs-service"
+  source       = "git::https://github.com/cvhome-saas/terraform-aws-ecs-service.git?ref=main"
   namespace_id = aws_service_discovery_private_dns_namespace.cluster_namespace.id
   service_name = each.key
   tags         = var.tags
