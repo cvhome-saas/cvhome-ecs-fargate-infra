@@ -9,7 +9,7 @@ data "aws_route53_zone" "domain_zone" {
 }
 
 data "aws_acm_certificate" "certificate" {
-  domain = data.aws_route53_zone.domain_zone.name
+  domain   = data.aws_route53_zone.domain_zone.name
   statuses = ["ISSUED"]
 }
 
@@ -37,40 +37,44 @@ locals {
 
 
 module "store-core" {
-  source                     = "./store-core"
-  vpc_id                     = module.vpc.vpc_id
-  public_subnets             = module.vpc.public_subnets
-  private_subnets            = module.vpc.private_subnets
-  log_s3_bucket_id           = module.log-bucket.s3_bucket_id
-  domain                     = data.aws_route53_zone.domain_zone.name
-  certificate_arn            = data.aws_acm_certificate.certificate.arn
-  project                    = var.project
-  tags                       = local.tags
-  database_subnets           = module.vpc.database_subnets
-  vpc_cidr_block             = local.vpc_cidr
-  env                        = local.env
-  image_tag                  = local.image_tag
-  namespace                  = local.store_core_namespace
-  pods                       = local.pods
-  docker_registry            = local.docker_registry
+  source           = "./store-core"
+  vpc_id           = module.vpc.vpc_id
+  public_subnets   = module.vpc.public_subnets
+  private_subnets  = module.vpc.private_subnets
+  log_s3_bucket_id = module.log-bucket.s3_bucket_id
+  domain           = data.aws_route53_zone.domain_zone.name
+  certificate_arn  = data.aws_acm_certificate.certificate.arn
+  project          = var.project
+  tags             = local.tags
+  database_subnets = module.vpc.database_subnets
+  vpc_cidr_block   = local.vpc_cidr
+  env              = local.env
+  image_tag        = local.image_tag
+  namespace        = local.store_core_namespace
+  pods             = local.pods
+  docker_registry  = local.docker_registry
+  is_prod          = local.is_prod == "true"
+  pod_auto_scale   = local.pod_auto_scale == "true"
 }
 
 module "store-pod" {
-  source               = "./store-pod"
-  vpc_id               = module.vpc.vpc_id
-  public_subnets       = module.vpc.public_subnets
-  private_subnets      = module.vpc.private_subnets
-  log_s3_bucket_id     = module.log-bucket.s3_bucket_id
-  domain               = data.aws_route53_zone.domain_zone.name
-  domain_zone_name     = data.aws_route53_zone.domain_zone.name
-  project              = var.project
-  tags                 = local.tags
-  database_subnets     = module.vpc.database_subnets
-  vpc_cidr_block       = local.vpc_cidr
-  env                  = local.env
-  docker_registry      = local.docker_registry
-  image_tag            = local.image_tag
-  test_stores          = each.key == "pod-0"
-  pod                  = each.value
-  for_each             = local.pods
+  source           = "./store-pod"
+  vpc_id           = module.vpc.vpc_id
+  public_subnets   = module.vpc.public_subnets
+  private_subnets  = module.vpc.private_subnets
+  log_s3_bucket_id = module.log-bucket.s3_bucket_id
+  domain           = data.aws_route53_zone.domain_zone.name
+  domain_zone_name = data.aws_route53_zone.domain_zone.name
+  project          = var.project
+  tags             = local.tags
+  database_subnets = module.vpc.database_subnets
+  vpc_cidr_block   = local.vpc_cidr
+  env              = local.env
+  docker_registry  = local.docker_registry
+  image_tag        = local.image_tag
+  test_stores      = each.key == "pod-0"
+  pod              = each.value
+  is_prod          = local.is_prod == "true"
+  pod_auto_scale   = local.pod_auto_scale == "true"
+  for_each         = local.pods
 }

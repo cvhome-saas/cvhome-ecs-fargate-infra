@@ -404,6 +404,14 @@ locals {
             {
               "name" : "CERT_BUCKET_REGION",
               "value" : module.cert-storage-bucket.s3_bucket_region
+            },
+            {
+              "name" : "ACME_CA_URL",
+              "value" : "https://acme-v02.api.letsencrypt.org/directory"
+            },
+            {
+              "name" : "DOMAIN_LOOKUP_TTL",
+              "value" : var.is_prod ? "5m" : "1m"
             }
           ]
           secrets: []

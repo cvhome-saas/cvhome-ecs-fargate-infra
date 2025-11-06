@@ -59,3 +59,9 @@ variable "pod" {
     size : string
   })
 }
+variable "pod_auto_scale" {
+  type = bool
+}
+variable "is_prod" {
+  type = bool
+}
