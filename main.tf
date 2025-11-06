@@ -20,26 +20,17 @@ locals {
     Terraform   = "true"
     Environment = local.env
   }
-  private_ecr_docker_registry = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com/${var.project}"
-  docker_registry             = var.docker_registry != "" ? var.docker_registry : local.private_ecr_docker_registry
-  xpods = [
-    {
-      index : 0
-      id : "1"
-      name : "default",
-      size : "large"
-    },
-  ]
+  docker_registry = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com/${var.project}"
   pods = {
-    for value in local.xpods : lookup(value, "name") => {
-      index : lookup(value, "index")
-      id : lookup(value, "id")
-      name : lookup(value, "name")
-      org : try(lookup(value, "org"), "")
-      endpoint : "https://store-pod-${lookup(value, "id")}.${data.aws_route53_zone.domain_zone.name}"
-      namespace : "store-pod-${lookup(value, "id")}.${var.project}.lcl"
-      size : try(lookup(value, "size"), "large"),
-      endpointType : "EXTERNAL"
+    for i in range(local.pod_count) : "pod-${i}" => {
+      index        = i
+      id           = tostring(i + 1)
+      name         = "pod-${i}"
+      org          = ""
+      endpoint     = "https://store-pod-${i + 1}.${data.aws_route53_zone.domain_zone.name}"
+      namespace    = "store-pod-${i + 1}.${var.project}.lcl"
+      size         = local.pod_size
+      endpointType = "EXTERNAL"
     }
   }
 }
@@ -79,7 +70,7 @@ module "store-pod" {
   env                  = local.env
   docker_registry      = local.docker_registry
   image_tag            = local.image_tag
-  test_stores          = each.key == "default"
+  test_stores          = each.key == "pod-0"
   pod                  = each.value
   for_each             = local.pods
 }

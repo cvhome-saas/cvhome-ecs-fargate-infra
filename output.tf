@@ -8,14 +8,14 @@ output "core-auth_url" {
   value = module.store-core.core-auth_url
 }
 output "org1_store1_url" {
-  value = "https://org1-store1.${module.store-pod["default"].domain}"
+  value = "https://org1-store1.${module.store-pod["pod-0"].domain}"
 }
 output "org1_store2_url" {
-  value = "https://org1-store2.${module.store-pod["default"].domain}"
+  value = "https://org1-store2.${module.store-pod["pod-0"].domain}"
 }
 output "org2_store1_url" {
-  value = "https://org2-store1.${module.store-pod["default"].domain}"
+  value = "https://org2-store1.${module.store-pod["pod-0"].domain}"
 }
 output "org2_store2_url" {
-  value = "https://org2-store2.${module.store-pod["default"].domain}"
+  value = "https://org2-store2.${module.store-pod["pod-0"].domain}"
 }
