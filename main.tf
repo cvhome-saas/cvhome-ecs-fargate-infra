@@ -22,7 +22,7 @@ locals {
   }
   docker_registry = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com/${var.project}"
   pods = {
-    for i in range(local.pod_count) : "pod-${i}" => {
+    for i in range(local.pod_count) : "pod-${i+1}" => {
       index        = i
       id           = tostring(i + 1)
       name         = "pod-${i}"
@@ -72,7 +72,7 @@ module "store-pod" {
   env              = local.env
   docker_registry  = local.docker_registry
   image_tag        = local.image_tag
-  test_stores      = each.key == "pod-0"
+  test_stores      = each.key == "pod-1"
   pod              = each.value
   is_prod          = local.is_prod == "true"
   pod_auto_scale   = local.pod_auto_scale == "true"
