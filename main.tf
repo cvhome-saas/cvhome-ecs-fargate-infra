@@ -58,7 +58,7 @@ module "store-core" {
 }
 
 module "store-pod" {
-  source           = "./store-pod"
+  source           = "git::https://github.com/cvhome-saas/cvhome-store-pod.git?ref=main"
   vpc_id           = module.vpc.vpc_id
   public_subnets   = module.vpc.public_subnets
   private_subnets  = module.vpc.private_subnets
