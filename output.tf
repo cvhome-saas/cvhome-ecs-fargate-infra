@@ -1,11 +1,14 @@
 output "store_ui_url" {
-  value = module.store-core.store_ui_url
+  value       = module.store-core.store_ui_url
+  description = "Store Ui URL"
 }
 output "welcome_ui_url" {
-  value = module.store-core.welcome_ui_url
+  value       = module.store-core.welcome_ui_url
+  description = "Welcome Ui URL"
 }
 output "core-auth_url" {
-  value = module.store-core.core-auth_url
+  value       = module.store-core.core-auth_url
+  description = "Auth Ui URL"
 }
 output "pod_store_urls" {
   description = "Store URLs for all pods"
