@@ -384,7 +384,8 @@ module "store-core-service" {
       cidr_blocks = "0.0.0.0/0"
     },
   ]
-  for_each = local.services
-  vpc_id   = var.vpc_id
+  auto_scale = var.pod_auto_scale
+  for_each   = local.services
+  vpc_id     = var.vpc_id
 }
 

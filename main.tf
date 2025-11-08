@@ -27,7 +27,7 @@ locals {
       id           = tostring(i + 1)
       name         = "pod-${i}"
       org          = ""
-      endpoint     = "https://store-pod-${i + 1}.${data.aws_route53_zone.domain_zone.name}"
+      endpoint     = "https://store-pod-saas-gateway-${i + 1}.${data.aws_route53_zone.domain_zone.name}"
       namespace    = "store-pod-${i + 1}.${var.project}.lcl"
       size         = local.pod_size
       endpointType = "EXTERNAL"

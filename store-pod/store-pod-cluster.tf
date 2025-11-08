@@ -10,16 +10,16 @@ locals {
   }
   services = {
     "landing-ui" = {
-      public              = true
-      priority            = 100
-      service_type        = "SERVICE"
-      loadbalancer_target_groups = {}
+      public                      = true
+      priority                    = 100
+      service_type                = "SERVICE"
+      loadbalancer_target_groups  = {}
       load_balancer_host_matchers = []
-      desired             = 1
-      cpu                 = 512
-      memory              = 1024
-      main_container      = "landing-ui"
-      main_container_port = 8110
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "landing-ui"
+      main_container_port         = 8110
       health_check = {
         path                = "/"
         port                = 8110
@@ -34,7 +34,7 @@ locals {
           environment : [
             { "name" : "INTERNAL_STORE_POD_GATEWAY", "value" : "http://store-pod-saas-gateway.${var.pod.namespace}:80" }
           ]
-          secrets: []
+          secrets : []
           portMappings : [
             {
               name : "app",
@@ -47,16 +47,16 @@ locals {
       }
     }
     "merchant-ui" = {
-      public              = true
-      priority            = 100
-      service_type        = "SERVICE"
-      loadbalancer_target_groups = {}
+      public                      = true
+      priority                    = 100
+      service_type                = "SERVICE"
+      loadbalancer_target_groups  = {}
       load_balancer_host_matchers = []
-      desired             = 1
-      cpu                 = 512
-      memory              = 1024
-      main_container      = "merchant-ui"
-      main_container_port = 8111
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "merchant-ui"
+      main_container_port         = 8111
       health_check = {
         path                = "/"
         port                = 8111
@@ -70,7 +70,7 @@ locals {
           image = "${var.docker_registry}/store-pod/merchant-ui:${var.image_tag}"
           environment : [
           ]
-          secrets: []
+          secrets : []
           portMappings : [
             {
               name : "app",
@@ -83,17 +83,17 @@ locals {
       }
     }
     "merchant" = {
-      public       = true
-      priority     = 100
-      service_type = "SERVICE"
+      public                     = true
+      priority                   = 100
+      service_type               = "SERVICE"
       loadbalancer_target_groups = {}
 
       load_balancer_host_matchers = []
-      desired             = 1
-      cpu                 = 512
-      memory              = 1024
-      main_container      = "merchant"
-      main_container_port = 8120
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "merchant"
+      main_container_port         = 8120
       health_check = {
         path                = "/actuator/health"
         port                = 8120
@@ -127,6 +127,14 @@ locals {
             { "name" : "COM_ASREVO_CVHOME_SERVICES_CONTENT_NAMESPACE", "value" : var.pod.namespace },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_CATALOG_NAMESPACE", "value" : var.pod.namespace },
             { "name" : "COM_ASREVO_CVHOME_SERVICES_ORDER_NAMESPACE", "value" : var.pod.namespace },
+            { "name" : "COM_ASREVO_CVHOME_POD-INFO_POD_ID_ID", "value" : var.pod.id },
+            { "name" : "COM_ASREVO_CVHOME_POD-INFO_POD_NAME", "value" : var.pod.name },
+            { "name" : "COM_ASREVO_CVHOME_POD-INFO_POD_ENDPOINT_ENDPOINT", "value" : var.pod.endpoint },
+            { "name" : "COM_ASREVO_CVHOME_POD-INFO_POD_ENDPOINT_TYPE", "value" : var.pod.endpointType },
+            {
+              "name" : "COM_ASREVO_CVHOME_POD-INFO_POD_DOMAIN",
+              "value" : "store-pod-saas-gateway-${var.pod.id}.${var.domain_zone_name}"
+            },
             { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-pod-db.db_instance_name },
             { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-pod-db.db_instance_address },
             { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-pod-db.db_instance_port },
@@ -150,17 +158,17 @@ locals {
       }
     }
     "content" = {
-      public       = true
-      priority     = 100
-      service_type = "SERVICE"
+      public                     = true
+      priority                   = 100
+      service_type               = "SERVICE"
       loadbalancer_target_groups = {}
 
       load_balancer_host_matchers = []
-      desired             = 1
-      cpu                 = 512
-      memory              = 1024
-      main_container      = "content"
-      main_container_port = 8121
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "content"
+      main_container_port         = 8121
       health_check = {
         path                = "/actuator/health"
         port                = 8121
@@ -217,17 +225,17 @@ locals {
       }
     }
     "catalog" = {
-      public       = true
-      priority     = 100
-      service_type = "SERVICE"
+      public                     = true
+      priority                   = 100
+      service_type               = "SERVICE"
       loadbalancer_target_groups = {}
 
       load_balancer_host_matchers = []
-      desired             = 1
-      cpu                 = 512
-      memory              = 1024
-      main_container      = "catalog"
-      main_container_port = 8122
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "catalog"
+      main_container_port         = 8122
       health_check = {
         path                = "/actuator/health"
         port                = 8122
@@ -284,17 +292,17 @@ locals {
       }
     }
     "order" = {
-      public       = true
-      priority     = 100
-      service_type = "SERVICE"
+      public                     = true
+      priority                   = 100
+      service_type               = "SERVICE"
       loadbalancer_target_groups = {}
 
       load_balancer_host_matchers = []
-      desired             = 1
-      cpu                 = 512
-      memory              = 1024
-      main_container      = "order"
-      main_container_port = 8123
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "order"
+      main_container_port         = 8123
       health_check = {
         path                = "/actuator/health"
         port                = 8123
@@ -371,11 +379,11 @@ locals {
 
 
       load_balancer_host_matchers = []
-      desired             = 1
-      cpu                 = 512
-      memory              = 1024
-      main_container      = "store-pod-saas-gateway"
-      main_container_port = 443
+      desired                     = 1
+      cpu                         = 512
+      memory                      = 1024
+      main_container              = "store-pod-saas-gateway"
+      main_container_port         = 443
       health_check = {
         path                = "/"
         port                = 80
@@ -391,11 +399,11 @@ locals {
             { "name" : "NAMESPACE", "value" : var.pod.namespace },
             {
               "name" : "ASK_TLS_URL",
-              "value" : "https://www.${var.domain}/manager/api/v1/router/public/ask-for-tls"
+              "value" : "http://merchant.${var.pod.namespace}:8120/api/v1/router/public/ask-for-tls"
             },
             {
               "name" : "DOMAIN_LOOKUP_URL",
-              "value" : "https://www.${var.domain}/manager/api/v1/router/public/lookup-by-domain"
+              "value" : "http://merchant.${var.pod.namespace}:8120/api/v1/router/public/lookup-by-domain"
             },
             {
               "name" : "CERT_BUCKET",
@@ -414,7 +422,7 @@ locals {
               "value" : var.is_prod ? "5m" : "1m"
             }
           ]
-          secrets: []
+          secrets : []
           portMappings : [
             {
               name : "app443",
@@ -442,12 +450,11 @@ locals {
   }
 }
 
-
 module "store-pod-cluster" {
-  source                     = "terraform-aws-modules/ecs/aws"
-  cluster_name               = "store-pod-${var.project}-${var.pod.id}-${var.env}"
+  source                             = "terraform-aws-modules/ecs/aws"
+  cluster_name                       = "store-pod-${var.project}-${var.pod.id}-${var.env}"
   default_capacity_provider_strategy = local.default_capacity_provider
-  tags                       = var.tags
+  tags                               = var.tags
 }
 
 module "store-pod-service" {
@@ -479,7 +486,8 @@ module "store-pod-service" {
       cidr_blocks = "0.0.0.0/0"
     },
   ]
-  for_each = local.services
-  vpc_id   = var.vpc_id
+  auto_scale = var.pod_auto_scale
+  for_each   = local.services
+  vpc_id     = var.vpc_id
 }
 
