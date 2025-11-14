@@ -1,3 +1,6 @@
+variable "region" {
+  type = string
+}
 variable "env" {
   type = string
 }
@@ -63,4 +66,8 @@ variable "pod_auto_scale" {
 }
 variable "is_prod" {
   type = bool
+}
+variable "is_monitoring" {
+  type = bool
+  default = false
 }

@@ -22,7 +22,7 @@ locals {
   }
   docker_registry = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com/${var.project}"
   pods = {
-    for i in range(local.pod_count) : "pod-${i+1}" => {
+    for i in range(local.pod_count) : "pod-${i + 1}" => {
       index        = i
       id           = tostring(i + 1)
       name         = "pod-${i}"
@@ -49,11 +49,13 @@ module "store-core" {
   database_subnets = module.vpc.database_subnets
   vpc_cidr_block   = local.vpc_cidr
   env              = local.env
+  region           = var.region
   image_tag        = local.image_tag
   namespace        = local.store_core_namespace
   pods             = local.pods
   docker_registry  = local.docker_registry
   is_prod          = local.is_prod == "true"
+  is_monitoring    = local.is_monitoring == "true"
   pod_auto_scale   = local.pod_auto_scale == "true"
 }
 
@@ -70,11 +72,14 @@ module "store-pod" {
   database_subnets = module.vpc.database_subnets
   vpc_cidr_block   = local.vpc_cidr
   env              = local.env
+  region           = var.region
   docker_registry  = local.docker_registry
   image_tag        = local.image_tag
   test_stores      = each.key == "pod-1"
   pod              = each.value
   is_prod          = local.is_prod == "true"
+  is_monitoring    = local.is_monitoring == "true"
   pod_auto_scale   = local.pod_auto_scale == "true"
-  for_each         = local.pods
+
+  for_each = local.pods
 }
