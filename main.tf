@@ -75,7 +75,7 @@ module "store-pod" {
   region           = var.region
   docker_registry  = local.docker_registry
   image_tag        = local.image_tag
-  test_stores      = each.key == "pod-1"
+  test_stores      = (each.key == "pod-1" && local.allow_test_stores == "true")
   pod              = each.value
   is_prod          = local.is_prod == "true"
   is_monitoring    = local.is_monitoring == "true"
