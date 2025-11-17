@@ -32,70 +32,6 @@ locals {
     },
     { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_NAMESPACE", "value" : "store-pod-1.${var.project}.lcl" },
   ]
-  manager_env = [
-    { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
-    { "name" : "OTEL_EXPORTER_OTLP_ENDPOINT", "value" : "http://otel-collector.${var.namespace}:4318" },
-    { "name" : "OTEL_SDK_DISABLED", "value" : !var.is_monitoring },
-    { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
-    { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_SCHEMA", "value" : "https" },
-    { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_PORT", "value" : "443" },
-    { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_SCHEMA", "value" : "https" },
-    { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_PORT", "value" : "443" },
-    { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.namespace },
-    {
-      "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
-      "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
-    },
-
-    { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_NAMESPACE", "value" : "store-pod-1.${var.project}.lcl" },
-    { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-core-db.db_instance_name },
-    { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-core-db.db_instance_address },
-    { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-core-db.db_instance_port },
-    { "name" : "SPRING_DATASOURCE_USERNAME", "value" : module.store-core-db.db_instance_username },
-  ]
-  manager_secret = [
-    {
-      name : "SPRING_DATASOURCE_PASSWORD",
-      valueFrom = "${module.store-core-db.db_instance_master_user_secret_arn}:password::"
-    }
-  ]
-  subscription_env = [
-    { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
-    { "name" : "OTEL_EXPORTER_OTLP_ENDPOINT", "value" : "http://otel-collector.${var.namespace}:4318" },
-    { "name" : "OTEL_SDK_DISABLED", "value" : !var.is_monitoring },
-    { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
-    { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_SCHEMA", "value" : "https" },
-    { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_PORT", "value" : "443" },
-    { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_SCHEMA", "value" : "https" },
-    { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_PORT", "value" : "443" },
-    { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.namespace },
-    {
-      "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
-      "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
-    },
-
-    { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_NAMESPACE", "value" : "store-pod-1.${var.project}.lcl" },
-
-
-    { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-core-db.db_instance_name },
-    { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-core-db.db_instance_address },
-    { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-core-db.db_instance_port },
-    { "name" : "SPRING_DATASOURCE_USERNAME", "value" : module.store-core-db.db_instance_username },
-  ]
-  subscription_secret = [
-    {
-      name      = "COM_ASREVO_CVHOME_STRIPE_KEY"
-      valueFrom = "${data.aws_secretsmanager_secret.stripe.arn}:STRIPE_KEY::"
-    },
-    {
-      name      = "COM_ASREVO_CVHOME_STRIPE_WEBHOOK"
-      valueFrom = "${data.aws_secretsmanager_secret.stripe.arn}:STRIPE_WEBHOOK-SIGNING-KEY::"
-    },
-    {
-      name : "SPRING_DATASOURCE_PASSWORD",
-      valueFrom = "${module.store-core-db.db_instance_master_user_secret_arn}:password::"
-    }
-  ]
   core-auth_env = [
     { "name" : "KC_HTTP_PORT", "value" : "8001" },
     { "name" : "KC_HTTP_ENABLED", "value" : "true" },
@@ -122,6 +58,41 @@ locals {
       valueFrom = "${module.store-core-db.db_instance_master_user_secret_arn}:password::"
     }
 
+  ]
+  control-plane_env = [
+    { "name" : "SPRING_PROFILES_ACTIVE", "value" : "fargate" },
+    { "name" : "OTEL_EXPORTER_OTLP_ENDPOINT", "value" : "http://otel-collector.${var.namespace}:4318" },
+    { "name" : "OTEL_SDK_DISABLED", "value" : !var.is_monitoring },
+    { "name" : "COM_ASREVO_CVHOME_APP_DOMAIN", "value" : var.domain },
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_SCHEMA", "value" : "https" },
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE-POD-GATEWAY_PORT", "value" : "443" },
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_SCHEMA", "value" : "https" },
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_CORE-AUTH_PORT", "value" : "443" },
+    { "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE", "value" : var.namespace },
+    {
+      "name" : "SPRING_CLOUD_ECS_DISCOVERY_NAMESPACE-ID",
+      "value" : aws_service_discovery_private_dns_namespace.cluster_namespace.id
+    },
+
+    { "name" : "COM_ASREVO_CVHOME_SERVICES_STORE_NAMESPACE", "value" : "store-pod-1.${var.project}.lcl" },
+    { "name" : "SPRING_DATASOURCE_DATABASE", "value" : module.store-core-db.db_instance_name },
+    { "name" : "SPRING_DATASOURCE_HOST", "value" : module.store-core-db.db_instance_address },
+    { "name" : "SPRING_DATASOURCE_PORT", "value" : module.store-core-db.db_instance_port },
+    { "name" : "SPRING_DATASOURCE_USERNAME", "value" : module.store-core-db.db_instance_username },
+  ]
+  control-plane_secret = [
+    {
+      name      = "COM_ASREVO_CVHOME_STRIPE_KEY"
+      valueFrom = "${data.aws_secretsmanager_secret.stripe.arn}:STRIPE_KEY::"
+    },
+    {
+      name      = "COM_ASREVO_CVHOME_STRIPE_WEBHOOK"
+      valueFrom = "${data.aws_secretsmanager_secret.stripe.arn}:STRIPE_WEBHOOK-SIGNING-KEY::"
+    },
+    {
+      name : "SPRING_DATASOURCE_PASSWORD",
+      valueFrom = "${module.store-core-db.db_instance_master_user_secret_arn}:password::"
+    }
   ]
 
   services = {
@@ -278,7 +249,7 @@ locals {
         }
       }
     }
-    "manager" = {
+    "control-plane" = {
       public                     = true
       priority                   = 100
       service_type               = "SERVICE"
@@ -288,7 +259,7 @@ locals {
       desired                     = 1
       cpu                         = 512
       memory                      = 1024
-      main_container              = "manager"
+      main_container              = "control-plane"
       main_container_port         = 8020
       health_check = {
         path                = "/actuator/health"
@@ -299,10 +270,10 @@ locals {
       }
 
       containers = {
-        "manager" = {
-          image = "${var.docker_registry}/store-core/manager:${var.image_tag}"
-          environment : concat(local.manager_env, local.pods_env)
-          secrets : local.manager_secret
+        "control-plane" = {
+          image = "${var.docker_registry}/store-core/control-plane:${var.image_tag}"
+          environment : concat(local.control-plane_env, local.pods_env)
+          secrets : local.control-plane_secret
           portMappings : [
             {
               name : "app",
@@ -314,42 +285,7 @@ locals {
         }
       }
     }
-    "subscription" = {
-      public                     = true
-      priority                   = 100
-      service_type               = "SERVICE"
-      loadbalancer_target_groups = {}
 
-      load_balancer_host_matchers = []
-      desired                     = 1
-      cpu                         = 512
-      memory                      = 1024
-      main_container              = "subscription"
-      main_container_port         = 8021
-      health_check = {
-        path                = "/actuator/health"
-        port                = 8021
-        healthy_threshold   = 2
-        interval            = 60
-        unhealthy_threshold = 3
-      }
-
-      containers = {
-        "subscription" = {
-          image = "${var.docker_registry}/store-core/subscription:${var.image_tag}"
-          environment : concat(local.subscription_env, local.pods_env)
-          secrets : local.subscription_secret
-          portMappings : [
-            {
-              name : "app",
-              containerPort : 8021,
-              hostPort : 8021,
-              protocol : "tcp"
-            }
-          ]
-        }
-      }
-    }
   }
 }
 
