@@ -96,7 +96,7 @@ locals {
   ]
 
   services = {
-    "store-ui" = {
+    "seller-ui" = {
       public                      = true
       priority                    = 100
       service_type                = "SERVICE"
@@ -105,7 +105,7 @@ locals {
       desired                     = 1
       cpu                         = 512
       memory                      = 1024
-      main_container              = "store-ui"
+      main_container              = "seller-ui"
       main_container_port         = 8010
       health_check = {
         path                = "/"
@@ -116,8 +116,8 @@ locals {
       }
 
       containers = {
-        "store-ui" = {
-          image = "${var.docker_registry}/store-core/store-ui:${var.image_tag}"
+        "seller-ui" = {
+          image = "${var.docker_registry}/store-core/seller-ui:${var.image_tag}"
           environment : []
           secrets : []
           portMappings : [
@@ -125,41 +125,6 @@ locals {
               name : "app",
               containerPort : 8010,
               hostPort : 8010,
-              protocol : "tcp"
-            }
-          ]
-        }
-      }
-    }
-    "welcome-ui" = {
-      public                      = true
-      priority                    = 100
-      service_type                = "SERVICE"
-      loadbalancer_target_groups  = {}
-      load_balancer_host_matchers = []
-      desired                     = 1
-      cpu                         = 512
-      memory                      = 1024
-      main_container              = "welcome-ui"
-      main_container_port         = 8011
-      health_check = {
-        path                = "/"
-        port                = 8011
-        healthy_threshold   = 2
-        interval            = 60
-        unhealthy_threshold = 3
-      }
-
-      containers = {
-        "welcome-ui" = {
-          image = "${var.docker_registry}/store-core/welcome-ui:${var.image_tag}"
-          environment : []
-          secrets : []
-          portMappings : [
-            {
-              name : "app",
-              containerPort : 8011,
-              hostPort : 8011,
               protocol : "tcp"
             }
           ]

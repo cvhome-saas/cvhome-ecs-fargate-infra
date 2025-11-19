@@ -93,7 +93,7 @@ module "cluster-lb" {
           conditions = [
             {
               host_header = {
-                values = [var.domain, "www.${var.domain}", "store-ui.${var.domain}"]
+                values = [var.domain, "www.${var.domain}", "seller-ui.${var.domain}"]
               }
             }
           ]
@@ -198,7 +198,7 @@ module "core-auth-record" {
     }
   ]
 }
-module "store-ui-record" {
+module "seller-ui-record" {
   source  = "terraform-aws-modules/route53/aws//modules/records"
   version = "~> 3.0"
 
@@ -206,7 +206,7 @@ module "store-ui-record" {
 
   records = [
     {
-      name = "store-ui"
+      name = "seller-ui"
       type = "A"
       alias = {
         name    = module.cluster-lb.dns_name
